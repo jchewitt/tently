@@ -373,7 +373,7 @@ a rehearsal, not a claim that environment publication or a new-task restoration 
 
 ## Explicit Codex authentication modes — tentative
 
-2026-10-20: implemented after `79b100c`, in the commit containing this entry. Unreleased source
+2026-10-20: implemented in `083fbdd`. Unreleased source
 defaults to ChatGPT login and offers explicit API-key authentication through a named environment
 variable. Existing npm 0.1.0 is unchanged. `init` emits the default; `doctor` distinguishes a
 ChatGPT login from an unverified API key. Saved-query access and built-in artifact identity do
@@ -391,3 +391,10 @@ with ambient API variables present, API mode with a valid and invalid/missing se
 doctor's presence-only reporting, and a bounded public-example hydration with artifact reuse.
 Record CLI/model versions and actual results separately. Hosted API authentication, native Windows
 behavior and any Codex GitHub Action proxy integration are not established by compilation.
+
+Maintainer disposition (2026-10-20): live authentication validation is **tentative, deferred and
+non-blocking for release**. The maintainer plans to exercise their existing ChatGPT-backed Codex
+workflow after publication and adoption into Banditrade, and report any issues. API-key validation
+may remain tentative; obtaining API credentials or making paid requests is not required for that
+follow-up. This records acceptance of deferred validation, not a passing result. Ordinary
+deterministic release checks remain applicable. No source-application reintegration was performed.

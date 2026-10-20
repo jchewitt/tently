@@ -21,8 +21,10 @@ Artifact storage contains model output and must remain private with the source r
 
 ## Codex authentication
 
-Status: implemented in unreleased source; validation is **tentative**, pending independent
-maintainer testing. Published 0.1.0 does not contain this option. Both modes still use Codex CLI;
+Status: implemented in unreleased source; live validation is **tentative and non-blocking for
+release**, as accepted by the maintainer. Follow-up is planned after publication and adoption into
+Banditrade using the maintainer's existing ChatGPT login; API-key testing may remain deferred.
+Published 0.1.0 does not contain this option. Both modes still use Codex CLI;
 this is not a direct OpenAI API provider or a fix for the managed-cloud filesystem issue.
 
 Merge one of these fragments into your existing `context-graph.config.json`:

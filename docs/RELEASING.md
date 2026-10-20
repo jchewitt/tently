@@ -22,6 +22,11 @@ placeholders were not operational releases. This cloud has no publishing identit
 used public reads and installation only. Subsequent source changes require a new version before
 another npm release; published `0.1.0` archives are immutable.
 
+The maintainer has accepted live validation of the new Codex authentication modes as tentative
+and non-blocking for the next release. Follow-up is planned after adoption into Banditrade;
+API-key testing may remain deferred. Keep this limitation in release notes without claiming a
+live pass. The deterministic preparation checks below still apply; see `VALIDATION.md`.
+
 ## Prepare and review
 
 Use Node 24, pnpm 10.18.2 and a clean checkout containing the reviewed changes:
