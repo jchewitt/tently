@@ -71,3 +71,15 @@ The current repository passed approved rules with eight advisory size/complexity
 
 Direct-RDF/OML assertion parity and real pipeline incremental reuse passed. Actual openCAESAR
 compilation and OWL reasoning remain unverified; no active OWL reasoner is claimed.
+
+## Milestone 5: providers and diagnostics
+
+Passed build and 41 focused deterministic tests, including actual subprocess timeout/cancellation,
+safe error reporting, transient-only retry limits, malformed output rejection, module identity and
+timeout enforcement, cache reuse, and model reasoning identity. The pipeline test additionally
+checks that a source-budget failure makes zero provider calls.
+
+`doctor` reports Git and Codex available, authenticated Codex login, and the RDF backend. A tiny
+public live test using Codex 0.163.0 / gpt-6-astra exited with status 1 before extraction. A bounded,
+redacted diagnostic identified a read-only filesystem error. Live semantic extraction is blocked
+and unverified in this environment; no credentials or private source were copied to work around it.

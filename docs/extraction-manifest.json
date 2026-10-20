@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "6a8d3be3cc9dc7e6a4354e067ec413fe88c44f012c062c95a0ccffda8bd84ac5"
+      "destinationSha256": "2a9208688f3284648531ff58a61d8a778f4a1248bebb1c75fd8aca26fd539e3e"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -227,7 +227,7 @@
       "destinationPath": "src/application.ts",
       "sourceSha256": "22e0fa1312c652f3e5ab2078d8c7e03d3b0235231e220df3349eb60622f78469",
       "modified": true,
-      "destinationSha256": "96720e8c8e7be8f019ce4eedda5bfacda8540bab31f5324592e81b446a71d2bc"
+      "destinationSha256": "c5b06b17b3589a4fa28eb23cc3a4b5bd38d21732c4812b457a6d42d2bb67c5b2"
     },
     {
       "sourcePath": "tools/context-graph/src/cache.ts",
@@ -241,7 +241,7 @@
       "destinationPath": "src/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "52fdf7a6cf534e5aadb5e7957febd1e9622ada0217015ae3c8fc875dea1feb27"
+      "destinationSha256": "9457766155f444be211bc758ecb46a773355a59870eb5aa6c489cf04ca79855b"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -255,7 +255,7 @@
       "destinationPath": "src/config.ts",
       "sourceSha256": "e9ee8cf2134d274aa6f6a21545959fbec97e958181d9032c073293f28e04d6ca",
       "modified": true,
-      "destinationSha256": "2ee49d75a84fb7c99326b78ee8ccebf7d08f2789d14e34bf97b494b7430eca6b"
+      "destinationSha256": "79f4b1efc82fd9b9b84240f1e69206eaec8525b80fa3b7fbc444d826ffde53de"
     },
     {
       "sourcePath": "tools/context-graph/src/core.ts",
@@ -318,14 +318,14 @@
       "destinationPath": "src/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
       "modified": true,
-      "destinationSha256": "1f98c84ab7f1cbf4ee8ed031361b04725a317bfb1cbd55eefc139d48c7937c35"
+      "destinationSha256": "d42fb1debffb382947a7e848cc41d2b325cf482918911a347eb5462af701823e"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",
       "destinationPath": "src/index.ts",
       "sourceSha256": "a3545649f67fc0bf0496298e3f1dca1e91aa7cb68ec112c34b99a5785fa83f3c",
       "modified": true,
-      "destinationSha256": "94698200b12bd813954ac0dc66d12b8ca3a11e67279317f012d953b3e0824a72"
+      "destinationSha256": "48fb57268984cbe571a8113975f801ea70ca50eb406442aaa33f04008025dedd"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-facade.ts",
@@ -443,15 +443,15 @@
       "sourcePath": "tools/context-graph/src/semantic.test.ts",
       "destinationPath": "src/semantic.test.ts",
       "sourceSha256": "908fe8166dd63f499c28b2c4d20db2e0110b453f66421b2154461287c2d94dac",
-      "modified": false,
-      "destinationSha256": "908fe8166dd63f499c28b2c4d20db2e0110b453f66421b2154461287c2d94dac"
+      "modified": true,
+      "destinationSha256": "77903523dac7c119304d594860ecbe31d1cf7411c4ff14f684fe7d0d3463c06c"
     },
     {
       "sourcePath": "tools/context-graph/src/semantic.ts",
       "destinationPath": "src/semantic.ts",
       "sourceSha256": "1a41fb3fc5a9508c76be59d1c50b74d70ec96411fcbb7f63b0e098c1813d8473",
-      "modified": false,
-      "destinationSha256": "1a41fb3fc5a9508c76be59d1c50b74d70ec96411fcbb7f63b0e098c1813d8473"
+      "modified": true,
+      "destinationSha256": "e84a76e81a1b42b6e666d80772e2b5b2e89d655ae75e4a57c33a259407297981"
     },
     {
       "sourcePath": "tools/context-graph/src/snapshot-checks.test.ts",
@@ -590,6 +590,8 @@
     "docs/ADR-003-draft-overlays.md",
     "docs/ADR-004-rdf-query-path.md",
     "docs/ADR-005-governance-and-optional-oml.md",
+    "docs/ADR-006-provider-boundaries.md",
+    "docs/PROVIDERS.md",
     "docs/ROADMAP.md",
     "docs/SOURCE-INVENTORY.md",
     "docs/VALIDATION.md",
@@ -632,14 +634,18 @@
     "src/architecture.test.ts",
     "src/authority.ts",
     "src/committed-tree.ts",
+    "src/doctor.ts",
     "src/governance.test.ts",
     "src/governance.ts",
     "src/overlay.test.ts",
     "src/overlay.ts",
+    "src/providers.test.ts",
+    "src/providers.ts",
     "src/rdf-ontology.test.ts",
     "src/rdf.test.ts",
     "src/rdf.ts",
     "src/saved-evidence.ts",
+    "src/semantic-process.ts",
     "src/snapshot-lifecycle.test.ts"
   ]
 }

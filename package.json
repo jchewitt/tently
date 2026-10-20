@@ -87,5 +87,25 @@
     "vitest": "3.2.4"
   },
   "packageManager": "pnpm@10.18.2",
-  "x-extraction-modifications": "Standalone workspace, runtime assets, scripts, and destination metadata; see docs/extraction-manifest.json."
+  "x-extraction-modifications": "Standalone workspace, runtime assets, scripts, and destination metadata; see docs/extraction-manifest.json.",
+  "peerDependencies": {
+    "dependency-cruiser": "18.7.0",
+    "eslint": "10.13.0",
+    "@typescript-eslint/parser": "8.72.0",
+    "jscpd": "5.4.1"
+  },
+  "peerDependenciesMeta": {
+    "dependency-cruiser": {
+      "optional": true
+    },
+    "eslint": {
+      "optional": true
+    },
+    "@typescript-eslint/parser": {
+      "optional": true
+    },
+    "jscpd": {
+      "optional": true
+    }
+  }
 }

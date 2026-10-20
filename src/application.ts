@@ -13,7 +13,8 @@ import { GitRepository } from './git.js';
 import { ContextGraphHydrator } from './hydrator.js';
 import { OpenCaesarOntologyCompiler, DirectRdfOntologyCompiler } from './ontology.js';
 import { SnapshotImpactQueryService } from './query.js';
-import { CodexCliSemanticExtractor, SemanticHydrator } from './semantic.js';
+import { SemanticHydrator } from './semantic.js';
+import { createSemanticExtractor } from './providers.js';
 import { SemanticArtifactStore, FileSnapshotStore } from './storage.js';
 import {
   RepositoryContractExtractor,
@@ -61,7 +62,7 @@ export async function createContextGraphApplication(configPath: string) {
   const adapter = await loadContextGraphAdapterModule(config.adapter, repository);
   const snapshotStore = new FileSnapshotStore(storageRoot);
   const artifactStore = new SemanticArtifactStore(storageRoot);
-  const semanticExtractor = new CodexCliSemanticExtractor(config.semantic);
+  const semanticExtractor = createSemanticExtractor(config.semantic, repositoryRoot);
   const semanticHydrator = new SemanticHydrator(config.semantic, artifactStore, semanticExtractor);
   const staticIndexer = new ScipTypeScriptIndexer(config.scip, storageRoot);
   const ontologyCompiler = config.ontology.backend === 'opencaesar' ? new OpenCaesarOntologyCompiler(

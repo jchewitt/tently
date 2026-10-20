@@ -18,7 +18,13 @@ export interface ContextGraphConfig {
   readonly contractAliases?: Readonly<Record<string, readonly string[]>>;
   readonly evidenceRoots: readonly string[];
   readonly semantic: {
-    readonly provider: 'codex-cli';
+    readonly provider: 'codex-cli' | 'module';
+    readonly providerModule?: string;
+    readonly providerIdentity?: string;
+    readonly timeoutMs?: number;
+    readonly retries?: number;
+    readonly maxDocuments?: number;
+    readonly maxSourceBytes?: number;
     readonly model: string;
     readonly reasoningEffort: string;
     readonly promptVersion: string;
@@ -230,10 +236,19 @@ function validateConfig(value: unknown, absolutePath: string): asserts value is 
   requireConfig(isRecord(value.semantic), 'semantic must be an object', absolutePath);
   if (isRecord(value.semantic)) {
     requireConfig(
-      value.semantic.provider === 'codex-cli',
+      value.semantic.provider === 'codex-cli' || value.semantic.provider === 'module',
       'semantic.provider is invalid',
       absolutePath,
     );
+    if (value.semantic.provider === 'module') {
+      requireConfig(isNonEmptyString(value.semantic.providerModule) && isNonEmptyString(value.semantic.providerIdentity),
+        'module providers require providerModule and providerIdentity', absolutePath);
+    }
+    for (const [field, max] of [['timeoutMs', 300_000], ['retries', 2], ['maxDocuments', 1000], ['maxSourceBytes', 1_048_576]] as const) {
+      const item = value.semantic[field];
+      if (item !== undefined) requireConfig(Number.isInteger(item) && Number(item) >= (field === 'retries' ? 0 : 1) && Number(item) <= max,
+        `semantic.${field} exceeds supported bounds`, absolutePath);
+    }
     for (const field of [
       'model',
       'reasoningEffort',
@@ -261,8 +276,8 @@ function validateConfig(value: unknown, absolutePath: string): asserts value is 
       absolutePath,
     );
     requireConfig(
-      Number.isInteger(value.semantic.concurrency) && Number(value.semantic.concurrency) > 0,
-      'semantic.concurrency must be a positive integer',
+      Number.isInteger(value.semantic.concurrency) && Number(value.semantic.concurrency) > 0 && Number(value.semantic.concurrency) <= 4,
+      'semantic.concurrency must be a positive integer no greater than 4',
       absolutePath,
     );
   }

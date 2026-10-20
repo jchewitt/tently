@@ -14,6 +14,7 @@ import { readFile } from 'node:fs/promises';
 import { basename, dirname, join } from 'node:path';
 import { analyzeArchitecture, type ArchitecturePolicy } from './governance.js';
 import { FileSnapshotStore } from './storage.js';
+import { diagnoseSetup } from './doctor.js';
 
 function valueAfter(args: readonly string[], name: string): string | undefined {
   const index = args.indexOf(name);
@@ -50,6 +51,10 @@ export function impactRequestFromArgs(args: readonly string[]): ImpactScanReques
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
+  if (args.includes('--help') || !args.length) {
+    process.stdout.write('context-graph doctor|hydrate|overlay|impact scan|sparql|validate|govern|visualize|diagnostics show|invariant check|clean-compare|ontology compile\nUse --config <file>; queries accept --snapshot <id>. impact scan accepts --changed-file, --capability, --max-facts, --max-depth, --continuation. See README.md for examples.\n');
+    return;
+  }
   if (args[0] === 'govern') {
     const policyFile = resolve(valueAfter(args, '--policy') ?? 'architecture.policy.json');
     const policy = JSON.parse(await readFile(policyFile, 'utf8')) as ArchitecturePolicy;
@@ -60,6 +65,10 @@ async function main(): Promise<void> {
     return;
   }
   const configPath = valueAfter(args, '--config') ?? defaultConfigPath();
+  if (args[0] === 'doctor') {
+    process.stdout.write(`${JSON.stringify(await diagnoseSetup(configPath), null, 2)}\n`);
+    return;
+  }
   const application = await createContextGraphApplication(configPath);
   const [command, subcommand] = args;
   if (command === 'sparql' || command === 'validate') {
@@ -88,13 +97,20 @@ async function main(): Promise<void> {
     return;
   }
   if (command === 'hydrate') {
+    const controller = new AbortController();
+    const cancel = () => controller.abort();
+    process.once('SIGINT', cancel);
     const scope = await application.scopeResolver?.resolve(impactRequestFromArgs(args));
     const result = await application.hydrator.hydrate({
       ref: valueAfter(args, '--ref') ?? 'HEAD',
       headName: scope?.headName ?? application.headName,
       semanticSources: scope?.semanticSources,
       forceSemantic: args.includes('--force-semantic'),
+      signal: controller.signal,
+      onProgress: args.includes('--quiet') ? undefined : (event) =>
+        process.stderr.write(`[context-graph] ${event.phase}${event.total === undefined ? '' : ` ${event.completed}/${event.total}`}\n`),
     });
+    process.removeListener('SIGINT', cancel);
     process.stdout.write(
       `${JSON.stringify(
         {

@@ -1,3 +1,4 @@
+// Modified for standalone extraction; see docs/extraction-manifest.json.
 import { mkdtemp, readFile, readdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -145,7 +146,7 @@ describe('SemanticHydrator', () => {
       });
     }
     expect(source.content).toBe('# Capability\nThe worker realizes search.\n');
-    expect(extractor.identity).toBe('codex-cli:test-model:prompt-v1:numbered-citations-v1');
+    expect(extractor.identity).toBe('codex-cli:test-model:low:prompt-v1:contract-v2');
     await expect(readFile(isolatedRoot, 'utf8')).rejects.toThrow();
   });
 

@@ -31,12 +31,14 @@ describe('unified evidence graph', () => {
     const repository = new GitRepository(root);
     const storage = join(root, '.context-graph');
     const store = new FileSnapshotStore(storage);
+    let providerCalls = 0;
     const hydrator = new ContextGraphHydrator({
       config, repository, snapshotStore: store,
       // A deterministic test provider reads the fixture's prose. This is not a claim of live model quality.
       semanticHydrator: new SemanticHydrator(config.semantic, new SemanticArtifactStore(storage), {
         identity: 'fixture-prose-parser:1',
         async extract(source) {
+          providerCalls++;
           const implementations = [...source.content.matchAll(/The (\w+) stage is implemented by ([^\s]+)\./g)];
           const routes = [...source.content.matchAll(/The (\w+) stage routes through the (\w+) stage/g)];
           const line = (index: number) => source.content.slice(0, index).split('\n').length;
@@ -67,6 +69,10 @@ describe('unified evidence graph', () => {
       ],
       invariantEvaluators: [],
     });
+    Object.assign(config.semantic, { maxDocuments: 1 });
+    await expect(hydrator.hydrate({ ref: 'HEAD', headName: 'default' })).rejects.toThrow('budget exceeded');
+    expect(providerCalls).toBe(0);
+    Object.assign(config.semantic, { maxDocuments: 8 });
     const { snapshot } = await hydrator.hydrate({ ref: 'HEAD', headName: 'default' });
     const repeated = await hydrator.hydrate({ ref: 'HEAD', headName: 'default' });
     expect(repeated.semanticReused).toBe(6);

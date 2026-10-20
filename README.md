@@ -9,7 +9,8 @@ This is a standalone baseline under development. See [roadmap](docs/ROADMAP.md) 
 
 ## Development
 
-Requires Node.js 20.11+ and pnpm 10.18.2.
+Development is tested on Node.js 24 and pnpm 10.18.2. The runtime declares Node.js 20.11+;
+other supported runtime versions have not been exercised here.
 
 ```sh
 pnpm install --frozen-lockfile
@@ -40,7 +41,8 @@ context-graph impact scan --config context-graph.config.json --capability search
 context-graph visualize --config context-graph.config.json --capability search --output graph.html
 ```
 
-Full semantic hydration currently requires configured Codex CLI access and Docker/openCAESAR.
+Semantic hydration requires a working configured provider. Direct RDF is the default;
+Docker/openCAESAR is an optional explicit backend. Run `context-graph doctor` for setup diagnostics.
 Committed indexing and ontology input use disposable archives, preserving the active checkout.
 Saved-snapshot queries do not invoke either dependency or refresh automatically. Responses report
 commit, configuration, source scope and excluded working changes. Use `hydrate` explicitly to
@@ -64,3 +66,6 @@ for query bounds and authority configuration.
 Never submit credentials, account data or private runtime payloads as semantic sources.
 Live provider tests are separate from deterministic CI. Public publication, registry naming
 and the final export inventory require explicit maintainer authorization.
+
+See [provider contract](docs/PROVIDERS.md) for bounded extraction and adapters, and
+[architecture policy](docs/architecture-policy.md) for deterministic governance.

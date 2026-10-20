@@ -21,6 +21,8 @@ import { matchesRepositoryGlob } from './glob.js';
 import { RdfEvidenceGraph } from './rdf.js';
 
 export interface HydrationOptions {
+  readonly signal?: AbortSignal;
+  readonly onProgress?: (event: { phase: string; completed?: number; total?: number }) => void;
   readonly ref: string;
   readonly headName: string;
   readonly forceSemantic?: boolean;
@@ -61,14 +63,18 @@ async function concurrentMap<T, R>(
 ): Promise<readonly R[]> {
   const results = new Array<R>(values.length);
   let cursor = 0;
+  let failure: unknown;
+  let failed = false;
   await Promise.all(
     Array.from({ length: Math.max(1, Math.min(concurrency, values.length)) }, async () => {
-      while (cursor < values.length) {
+      while (!failed && cursor < values.length) {
         const index = cursor++;
-        results[index] = await worker(values[index] as T, index);
+        try { results[index] = await worker(values[index] as T, index); }
+        catch (error) { failed = true; failure ??= error; }
       }
     }),
   );
+  if (failed) throw failure;
   return results;
 }
 
@@ -98,6 +104,8 @@ export class ContextGraphHydrator {
   }
 
   async hydrate(options: HydrationOptions): Promise<HydrationResult> {
+    options.signal?.throwIfAborted();
+    options.onProgress?.({ phase: 'resolve-committed-sources' });
     const { config, repository, snapshotStore } = this.dependencies;
     const commitSha = await repository.resolveRef(options.ref);
     if (options.requireClean === true) await repository.requireExactCleanCommit(commitSha);
@@ -149,6 +157,10 @@ export class ContextGraphHydrator {
       semanticPaths: selectedSemanticSources,
     };
     const sources = await repository.semanticSources(context, selectedSemanticSources);
+    if (sources.length > (config.semantic.maxDocuments ?? 8) ||
+      sources.some((source) => Buffer.byteLength(source.content) > (config.semantic.maxSourceBytes ?? 65_536))) {
+      throw new Error('Semantic source budget exceeded before extraction; narrow scope or explicitly review configured limits');
+    }
     const ids = new Set<string>();
     for (const source of sources) {
       if (ids.has(source.stableSemanticId)) {
@@ -158,14 +170,17 @@ export class ContextGraphHydrator {
     }
     let semanticExtracted = 0;
     let semanticReused = 0;
+    const controller = new AbortController();
+    const signal = AbortSignal.any([controller.signal, ...(options.signal ? [options.signal] : [])]);
     const hydrated = await concurrentMap(sources, config.semantic.concurrency, async (source) => {
-      const result = await this.dependencies.semanticHydrator.hydrate(
-        source,
-        context,
-        forceRevision,
-      );
+      let result;
+      try {
+        result = await this.dependencies.semanticHydrator.hydrate(source, context, forceRevision, { signal });
+      } catch (error) { controller.abort(); throw error; }
       if (result.reused) semanticReused += 1;
       else semanticExtracted += 1;
+      options.onProgress?.({ phase: result.reused ? 'semantic-cache-hit' : 'semantic-extracted',
+        completed: semanticReused + semanticExtracted, total: sources.length });
       return { source, ...result };
     });
     const artifacts = hydrated.map((result) => result.artifact);
@@ -196,6 +211,8 @@ export class ContextGraphHydrator {
           matchesRepositoryGlob(source.path, pattern)) ? 'declared' : 'inferred') as 'declared' | 'inferred',
       })),
     );
+    options.signal?.throwIfAborted();
+    options.onProgress?.({ phase: 'index-typescript' });
     const scip = await this.dependencies.staticIndexer.index(context);
     const extractorFacts = (
       await Promise.all(
@@ -204,6 +221,8 @@ export class ContextGraphHydrator {
     ).flat();
     const trackedPaths = await repository.listAllFilesAt(commitSha);
     const documentFacts = linkSemanticDocuments(context, hydrated, trackedPaths);
+    options.signal?.throwIfAborted();
+    options.onProgress?.({ phase: 'compile-semantic-rdf' });
     const ontology = await this.dependencies.ontologyCompiler.compile(snapshotId, artifacts, context);
     const runtimeEvidence = runtimeRevision.references;
     const runtimeFacts = runtimeEvidenceFacts(context, runtimeEvidence);
@@ -282,10 +301,13 @@ export class ContextGraphHydrator {
       unresolved,
       diagnostics,
     };
+    options.signal?.throwIfAborted();
+    options.onProgress?.({ phase: 'validate-shacl' });
     const validation = await new RdfEvidenceGraph(snapshot).validate();
     if (!validation.conforms) {
       throw new Error(`Graph extraction failed SHACL validation: ${JSON.stringify(validation.issues)}`);
     }
+    options.onProgress?.({ phase: 'publish-snapshot' });
     await snapshotStore.write(snapshot);
     await snapshotStore.updateHead(options.headName, snapshotId);
     return { snapshot, semanticExtracted, semanticReused };

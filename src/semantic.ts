@@ -1,7 +1,10 @@
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+// Modified for standalone extraction; see docs/extraction-manifest.json.
+import { mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { spawn } from 'node:child_process';
+import { runSemanticProcess, SemanticProviderError, type SemanticRunOptions } from './semantic-process.js';
+export { SemanticProviderError } from './semantic-process.js';
+export type { SemanticRunOptions } from './semantic-process.js';
 
 import type {
   ExtractionContext,
@@ -22,7 +25,7 @@ import {
   semanticCitationSchema,
 } from './semantic-citations.js';
 
-interface ExtractedAssertion {
+export interface ExtractedAssertion {
   readonly subject: { readonly id: string; readonly kind: GraphNodeKind; readonly label: string };
   readonly predicate: GraphPredicate;
   readonly object: { readonly id: string; readonly kind: GraphNodeKind; readonly label: string };
@@ -30,7 +33,7 @@ interface ExtractedAssertion {
   readonly confidence: number;
 }
 
-interface CodexSemanticOutput {
+export interface SemanticOutput {
   readonly assertions: readonly ExtractedAssertion[];
   readonly oml: string;
   readonly unresolvedMappings?: readonly string[];
@@ -43,7 +46,7 @@ interface CodexSemanticOutput {
 }
 
 export interface SemanticExtractionResult {
-  readonly parsed: CodexSemanticOutput;
+  readonly parsed: SemanticOutput;
   readonly rawModelOutput: string;
 }
 
@@ -120,7 +123,7 @@ function renderOml(key: string, assertions: readonly ExtractedAssertion[]): stri
 
 export interface SemanticExtractor {
   readonly identity: string;
-  extract(source: SemanticSource, context: ExtractionContext): Promise<SemanticExtractionResult>;
+  extract(source: SemanticSource, context: ExtractionContext, options?: SemanticRunOptions): Promise<SemanticExtractionResult>;
 }
 
 export interface SemanticCommandRunner {
@@ -130,6 +133,7 @@ export interface SemanticCommandRunner {
     cwd: string,
     prompt: string,
     environment: SemanticCommandEnvironment,
+    options?: SemanticRunOptions,
   ): Promise<void>;
 }
 
@@ -170,29 +174,7 @@ export function semanticCommandEnvironment(
   return result;
 }
 
-const spawnSemanticCommand: SemanticCommandRunner = {
-  run(command, args, cwd, prompt, environment) {
-    return new Promise<void>((resolve, reject) => {
-      const child = spawn(command, [...args], {
-        cwd,
-        env: environment,
-        stdio: ['pipe', 'ignore', 'pipe'],
-        windowsHide: true,
-      });
-      let stderr = '';
-      child.stderr.on('data', (chunk: Buffer) => {
-        stderr += chunk.toString('utf8');
-      });
-      child.once('error', reject);
-      child.once('close', (code) => {
-        if (code === 0) resolve();
-        else
-          reject(new Error(`Codex semantic extraction failed (${code}): ${stderr.slice(-4000)}`));
-      });
-      child.stdin.end(prompt);
-    });
-  },
-};
+const spawnSemanticCommand: SemanticCommandRunner = { run: runSemanticProcess };
 
 const kinds: readonly GraphNodeKind[] = [
   'Project',
@@ -227,7 +209,7 @@ const predicates: readonly GraphPredicate[] = [
   'contains',
 ];
 
-function outputSchema(lineCount: number): object {
+export function semanticOutputSchema(lineCount: number): object {
   const node = {
     type: 'object',
     additionalProperties: false,
@@ -280,6 +262,38 @@ function outputSchema(lineCount: number): object {
   };
 }
 
+/** Runtime validation is shared by every provider; schema-constrained output is not trusted blindly. */
+export function assertSemanticOutput(value: unknown, source: SemanticSource): asserts value is SemanticOutput {
+  const record = (item: unknown): item is Record<string, unknown> => typeof item === 'object' && item !== null && !Array.isArray(item);
+  const text = (item: unknown, max = 1000): item is string => typeof item === 'string' && item.trim().length > 0 && item.length <= max;
+  const node = (item: unknown) => record(item) && text(item.id) && text(item.label) && kinds.includes(item.kind as GraphNodeKind);
+  const fail = (message: string): never => { throw new SemanticProviderError('invalid-output', message); };
+  if (!record(value) || !Array.isArray(value.assertions) || value.assertions.length > 1000 || typeof value.oml !== 'string') {
+    fail('Invalid semantic output structure');
+  }
+  const output = value as Record<string, unknown>;
+  const lineCount = source.content.split('\n').length;
+  for (const [index, assertion] of (output.assertions as unknown[]).entries()) {
+    if (!record(assertion) || !node(assertion.subject) || !node(assertion.object) ||
+      !predicates.includes(assertion.predicate as GraphPredicate) || typeof assertion.confidence !== 'number' ||
+      !Number.isFinite(assertion.confidence) || assertion.confidence < 0 || assertion.confidence > 1 || !record(assertion.citation)) {
+      fail('Invalid semantic assertion');
+    }
+    assertSemanticCitation((assertion as ExtractedAssertion).citation, source.path, lineCount, `assertion[${index}]`);
+  }
+  if (output.diagnostics !== undefined) {
+    if (!Array.isArray(output.diagnostics) || output.diagnostics.length > 1000) fail('Invalid semantic diagnostics');
+    for (const [index, item] of (output.diagnostics as unknown[]).entries()) {
+      if (!record(item) || !['missingIntent', 'ambiguousIntent', 'implementationGaps'].includes(String(item.kind)) ||
+        !text(item.reason) || !record(item.citation) || !Array.isArray(item.relatedNodeIds) ||
+        item.relatedNodeIds.length > 1000 || !item.relatedNodeIds.every((id) => text(id))) fail('Invalid semantic diagnostic');
+      assertSemanticCitation((item as { citation: ExtractedAssertion['citation'] }).citation, source.path, lineCount, `diagnostic[${index}]`);
+    }
+  }
+  if (output.unresolvedMappings !== undefined && (!Array.isArray(output.unresolvedMappings) ||
+    output.unresolvedMappings.length > 1000 || !output.unresolvedMappings.every((item) => text(item)))) fail('Invalid unresolved mappings');
+}
+
 export class CodexCliSemanticExtractor implements SemanticExtractor {
   readonly identity: string;
 
@@ -287,20 +301,25 @@ export class CodexCliSemanticExtractor implements SemanticExtractor {
     private readonly config: ContextGraphConfig['semantic'],
     private readonly runner: SemanticCommandRunner = spawnSemanticCommand,
   ) {
-    this.identity = `codex-cli:${config.model}:${config.promptVersion}:numbered-citations-v1`;
+    this.identity = `codex-cli:${config.model}:${config.reasoningEffort}:${config.promptVersion}:contract-v2`;
   }
 
   async extract(
     source: SemanticSource,
     context: ExtractionContext,
+    options: SemanticRunOptions = {},
   ): Promise<SemanticExtractionResult> {
+    options.signal?.throwIfAborted();
+    if (Buffer.byteLength(source.content) > (this.config.maxSourceBytes ?? 65_536)) {
+      throw new SemanticProviderError('invalid-output', 'Semantic source exceeds configured byte budget');
+    }
     const runRoot = await mkdtemp(join(tmpdir(), 'context-graph-codex-'));
     const schemaPath = join(runRoot, 'schema.json');
     const outputPath = join(runRoot, 'output.json');
     const sourcePath = join(runRoot, 'source.md');
     const lineCount = source.content.split('\n').length;
     const numberedSource = numberedSemanticSource(source.content);
-    await writeFile(schemaPath, `${JSON.stringify(outputSchema(lineCount), null, 2)}\n`, 'utf8');
+    await writeFile(schemaPath, `${JSON.stringify(semanticOutputSchema(lineCount), null, 2)}\n`, 'utf8');
     await writeFile(sourcePath, numberedSource, 'utf8');
     const prompt = [
       'Extract only semantic architecture assertions explicitly supported by the supplied source.',
@@ -350,18 +369,25 @@ export class CodexCliSemanticExtractor implements SemanticExtractor {
       '-',
     ];
     try {
-      await this.runner.run(
-        command,
-        args,
-        runRoot,
-        prompt,
-        semanticCommandEnvironment(process.env),
-      );
+      const retries = this.config.retries ?? 0;
+      for (let attempt = 0; ; attempt++) {
+        try {
+          await this.runner.run(command, args, runRoot, prompt, semanticCommandEnvironment(process.env),
+            { ...options, timeoutMs: options.timeoutMs ?? this.config.timeoutMs ?? 120_000 });
+          break;
+        } catch (error) {
+          if (!(error instanceof SemanticProviderError) || !error.retryable || attempt >= retries || options.signal?.aborted) throw error;
+        }
+      }
+      if ((await stat(outputPath)).size > 2 * 1024 * 1024) {
+        throw new SemanticProviderError('invalid-output', 'Semantic output exceeds 2 MiB');
+      }
       const rawModelOutput = await readFile(outputPath, 'utf8');
-      return {
-        parsed: JSON.parse(rawModelOutput) as CodexSemanticOutput,
-        rawModelOutput,
-      };
+      let parsed: unknown;
+      try { parsed = JSON.parse(rawModelOutput); }
+      catch { throw new SemanticProviderError('invalid-output', 'Semantic output is not valid JSON'); }
+      assertSemanticOutput(parsed, source);
+      return { parsed, rawModelOutput };
     } finally {
       await rm(runRoot, { recursive: true, force: true });
     }
@@ -379,7 +405,9 @@ export class SemanticHydrator {
     source: SemanticSource,
     context: ExtractionContext,
     forceRevision?: string,
+    options: SemanticRunOptions = {},
   ): Promise<{ artifact: SemanticArtifact; reused: boolean }> {
+    options.signal?.throwIfAborted();
     const keyInput = {
       stableSemanticId: source.stableSemanticId,
       sourceDigest: source.digest,
@@ -391,13 +419,17 @@ export class SemanticHydrator {
       minimumConfidence: this.config.minimumConfidence,
       failOnUnresolved: this.config.failOnUnresolved,
       forceRevision,
-      diagnosticContractVersion: 2,
+      diagnosticContractVersion: 3,
     };
     const key = sha256(stableJson(keyInput));
     const existing = await this.store.read(key);
     if (existing) return { artifact: existing, reused: true };
 
-    const extraction = await this.extractor.extract(source, context);
+    const extraction = await this.extractor.extract(source, context, options);
+    assertSemanticOutput(extraction.parsed, source);
+    if (typeof extraction.rawModelOutput !== 'string' || Buffer.byteLength(extraction.rawModelOutput) > 2 * 1024 * 1024) {
+      throw new SemanticProviderError('invalid-output', 'Invalid or oversized raw semantic output');
+    }
     const output = extraction.parsed;
     const lineCount = source.content.split('\n').length;
     const facts: Omit<GraphFact, 'snapshotId'>[] = output.assertions.map((assertion, index) => {
