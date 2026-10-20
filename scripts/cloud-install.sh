@@ -8,6 +8,7 @@ npm install --prefix /workspace/context-graph-tools --cache /workspace/.npm-cach
   --ignore-scripts --no-audit --no-fund pnpm@10.18.2
 export PATH=/workspace/context-graph-tools/node_modules/.bin:$PATH
 export npm_config_store_dir=/workspace/.pnpm-store
+export npm_config_cache=/workspace/.npm-cache
 export XDG_CACHE_HOME=/workspace/.cache
 pnpm install --frozen-lockfile
 pnpm build

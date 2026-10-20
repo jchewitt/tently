@@ -10,6 +10,7 @@ Start each shell session with:
 ```sh
 export PATH=/workspace/context-graph-tools/node_modules/.bin:$PATH
 export npm_config_store_dir=/workspace/.pnpm-store
+export npm_config_cache=/workspace/.npm-cache
 export XDG_CACHE_HOME=/workspace/.cache
 cd /workspace/tently
 ```
@@ -41,3 +42,6 @@ Optional npm publication uses the secure `TENTLY_NPM_TOKEN` environment binding,
 credential and publishing that configuration are separate user actions. Development and
 validation do not need this secret. See `RELEASING.md` for the publisher's temporary npm
 configuration and archive verification. No credential value belongs in this repository.
+
+See [environment validation](ENVIRONMENT-VALIDATION.md) for the hosted CI evidence, fresh-task
+restoration procedure and browser-MCP checklist. These checks do not require live Codex.

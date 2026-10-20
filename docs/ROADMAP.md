@@ -25,10 +25,14 @@ pending explicit owner approval. It does not publish a replacement for npm 0.1.0
 
 Next work should be separate, reviewed increments: fix native Windows exact-byte archive handling,
 concurrent atomic snapshot-head replacement, CRLF integrity checks and symlink fixtures;
-run bounded semantic-quality evaluations; exercise macOS and hosted CI; validate fresh-cloud
+run bounded semantic-quality evaluations; retain the passing hosted Ubuntu CI gate; validate fresh-cloud
 restoration; resolve the cloud-specific live provider block; add browser
 interaction/accessibility tests; benchmark larger RDF graphs; evaluate a second real provider.
 Figma and source-application reintegration are future adapter work.
+
+macOS is outside the maintainer's current scope. Hosted Ubuntu CI passed at `92ae118`;
+[environment validation](ENVIRONMENT-VALIDATION.md) separates the remaining fresh-task and
+browser-MCP checks from the unresolved live Codex cloud issue.
 
 Validation evidence and decisions are in `VALIDATION.md` and the ADR files. Source approval and
 model assertion review are distinct. On 2026-10-20 the user authorized pushing the reviewed

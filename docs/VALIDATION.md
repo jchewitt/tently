@@ -345,4 +345,28 @@ telemetry (2) entry points. A source comparison confirmed all 38 moved runtime f
 only in import/export module paths and required attribution notices. Clean builds remove
 obsolete compiled modules. Public package names, CLI commands, configuration, graph behavior
 and snapshot formats are unchanged. This is an unreleased source refactor, not a replacement
-for published 0.1.0. Native Windows, macOS and hosted CI were not rerun for this change.
+for published 0.1.0. Native Windows and macOS were not rerun for this change. Hosted CI was
+subsequently verified as recorded below.
+
+## Hosted CI and restoration preparation
+
+GitHub-hosted Ubuntu [run 39492039168](https://github.com/jchewitt/tently/actions/runs/39492039168)
+completed successfully at `92ae118ccb22f59aaa150b1c8f3a009bdacc788a`. The Actions API reports
+the deterministic job and repository composite action succeeded. The workflow selects Node 24
+and pnpm 10.18.2, installs the frozen lockfile and runs the full deterministic publication gate.
+This verifies hosted CI independently of the managed cloud's live Codex filesystem failure.
+Earlier notes that hosted CI was unverified describe the evidence available at that time.
+
+The reusable cloud install/start instructions were saved as an updated environment draft with
+the writable npm cache and current GitHub/npm/CI state. The updated install script completed
+frozen installation and build in this instance. `scripts/check-restoration.mjs` records an ignored public
+snapshot checkpoint and verifies its retained content and query behavior with an intentionally
+unavailable semantic provider. Current-instance rehearsal is separate from restoring a genuinely
+new cloud task. Follow [environment validation](ENVIRONMENT-VALIDATION.md) for the final user-driven
+environment publication/new-task step and the browser-MCP checklist. macOS is out of current scope.
+
+Current-instance checkpoint verification returned 10 query facts from the retained snapshot with
+an intentionally unavailable module provider and `eligibleForCurrentDiffValidation: false`.
+Changing the checkpoint digest caused verification to fail; restoring the original proof passed
+again. Governance passed with the same 11 advisories, and inventory validation passed. This is
+a rehearsal, not a claim that environment publication or a new-task restoration occurred.
