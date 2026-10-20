@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Modified for standalone extraction; see docs/extraction-manifest.json.
 
+import '../runtime-check.mjs';
 import { resolve } from 'node:path';
 import process from 'node:process';
 

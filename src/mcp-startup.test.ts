@@ -59,7 +59,7 @@ async function unbuiltCheckout() {
       );
     }
   }
-  for (const file of ['mcp-launcher.mjs', 'context-graph.config.json']) {
+  for (const file of ['mcp-launcher.mjs', 'context-graph.config.json', 'runtime-check.mjs', 'runtime-check.d.mts']) {
     await cp(join(original, file), join(toolkit, file));
   }
   return { root, toolkit, launcher: join(toolkit, 'mcp-launcher.mjs') };

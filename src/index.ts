@@ -1,4 +1,5 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
+import '../runtime-check.mjs';
 export * from './core.js';
 export * from './git.js';
 export * from './hydrator.js';

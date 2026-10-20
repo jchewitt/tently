@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // Standalone development launcher. Installed consumers run dist/mcp.js directly.
+import './runtime-check.mjs';
 import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';

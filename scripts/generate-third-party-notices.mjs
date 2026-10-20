@@ -4,6 +4,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
+import { pnpmInvocation } from './package-manager.mjs';
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const toolkitRoot = resolve(scriptDirectory, '..');
@@ -39,20 +40,14 @@ function isAllowedLicenseExpression(expression) {
 }
 
 function pnpmCommand(args) {
-  const npmExecutable = process.env.npm_execpath;
-  const command = npmExecutable
-    ? process.execPath
-    : process.platform === 'win32'
-      ? 'pnpm.cmd'
-      : 'pnpm';
-  const commandArgs = npmExecutable ? [npmExecutable, ...args] : args;
-  const result = spawnSync(command, commandArgs, {
+  const invocation = pnpmInvocation(args);
+  const result = spawnSync(invocation.command, invocation.args, {
     cwd: repositoryRoot,
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],
   });
   if (result.status !== 0) {
-    throw new Error(result.stderr.trim() || result.stdout.trim() || `pnpm exited ${result.status}`);
+    throw new Error(result.error?.message || result.stderr?.trim() || result.stdout?.trim() || `pnpm exited ${result.status}`);
   }
   return result.stdout;
 }

@@ -9,6 +9,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import { pnpmInvocation } from './package-manager.mjs';
 
 const toolkitRoot = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const packages = [
@@ -20,21 +21,15 @@ function run(command, args, cwd) {
   const result = spawnSync(command, args, { cwd, encoding: 'utf8' });
   if (result.status !== 0) {
     throw new Error(
-      result.stderr.trim() || result.stdout.trim() || `${command} exited ${result.status}`,
+      result.error?.message || result.stderr?.trim() || result.stdout?.trim() || `${command} exited ${result.status}`,
     );
   }
   return result.stdout;
 }
 
 function runPnpm(args, cwd) {
-  const npmExecutable = process.env.npm_execpath;
-  const command = npmExecutable
-    ? process.execPath
-    : process.platform === 'win32'
-      ? 'pnpm.cmd'
-      : 'pnpm';
-  const commandArgs = npmExecutable ? [npmExecutable, ...args] : args;
-  return run(command, commandArgs, cwd);
+  const invocation = pnpmInvocation(args);
+  return run(invocation.command, invocation.args, cwd);
 }
 
 async function npmCliPath() {
@@ -84,6 +79,7 @@ try {
     if (expectedName === '@launch-echo/tently') {
       for (const asset of [
         'dist/cli.js', 'dist/mcp.js',
+        'runtime-check.mjs', 'runtime-check.d.mts',
         'examples/generic-typescript/context-graph.config.json',
         'examples/generic-typescript/ontology/build.gradle',
         'examples/generic-typescript/ontology/src/oml/context-graph.dev/core.oml',

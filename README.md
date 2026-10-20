@@ -58,17 +58,24 @@ archive-byte and concurrent snapshot replacement issues; see the [validation rec
 
 ## Development
 
-Development is tested on Node.js 24 and pnpm 10.18.2. The runtime declares Node.js 20.11+;
-other supported runtime versions have not been exercised here.
+The toolkit requires Node.js 24 or newer; Node 24 is the validated runtime.
+Use pnpm 10.18.2 for development. The neutral core package has no toolkit runtime dependencies
+and retains its separate Node.js 20.11+ declaration.
 
 ```sh
 git clone https://github.com/jchewitt/tently.git
 cd tently
+nvm install
+nvm use
 pnpm install --frozen-lockfile
 pnpm build
 pnpm test
 pnpm context-graph:publication-check
 ```
+
+The `.nvmrc` selects Node 24. If you do not use nvm, install Node 24 through your usual
+version manager. The project rejects unsupported Node versions during installation, and
+CLI/MCP startup reports a version error before loading runtime dependencies.
 
 The publication check packs and installs into a disposable consumer, indexes actual TypeScript
 and exercises the installed toolkit. It does not publish. Core and toolkit retain separate

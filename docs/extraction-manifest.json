@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "e1bbfd7186a0239ec5b645efa79174c040aeb1776559f7ece53b92cf168d1af4"
+      "destinationSha256": "7effe3bdd908b5454c436fa0b8e5ca69901f97e3bb83eec99a23cf8723ff316c"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -192,14 +192,14 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "07e59360014380187befc3099d6c4f05412a475040130f5ab294fb25616b62f3"
+      "destinationSha256": "a086e1a5b5acfba5c793365eda67095c6a69a730cf5ba123d508f9936053c773"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
       "destinationPath": "scripts/generate-third-party-notices.mjs",
       "sourceSha256": "42cd4996ecab49b008634958e47b0a9eadf9ea775678b8daaeeafea59eaabadf",
       "modified": true,
-      "destinationSha256": "a6e4e062afadb1993363337009d9e1bc0cd1256d6b1503bd57cf6289e9c806df"
+      "destinationSha256": "60ef68b41ddbd9fb8777e5d4fa2319e1fd9121dab9e4087871796bbad5291146"
     },
     {
       "sourcePath": "tools/context-graph/src/agent-context.test.ts",
@@ -241,7 +241,7 @@
       "destinationPath": "src/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "b405f04022b5125be8fca5f5fa9210777a08d62daca159b22429dad02b1442e3"
+      "destinationSha256": "6d28a5e93f2c5df8ada434e06bef46d4781195fcd2aa62effc79c4e954a48852"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -325,7 +325,7 @@
       "destinationPath": "src/index.ts",
       "sourceSha256": "a3545649f67fc0bf0496298e3f1dca1e91aa7cb68ec112c34b99a5785fa83f3c",
       "modified": true,
-      "destinationSha256": "48fb57268984cbe571a8113975f801ea70ca50eb406442aaa33f04008025dedd"
+      "destinationSha256": "6c1b2fdf1a19dc8db047dee3853808df3c7409788f02ade1dab79266825358dd"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-facade.ts",
@@ -339,14 +339,14 @@
       "destinationPath": "src/mcp-startup.test.ts",
       "sourceSha256": "0793f213a0a6a8b4a4c68d12f6333127738f47f3e2c53b1882e9b45f45d1695f",
       "modified": true,
-      "destinationSha256": "260fa45c5eabe58142f7195eb79b23fa5650a46bf273ef1b773766cdb3ff9fe8"
+      "destinationSha256": "fea5585a0f9f484c3b69c763eba5a30f78c8e228dfafe7347ad1b0fcf4ea9105"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp.ts",
       "destinationPath": "src/mcp.ts",
       "sourceSha256": "ee4ffeffb2eea9f8a1097373ade12402ccf8c4fd3c9c38f6a98d8ee8c7b30595",
       "modified": true,
-      "destinationSha256": "658c15f678b8af2bed7a595a613dcf925f24ede40a55152e642c8a80dc237c48"
+      "destinationSha256": "39f2c671e77271de777920b771b6bf66bc8e7b018169cee7e965a1050d0427be"
     },
     {
       "sourcePath": "tools/context-graph/src/ontology.integration.test.ts",
@@ -579,6 +579,8 @@
   "authoredPaths": [
     ".github/workflows/check.yml",
     ".gitignore",
+    ".npmrc",
+    ".nvmrc",
     "CONTRIBUTING.md",
     "README.md",
     "SECURITY.md",
@@ -633,7 +635,11 @@
     "pnpm-lock.yaml",
     "pnpm-workspace.yaml",
     "reviewed-licenses.json",
+    "runtime-check.d.mts",
+    "runtime-check.mjs",
     "scripts/cloud-install.sh",
+    "scripts/npm-auth.mjs",
+    "scripts/package-manager.mjs",
     "scripts/release.mjs",
     "scripts/update-inventory.mjs",
     "src/architecture.test.ts",
@@ -645,13 +651,16 @@
     "src/init.test.ts",
     "src/init.ts",
     "src/module-resolution.ts",
+    "src/npm-auth.test.ts",
     "src/overlay.test.ts",
     "src/overlay.ts",
+    "src/package-manager.test.ts",
     "src/providers.test.ts",
     "src/providers.ts",
     "src/rdf-ontology.test.ts",
     "src/rdf.test.ts",
     "src/rdf.ts",
+    "src/runtime.test.ts",
     "src/saved-evidence.ts",
     "src/semantic-process.ts",
     "src/snapshot-lifecycle.test.ts",

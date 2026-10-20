@@ -237,3 +237,35 @@ This verifies npx installation mechanics without claiming public npm publication
 Registry authentication and public-registry installation remain pending. No npm publication
 has occurred. The HDesk Windows/WSL results above still refer to their original tested SHA;
 the new setup/release commands have not been tested on native Windows.
+
+## Release portability follow-up
+
+The maintainer's WSL release-preparation run initially used Node 22.14.0. The locked Undici
+dependency could not load because `zlib.createZstdDecompress` was unavailable. The previous
+toolkit Node 20.11+ declaration was incorrect. Toolkit metadata, `.nvmrc` and early startup
+checks now require Node 24+; the independent core package retains its own Node requirement.
+
+After updating to Node 24.14.1, the maintainer reported 116 toolkit/example tests passing,
+one optional test skipped, a passing architecture report with 11 advisory findings, and a
+passing inventory check. That aggregate invocation then stopped at license generation:
+the standalone pnpm 10.18.2 executable was passed to Node as JavaScript, producing an `ELF`
+syntax error. This is a script launcher defect, not a license finding. These user-reported
+results do not establish a completed WSL release-preparation pass.
+
+The shared launcher now executes standalone pnpm directly and JavaScript entry points
+through Node. Regression tests cover both forms, paths with spaces and literal arguments.
+A Linux reproduction uses the actual standalone `@pnpm/exe@10.18.2` distribution.
+Separate probes using real Node 22.14.0 confirm that the built CLI, MCP, library entry point
+and development launcher reject the unsupported runtime before loading Undici.
+
+The full Linux publication gate passed on Node 24.19.0 with standalone pnpm 10.18.2:
+126 deterministic tests (1 core + 125 toolkit/example), one optional Docker/OML test skipped,
+architecture approval with the same 11 advisory findings, inventory and license checks, and
+the fresh packed-consumer smoke. That smoke covers npm exec setup/config, runtime assets,
+real TypeScript indexing, SCIP, RDF/SPARQL/SHACL, visualization output and MCP.
+
+Secure cloud publication support is tested for temporary npm configuration permissions,
+literal environment-variable references, cleanup and preservation of ordinary npm login
+when no cloud token is configured. No credential value is stored in that configuration.
+The environment requirement has been saved; an applied credential and public npm publication
+remain pending. These checks do not establish new native Windows or macOS results.

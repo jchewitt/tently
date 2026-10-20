@@ -35,3 +35,9 @@ A fresh Git clone is the portable route for local testing. Cloud environment pub
 does not publish repository commits or prove fresh-task restoration; those are separate checks.
 Saving an environment draft does not apply/publish it. Review and activate it through environment
 settings separately from any repository/package publication decision.
+
+Optional npm publication uses the secure `TENTLY_NPM_TOKEN` environment binding, scoped to
+`registry.npmjs.org`. Its requirement has been saved as an environment draft; supplying the
+credential and publishing that configuration are separate user actions. Development and
+validation do not need this secret. See `RELEASING.md` for the publisher's temporary npm
+configuration and archive verification. No credential value belongs in this repository.

@@ -1,8 +1,11 @@
+import '../runtime-check.mjs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { access, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { pnpmInvocation } from './package-manager.mjs';
+import { npmAuthOptions } from './npm-auth.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const destination = join(root, '.release');
@@ -16,6 +19,7 @@ const entries = [
   ['@launch-echo/tently-core', 'packages/core'],
   ['@launch-echo/tently', '.'],
 ];
+let authentication = { args: [], cleanup: async () => {} };
 
 async function npmCliPath() {
   for (const path of [
@@ -38,7 +42,7 @@ async function main() {
   }
   const commit = git('rev-parse', 'HEAD');
   const npmCli = await npmCliPath();
-  const npm = (...args) => execute(process.execPath, [npmCli, ...args, `--registry=${registry}`]);
+  const npm = (...args) => execute(process.execPath, [npmCli, ...args, `--registry=${registry}`, ...authentication.args]);
   if (mode === '--prepare') {
     await mkdir(destination, { recursive: true });
     const packages = [];
@@ -49,7 +53,8 @@ async function main() {
         throw new Error(`Unexpected release metadata for ${name}`);
       }
       if (!process.env.npm_execpath) throw new Error('Run through pnpm release:prepare to resolve workspace dependency ranges');
-      execute(process.execPath, [process.env.npm_execpath, 'pack', '--pack-destination', destination], packageRoot);
+      const invocation = pnpmInvocation(['pack', '--pack-destination', destination]);
+      execute(invocation.command, invocation.args, packageRoot);
       const filename = `${name.replace(/^@/, '').replaceAll('/', '-')}-${manifest.version}.tgz`;
       if (!(await readdir(destination)).includes(filename)) throw new Error(`Missing archive: ${filename}`);
       const archive = join(destination, filename);
@@ -76,13 +81,14 @@ async function main() {
       throw new Error('Release archive identity or integrity mismatch');
     }
   }
-  // No login flow or token handling: use only the operator's configured registry identity.
+  // Use the operator's login or the secure cloud variable reference; never persist its value.
+  authentication = await npmAuthOptions();
   npm('whoami');
   for (const pkg of manifest.packages) {
     let existing;
     try {
       existing = JSON.parse(execFileSync(process.execPath,
-        [npmCli, 'view', `${pkg.name}@${pkg.version}`, 'dist.integrity', '--json', `--registry=${registry}`],
+        [npmCli, 'view', `${pkg.name}@${pkg.version}`, 'dist.integrity', '--json', `--registry=${registry}`, ...authentication.args],
         { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }));
     } catch (error) {
       let report;
@@ -106,4 +112,4 @@ async function main() {
 main().catch((error) => {
   console.error(error.message);
   process.exitCode = 1;
-});
+}).finally(() => authentication.cleanup());

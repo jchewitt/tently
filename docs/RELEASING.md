@@ -22,9 +22,22 @@ never by putting credentials in repository files or chat.
 Use Node 24, pnpm 10.18.2 and a clean checkout containing the reviewed changes:
 
 ```sh
+nvm install
+nvm use
 pnpm install --frozen-lockfile
 pnpm release:prepare
 ```
+
+The repository's `.nvmrc` selects Node 24; use your preferred version manager if nvm is not
+installed. Check `node --version` in the shell running the release. Node 22.14.0 cannot load
+the locked Undici dependency: its missing `zlib.createZstdDecompress` causes failures before
+the CLI or MCP starts. The toolkit now declares Node 24+ and checks this before dependency
+loading. This replaces the earlier incorrect Node 20.11+ toolkit claim.
+
+Both the JavaScript pnpm distribution and standalone `@pnpm/exe` are supported. The release,
+license and package-smoke scripts detect which entry point pnpm supplied instead of passing
+a native executable to Node. An `ELF` syntax error from the license check on an older checkout
+is this launcher bug; pull the fix before retrying.
 
 Preparation runs the full publication gate, including setup/config tests and a disposable
 registry that serves only the two local archives. The npm exec test installs just
@@ -49,6 +62,15 @@ Then, from the same clean checkout and prepared archives:
 npm whoami --registry=https://registry.npmjs.org
 pnpm release:publish
 ```
+
+For the managed cloud, configure `TENTLY_NPM_TOKEN` through secure environment settings with
+access limited to `registry.npmjs.org`, then save and publish the environment configuration.
+The saved requirement alone does not provide a token or activate it. Use a credential authorized
+to publish both packages in the `launch-echo` scope. Never paste its value into chat or a file.
+The release publisher uses a temporary, restricted-permission npm configuration containing
+only the literal `${TENTLY_NPM_TOKEN}` reference and removes it afterward. Its own `whoami`
+check uses that configuration; a separate bare `npm whoami` may still report no login.
+Without this variable, the publisher retains normal npm login configuration.
 
 The publisher verifies all archive hashes and the source commit before any registry write.
 It publishes core first, then the toolkit, using public access. It verifies each published
