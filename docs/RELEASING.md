@@ -11,11 +11,15 @@ published by this extraction. Licenses and LaunchEcho attribution are preserved.
 
 ## Current status
 
-The maintainer requested npm publication. Public registry reads returned 404 for both selected
-names; this does not prove organization ownership or publishing permission. This cloud session
-has no configured npm identity (`npm whoami` returns `ENEEDAUTH`), so no registry publish has
-occurred. Authentication must be configured through a trusted npm login or secure CI settings,
-never by putting credentials in repository files or chat.
+The maintainer published `@launch-echo/tently-core@0.1.0` from WSL. npm first accepted it while
+public registry reads still returned 404; a later read confirmed its integrity matches the
+prepared core archive. `@launch-echo/tently@0.1.0` remains unpublished at this validation point.
+Core's public `latest` tag is now `0.1.0`, its license is Apache-2.0, and public installation
+and ESM import passed. An earlier npm page showed a temporary `0.0.0-stage` holding version
+while review was pending; this was not our operational release.
+This cloud session has no configured npm identity. Authentication must be configured through
+a trusted npm login or secure CI settings, never by putting credentials in repository files
+or chat.
 
 ## Prepare and review
 
@@ -84,6 +88,20 @@ It publishes core first, then the toolkit, using public access. It verifies each
 archive's registry integrity. If a prior attempt published one package, rerunning skips it only
 when the existing version has exactly the prepared integrity; a different archive at the same
 version is an error. npm package publication is not atomic across the two packages.
+
+After npm accepts an upload, metadata can remain unavailable while npm processes it. The
+publisher saves an archive-specific acceptance record in `.release/`, then checks visibility
+up to 21 times, 15 seconds apart, before proceeding to the next package. Each lookup has a
+bounded timeout and requests fresh registry data. Only 404 triggers this wait; authentication,
+network errors and integrity mismatches stop publication. A visibility timeout reports that
+the upload was accepted, rather than claiming it failed. Keep `.release/` and retry later:
+an acceptance record resumes verification without another upload. These local records do not
+make the two uploads atomic and cannot cover a process interruption before a record is saved.
+
+For the first core upload made with the earlier script, there is no acceptance record. Core
+is now publicly visible, so rerunning with its original prepared bytes will verify and skip it.
+Pulling publisher changes requires a new preparation because the manifest is tied to a commit;
+do not delete the existing release directory or change a published version's package contents.
 
 Local publication explicitly disables provenance because it cannot generate a supported CI
 attestation. On GitHub Actions the script requests provenance; that environment must have npm

@@ -641,6 +641,7 @@
     "scripts/npm-auth.mjs",
     "scripts/npm-command.mjs",
     "scripts/package-manager.mjs",
+    "scripts/registry-publication.mjs",
     "scripts/release.mjs",
     "scripts/update-inventory.mjs",
     "src/architecture.test.ts",
@@ -662,6 +663,7 @@
     "src/rdf-ontology.test.ts",
     "src/rdf.test.ts",
     "src/rdf.ts",
+    "src/registry-publication.test.ts",
     "src/runtime.test.ts",
     "src/saved-evidence.ts",
     "src/semantic-process.ts",
@@ -685,6 +687,14 @@
       "@launch-echo/tently-core"
     ],
     "authenticationVerified": false,
-    "published": false
+    "published": false,
+    "publishedPackages": [
+      {
+        "name": "@launch-echo/tently-core",
+        "version": "0.1.0",
+        "integrity": "sha512-OXMxUWVKxchUTvEex0f1ZhFKWejWSS36FN74QDCLQ4H4Uf0QIH6abM4xPqXXS6pZlhofEzbDorXUspwd4xQdOg==",
+        "verification": "Public registry metadata, downloaded bytes and fresh consumer installation verified; maintainer published from WSL."
+      }
+    ]
   }
 }

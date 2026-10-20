@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { pnpmInvocation } from './package-manager.mjs';
 import { npmAuthOptions } from './npm-auth.mjs';
 import { runNpm } from './npm-command.mjs';
+import { publishAndVerify } from './registry-publication.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const destination = join(root, '.release');
@@ -86,26 +87,45 @@ async function main() {
   authentication = await npmAuthOptions();
   npm('whoami');
   for (const pkg of manifest.packages) {
-    let existing;
-    try {
-      existing = JSON.parse(execFileSync(process.execPath,
-        [npmCli, 'view', `${pkg.name}@${pkg.version}`, 'dist.integrity', '--json', `--registry=${registry}`, ...authentication.args],
-        { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }));
-    } catch (error) {
-      let report;
-      try { report = JSON.parse(String(error.stdout)); } catch {}
-      if (report?.error?.code !== 'E404') throw new Error(`Unable to check registry state for ${pkg.name}; no publish attempted for it`);
-    }
-    if (existing) {
-      if (existing !== pkg.integrity) throw new Error(`${pkg.name}@${pkg.version} already exists with different bytes`);
-      console.log(`Already published with matching integrity: ${pkg.name}@${pkg.version}`);
-      continue;
-    }
-    console.log(`Publishing ${pkg.name}@${pkg.version}`);
-    npm('publish', join(destination, pkg.filename), '--access=public',
-      `--provenance=${process.env.GITHUB_ACTIONS === 'true'}`);
-    const actual = JSON.parse(npm('view', `${pkg.name}@${pkg.version}`, 'dist.integrity', '--json'));
-    if (actual !== pkg.integrity) throw new Error(`Published integrity could not be verified for ${pkg.name}; inspect registry state before retrying`);
+    const receipt = join(destination, `${pkg.filename}.accepted.json`);
+    await publishAndVerify({
+      pkg,
+      lookup: () => {
+        let output;
+        try {
+          output = execFileSync(process.execPath,
+            [npmCli, 'view', `${pkg.name}@${pkg.version}`, 'dist.integrity', '--json',
+              '--prefer-online', '--fetch-retries=0', '--fetch-timeout=15000',
+              `--registry=${registry}`, ...authentication.args],
+            { cwd: root, encoding: 'utf8', timeout: 20_000, stdio: ['ignore', 'pipe', 'pipe'] });
+        } catch (error) {
+          let report;
+          try { report = JSON.parse(String(error.stdout)); } catch {}
+          if (report?.error?.code === 'E404') return null;
+          throw new Error(`Unable to check registry state for ${pkg.name}; publication stopped. ` +
+            'Authentication, network and registry errors are not treated as missing packages.');
+        }
+        const integrity = JSON.parse(output);
+        if (typeof integrity !== 'string' || !integrity.startsWith('sha512-')) {
+          throw new Error(`Registry returned invalid integrity for ${pkg.name}; publication stopped`);
+        }
+        return integrity;
+      },
+      wasAccepted: async () => {
+        let saved;
+        try { saved = JSON.parse(await readFile(receipt, 'utf8')); }
+        catch (error) { if (error.code === 'ENOENT') return false; throw error; }
+        if (saved.name !== pkg.name || saved.version !== pkg.version || saved.integrity !== pkg.integrity) {
+          throw new Error(`Acceptance record differs from prepared archive for ${pkg.name}; inspect release state`);
+        }
+        return true;
+      },
+      publish: () => npm('publish', join(destination, pkg.filename), '--access=public',
+        `--provenance=${process.env.GITHUB_ACTIONS === 'true'}`),
+      recordAccepted: () => writeFile(receipt, `${JSON.stringify({
+        name: pkg.name, version: pkg.version, integrity: pkg.integrity,
+      }, null, 2)}\n`),
+    });
   }
   console.log('Both packages are published and their registry integrity matches the prepared archives.');
 }

@@ -10,8 +10,9 @@ This standalone implementation uses small, recorded delivery milestones. See [ro
 ## Set up a project
 
 The npm package is `@launch-echo/tently`; its neutral `@launch-echo/tently-core` dependency is
-installed automatically. The first registry release is prepared but still requires an
-authenticated publisher in the `launch-echo` npm organization. The commands below become
+installed automatically. Core 0.1.0 is published and verified; the toolkit's first registry
+release still requires completion by an authenticated publisher in the `launch-echo` organization.
+The commands below become
 available from the public registry after publication; local archive testing is described below.
 
 From your TypeScript project's directory, after publication:

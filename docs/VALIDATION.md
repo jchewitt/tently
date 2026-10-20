@@ -280,3 +280,23 @@ remain captured for validation. A subprocess regression test verifies those outp
 and a Linux pseudo-terminal probe confirms both stdin and stdout reach the publication child
 as terminals. Neither test contacts npm for publication or completes a real browser/OTP
 challenge; that authenticated WSL retry remains operator validation.
+
+### npm processing delay and partial release
+
+The maintainer's next WSL attempt successfully completed npm's publish authentication and
+received acceptance for `@launch-echo/tently-core@0.1.0`. Immediate integrity verification
+returned 404 while npm processed the package. A subsequent public registry read confirmed
+core's SHA-512 integrity matches the prepared archive; toolkit still returned 404. This is
+a partial release, not failure of the accepted core upload or evidence of toolkit publication.
+
+The npm website initially displayed `0.0.0-stage`, a temporary holding version awaiting
+staged review, with no license. Later public checks confirmed `latest: 0.1.0` and
+`Apache-2.0` for core. Downloaded tarball bytes match the prepared SHA-512 digest, and a fresh
+temporary consumer successfully installed core from public npm and imported its ESM exports.
+The placeholder's license field does not describe our submitted package.
+
+The publisher now saves acceptance before polling visibility and waits for matching integrity
+before advancing to dependent packages. Seven deterministic tests cover delayed visibility,
+matching existing archives, mismatches, bounded timeout and resume without another upload,
+blocking dependents, registry errors, and publish failure. These tests use controlled registry
+responses; they do not measure npm's processing-time guarantees.
