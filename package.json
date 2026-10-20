@@ -1,0 +1,79 @@
+{
+  "name": "@launchecho/context-graph-toolkit",
+  "version": "0.1.0",
+  "description": "Reusable commit-keyed semantic, implementation, runtime, and evidence graph toolkit",
+  "license": "Apache-2.0",
+  "type": "module",
+  "files": [
+    "dist",
+    "LICENSE",
+    "NOTICE",
+    "README.md",
+    "THIRD_PARTY_NOTICES.md",
+    "examples/generic-typescript",
+    "templates/context-graph-development",
+    "third-party-tools.json"
+  ],
+  "bin": {
+    "context-graph": "dist/cli.js",
+    "context-graph-mcp": "dist/mcp.js"
+  },
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./core": {
+      "types": "./dist/core.d.ts",
+      "import": "./dist/core.js"
+    },
+    "./telemetry": {
+      "types": "./dist/telemetry.d.ts",
+      "import": "./dist/telemetry.js"
+    }
+  },
+  "scripts": {
+    "build": "pnpm --filter @launchecho/context-graph-core build && tsc -p tsconfig.json",
+    "context-graph": "tsx src/cli.ts",
+    "hydrate": "tsx src/cli.ts hydrate --ref HEAD",
+    "mcp": "tsx src/mcp.ts",
+    "ontology:build": "tsx src/cli.ts ontology compile",
+    "scip:index": "scip-typescript index --pnpm-workspaces --no-global-caches",
+    "test": "pnpm --filter @launchecho/context-graph-core test && vitest run",
+    "test:watch": "vitest",
+    "context-graph:licenses": "node scripts/generate-third-party-notices.mjs",
+    "context-graph:licenses:check": "node scripts/generate-third-party-notices.mjs --check",
+    "context-graph:pack:check": "node scripts/check-publication.mjs",
+    "context-graph:publication-check": "pnpm build && pnpm test && pnpm context-graph:licenses:check && pnpm context-graph:pack:check"
+  },
+  "engines": {
+    "node": ">=20.11.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jchewitt/tently.git"
+  },
+  "dependencies": {
+    "@launchecho/context-graph-core": "workspace:^",
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "@opentelemetry/api": "1.9.0",
+    "@opentelemetry/resources": "2.2.0",
+    "@opentelemetry/sdk-trace-base": "2.2.0",
+    "@sourcegraph/scip-typescript": "0.4.0",
+    "n3": "2.7.2"
+  },
+  "devDependencies": {
+    "@types/n3": "1.26.1",
+    "@types/node": "20.19.11",
+    "tsx": "4.20.5",
+    "typescript": "5.5.4",
+    "vitest": "3.2.4"
+  },
+  "packageManager": "pnpm@10.18.2",
+  "x-extraction-modifications": "Standalone workspace, runtime assets, scripts, and destination metadata; see docs/extraction-manifest.json."
+}

@@ -1,0 +1,43 @@
+{
+  "name": "@launchecho/context-graph-core",
+  "version": "0.1.0",
+  "description": "Neutral contracts and deterministic utilities for commit-keyed context graphs",
+  "license": "Apache-2.0",
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE",
+    "NOTICE",
+    "README.md",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "engines": {
+    "node": ">=20.11.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jchewitt/tently.git",
+    "directory": "packages/core"
+  },
+  "devDependencies": {
+    "@types/node": "20.19.11",
+    "typescript": "5.5.4",
+    "vitest": "3.2.4"
+  },
+  "x-extraction-modifications": "Destination repository metadata."
+}

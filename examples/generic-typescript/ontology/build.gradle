@@ -1,0 +1,38 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'io.opencaesar.oml:oml-merge-gradle:2.13.0'
+        classpath 'io.opencaesar.adapters:oml2owl-gradle:2.13.1'
+    }
+}
+
+apply plugin: 'base'
+apply plugin: 'oml'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    oml 'io.opencaesar.ontologies:core-vocabularies:5.1.0'
+}
+
+task downloadDependencies(type: io.opencaesar.oml.merge.OmlMergeTask, dependsOn: configurations.oml) {
+    inputZipPaths = configurations.oml.files
+    outputCatalogFolder = file('build/oml')
+}
+
+task oml2owl(type: io.opencaesar.oml2owl.Oml2OwlTask, dependsOn: downloadDependencies) {
+    inputCatalogPath = file('catalog.xml')
+    rootOntologyIri = 'https://context-graph.dev/generated/snapshot'
+    outputCatalogPath = file('build/rdf/catalog.xml')
+    outputFileExtension = 'ttl'
+    generateRules = true
+    omlAnnotations = 'generate'
+}
+
+tasks.named('build') {
+    dependsOn oml2owl
+}

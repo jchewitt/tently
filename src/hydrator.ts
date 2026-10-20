@@ -1,0 +1,296 @@
+import type { ContextGraphConfig } from './config.js';
+import type {
+  ExtractionContext,
+  FactExtractor,
+  GraphSnapshot,
+  InvariantEvaluator,
+  RuntimeTraceReference,
+  RuntimeEvidenceProvider,
+  SnapshotStore,
+} from './core.js';
+import type { GitRepository } from './git.js';
+import { contractPatternRoots } from './glob.js';
+import type { OntologyCompiler } from './ontology.js';
+import type { SemanticHydrator } from './semantic.js';
+import type { ScipIndexResult, StaticIndexer } from './static.js';
+import { sha256, stableJson } from './util.js';
+import { linkSemanticDocuments } from './document.js';
+import { runtimeEvidenceFacts } from './runtime-evidence.js';
+
+export interface HydrationOptions {
+  readonly ref: string;
+  readonly headName: string;
+  readonly forceSemantic?: boolean;
+  readonly snapshotSuffix?: string;
+  readonly requireClean?: boolean;
+  readonly semanticSources?: readonly string[];
+  readonly runtimeEvidenceRevision?: RuntimeEvidenceRevision;
+}
+
+export interface RuntimeEvidenceRevision {
+  readonly commitSha: string;
+  readonly digest: string;
+  readonly references: readonly RuntimeTraceReference[];
+}
+
+export interface HydrationResult {
+  readonly snapshot: GraphSnapshot;
+  readonly semanticExtracted: number;
+  readonly semanticReused: number;
+}
+
+export interface HydratorDependencies {
+  readonly config: ContextGraphConfig;
+  readonly repository: GitRepository;
+  readonly snapshotStore: SnapshotStore;
+  readonly semanticHydrator: SemanticHydrator;
+  readonly staticIndexer: StaticIndexer;
+  readonly ontologyCompiler: OntologyCompiler;
+  readonly runtimeEvidenceProvider: RuntimeEvidenceProvider;
+  readonly extractorFactory: (scip: ScipIndexResult) => readonly FactExtractor[];
+  readonly invariantEvaluators: readonly InvariantEvaluator[];
+}
+
+async function concurrentMap<T, R>(
+  values: readonly T[],
+  concurrency: number,
+  worker: (value: T, index: number) => Promise<R>,
+): Promise<readonly R[]> {
+  const results = new Array<R>(values.length);
+  let cursor = 0;
+  await Promise.all(
+    Array.from({ length: Math.max(1, Math.min(concurrency, values.length)) }, async () => {
+      while (cursor < values.length) {
+        const index = cursor++;
+        results[index] = await worker(values[index] as T, index);
+      }
+    }),
+  );
+  return results;
+}
+
+export class ContextGraphHydrator {
+  constructor(private readonly dependencies: HydratorDependencies) {}
+
+  async collectRuntimeEvidence(commitSha: string): Promise<RuntimeEvidenceRevision> {
+    const { config, repository } = this.dependencies;
+    const context: ExtractionContext = {
+      repositoryRoot: repository.root,
+      repositoryId: config.repositoryId,
+      ref: commitSha,
+      commitSha,
+      snapshotId: commitSha,
+      changedPaths: [],
+      deletedPaths: [],
+      renamedPaths: {},
+    };
+    const references = [...(await this.dependencies.runtimeEvidenceProvider.collect(context))]
+      .filter((evidence) => evidence.accepted)
+      .sort((left, right) => stableJson(left).localeCompare(stableJson(right)));
+    return {
+      commitSha,
+      digest: sha256(stableJson(references)),
+      references,
+    };
+  }
+
+  async hydrate(options: HydrationOptions): Promise<HydrationResult> {
+    const { config, repository, snapshotStore } = this.dependencies;
+    const commitSha = await repository.resolveRef(options.ref);
+    if (options.requireClean !== false) await repository.requireExactCleanCommit(commitSha);
+    await this.dependencies.ontologyCompiler.checkReady?.();
+    const prior = await snapshotStore.readHead(options.headName);
+    const baseSha =
+      prior?.manifest.commitSha === commitSha
+        ? prior.manifest.baseSha
+        : (prior?.manifest.commitSha ?? (await repository.firstParent(commitSha)));
+    const selectedSemanticSources = options.semanticSources ?? config.semanticSources;
+    const allRoots = [
+      ...new Set([
+        ...selectedSemanticSources,
+        ...config.codeRoots,
+        ...config.evidenceRoots,
+        ...contractPatternRoots(config.contractPatterns),
+      ]),
+    ];
+    const delta = await repository.delta(baseSha, commitSha, allRoots);
+    const forceRevision = options.forceSemantic
+      ? `${commitSha}:${new Date().toISOString()}:${process.pid}`
+      : undefined;
+    const baseSuffix =
+      options.snapshotSuffix ??
+      (forceRevision ? `semantic-${sha256(forceRevision).slice(0, 12)}` : undefined);
+    const runtimeRevision =
+      options.runtimeEvidenceRevision ?? (await this.collectRuntimeEvidence(commitSha));
+    if (runtimeRevision.commitSha !== commitSha) {
+      throw new Error('Runtime evidence revision does not match the hydration commit');
+    }
+    const runtimeSuffix =
+      config.runtimeEvidence.length > 0
+        ? `runtime-${runtimeRevision.digest.slice(0, 12)}`
+        : undefined;
+    const effectiveSuffix = [baseSuffix, runtimeSuffix].filter(Boolean).join('-') || undefined;
+    const snapshotId = effectiveSuffix ? `${commitSha}-${effectiveSuffix}` : commitSha;
+    const context: ExtractionContext = {
+      repositoryRoot: repository.root,
+      repositoryId: config.repositoryId,
+      ref: options.ref,
+      commitSha,
+      baseSha,
+      snapshotId,
+      changedPaths: delta.changedPaths,
+      deletedPaths: delta.deletedPaths,
+      renamedPaths: delta.renamedPaths,
+      semanticPaths: selectedSemanticSources,
+    };
+    const sources = await repository.semanticSources(context, selectedSemanticSources);
+    const ids = new Set<string>();
+    for (const source of sources) {
+      if (ids.has(source.stableSemanticId)) {
+        throw new Error(`Duplicate stable semantic ID: ${source.stableSemanticId}`);
+      }
+      ids.add(source.stableSemanticId);
+    }
+    let semanticExtracted = 0;
+    let semanticReused = 0;
+    const hydrated = await concurrentMap(sources, config.semantic.concurrency, async (source) => {
+      const result = await this.dependencies.semanticHydrator.hydrate(
+        source,
+        context,
+        forceRevision,
+      );
+      if (result.reused) semanticReused += 1;
+      else semanticExtracted += 1;
+      return { source, ...result };
+    });
+    const artifacts = hydrated.map((result) => result.artifact);
+    const diagnostics = hydrated.flatMap(({ source, artifact }) =>
+      (artifact.diagnostics ?? []).map((item) => ({
+        ...item,
+        id: sha256(stableJson({ artifact: artifact.key, diagnostic: item.id, path: source.path })),
+        provenance: item.provenance.map((span) => ({
+          ...span,
+          path: source.path,
+          digest: source.digest,
+          commitSha,
+        })),
+      })),
+    );
+    const semanticFacts = hydrated.flatMap(({ source, artifact }) =>
+      artifact.facts.map((fact) => ({
+        ...fact,
+        id: sha256(stableJson({ artifact: artifact.key, fact: fact.id, path: source.path })),
+        provenance: {
+          ...fact.provenance,
+          path: source.path,
+          digest: source.digest,
+          commitSha,
+        },
+        snapshotId,
+      })),
+    );
+    const scip = await this.dependencies.staticIndexer.index(context);
+    const extractorFacts = (
+      await Promise.all(
+        this.dependencies.extractorFactory(scip).map((extractor) => extractor.extract(context)),
+      )
+    ).flat();
+    const trackedPaths = await repository.listAllFilesAt(commitSha);
+    const documentFacts = linkSemanticDocuments(context, hydrated, trackedPaths);
+    const ontology = await this.dependencies.ontologyCompiler.compile(snapshotId, artifacts);
+    const runtimeEvidence = runtimeRevision.references;
+    const runtimeFacts = runtimeEvidenceFacts(context, runtimeEvidence);
+    const facts = [...semanticFacts, ...documentFacts, ...extractorFacts, ...runtimeFacts].sort(
+      (left, right) => left.id.localeCompare(right.id),
+    );
+    const invariants = (
+      await Promise.all(
+        this.dependencies.invariantEvaluators.map((evaluator) =>
+          evaluator.evaluate(snapshotId, facts),
+        ),
+      )
+    ).flat();
+    const failures = invariants.filter((invariant) => invariant.status === 'fail');
+    if (failures.length > 0) {
+      throw new Error(
+        `Invariant validation failed: ${failures.map((failure) => failure.invariantId).join(', ')}`,
+      );
+    }
+    const unresolved = [
+      ...new Set([
+        ...artifacts.flatMap((artifact) => artifact.unresolvedMappings),
+        ...invariants
+          .filter((invariant) => invariant.status === 'unknown')
+          .map((invariant) => invariant.message),
+      ]),
+    ].sort();
+    const logical = {
+      repositoryId: config.repositoryId,
+      commitSha,
+      ontologyVersion: config.semantic.ontologyVersion,
+      semanticArtifactKeys: artifacts.map((artifact) => artifact.key).sort(),
+      scipIndexDigest: scip.digest,
+      rdfDigest: ontology.digest,
+      facts: facts.map(({ snapshotId: _snapshotId, ...fact }) => fact),
+      invariants,
+      runtimeEvidence,
+      unresolved,
+      diagnostics,
+      semanticSources: selectedSemanticSources,
+    };
+    const contentDigest = sha256(stableJson(logical));
+    const snapshot: GraphSnapshot = {
+      manifest: {
+        schemaVersion: 1,
+        repositoryId: config.repositoryId,
+        ref: options.ref,
+        commitSha,
+        baseSha,
+        snapshotId,
+        ontologyVersion: config.semantic.ontologyVersion,
+        extractorVersions: {
+          semantic: config.semantic.extractorVersion,
+          scip: scip.version,
+          ontology: config.ontology.toolVersion,
+          ...Object.fromEntries(
+            this.dependencies
+              .extractorFactory(scip)
+              .map((extractor) => [extractor.identity.id, extractor.identity.version]),
+          ),
+        },
+        semanticModel: config.semantic.model,
+        semanticPromptVersion: config.semantic.promptVersion,
+        generatedAt: new Date().toISOString(),
+        contentDigest,
+        runtimeEvidenceDigest: runtimeRevision.digest,
+        semanticArtifactKeys: artifacts.map((artifact) => artifact.key).sort(),
+        scipIndexDigest: scip.digest,
+        rdfDigest: ontology.digest,
+      },
+      facts,
+      invariants,
+      runtimeEvidence,
+      unresolved,
+      diagnostics,
+    };
+    await snapshotStore.write(snapshot);
+    await snapshotStore.updateHead(options.headName, snapshotId);
+    return { snapshot, semanticExtracted, semanticReused };
+  }
+
+  async compareClean(options: Omit<HydrationOptions, 'snapshotSuffix'>): Promise<HydrationResult> {
+    const current = await this.dependencies.snapshotStore.readHead(options.headName);
+    if (!current) throw new Error('No incremental snapshot exists to compare');
+    const clean = await this.hydrate({
+      ...options,
+      headName: `${options.headName}-clean`,
+      snapshotSuffix: `clean-${Date.now()}`,
+    });
+    if (clean.snapshot.manifest.contentDigest !== current.manifest.contentDigest) {
+      throw new Error(
+        `Clean hydration drift: ${current.manifest.contentDigest} != ${clean.snapshot.manifest.contentDigest}`,
+      );
+    }
+    return clean;
+  }
+}

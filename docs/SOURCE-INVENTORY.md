@@ -1,0 +1,39 @@
+# Source inspection and export boundary
+
+Inspected commit: `fda97e0146099543aeaa6b338ef2b0e9fab0d1d6`.
+The requested commit was fetched for read-only inspection into temporary storage outside this
+destination. The source checkout, branches, configuration and services were not changed.
+The destination was verified as `/workspace/tently`, origin `github.com/jchewitt/tently`.
+
+`extraction-manifest.json` enumerates every imported committed file with its original SHA-256.
+Only `tools/context-graph` tooling is imported. Private product documents are reference-only;
+the adapter, product ontology, configuration profiles and trace harness are excluded.
+Tests using synthetic product names are adapted to public examples. Source-integration tests
+that read the application are replaced with standalone boundary checks, not claimed as executed.
+Apache-2.0 licenses and LaunchEcho copyright/attribution are retained.
+
+## Findings verified in source
+
+| Area | Evidence and consequence |
+| --- | --- |
+| Neutral boundary | `packages/core` holds records/interfaces; composition loads adapters dynamically. |
+| Semantic extraction | `semantic.ts` invokes Codex, validates structured citations, then renders OML deterministically. |
+| Ontology | `ontology.ts` invokes openCAESAR in Docker. The compiled RDF is digest-bound but not the query backend. |
+| Graph assembly | `hydrator.ts` separately combines semantic, document, SCIP, adapter and runtime facts into JSON. |
+| Queries | `query.ts` uses bounded traversal, with a three-hop search and fact limits; no SPARQL execution. |
+| Rules | Adapter invariant evaluators are TypeScript; no active OWL reasoner is wired into hydration. |
+| Indexing | `static.ts` bundles SCIP TypeScript; no universal language support is established. |
+| Editing | `agent-context.ts` may hydrate during a read; `hydrator.ts` requires an exact clean checkout. |
+| Viewer | HTML/DOT/SVG render Context Packs; this is a bounded viewer, not a complete explorer. |
+| Packaging | Published files omit examples/agent templates; the root launcher builds the product adapter and changes cwd. |
+| Root dependencies | Build/test/license/publication commands depend on monorepo scripts and pnpm workspace membership. |
+
+Root package/workspace/TypeScript configuration and tooling ADR, owner and validation documents
+were read as reference. Their historical validation claims are not destination validation.
+Minimal destination equivalents replace root automation; no monorepo lockfile is imported.
+
+## Export status
+
+This is a local export inventory for review. No external release has occurred or been authorized.
+Package names are retained for compatibility and attribution; registry ownership has not been
+verified. Release naming and the final export inventory require review before publication.

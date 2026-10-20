@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.context-graph/
+*.tgz
+coverage/
+.env
+.env.*
+!.env.example

@@ -1,0 +1,99 @@
+vocabulary <https://context-graph.dev/core#> as cg {
+  extends <http://www.w3.org/2001/XMLSchema#> as xsd
+
+  aspect GraphElement [
+    key hasIdentifier
+  ]
+
+  scalar property hasIdentifier [
+    domain GraphElement
+    range xsd:string
+    functional
+  ]
+
+  concept Project < GraphElement
+  concept ProductCapability < GraphElement
+  concept Workflow < GraphElement
+  concept RuntimeComponent < GraphElement
+  concept APIContract < GraphElement
+  concept EventContract < GraphElement
+  concept QueueContract < GraphElement
+  concept PersistenceModel < GraphElement
+  concept Provider < GraphElement
+  concept Scope < GraphElement
+  concept OwnerDocument < GraphElement
+  concept ValidationArtifact < GraphElement
+  concept ArchitectureInvariant < GraphElement
+  concept DecisionAuthority < GraphElement
+
+  relation realizes [
+    from RuntimeComponent
+    to ProductCapability
+    reverse implementedBy
+  ]
+
+  relation consumes [
+    from RuntimeComponent
+    to GraphElement
+  ]
+
+  relation emits [
+    from RuntimeComponent
+    to GraphElement
+  ]
+
+  relation persistsTo [
+    from RuntimeComponent
+    to PersistenceModel
+  ]
+
+  relation governedBy [
+    from GraphElement
+    to ArchitectureInvariant
+  ]
+
+  relation definedBy [
+    from GraphElement
+    to OwnerDocument
+  ]
+
+  relation verifiedBy [
+    from GraphElement
+    to ValidationArtifact
+  ]
+
+  relation operationallyOwnedBy [
+    from ProductCapability
+    to RuntimeComponent
+  ]
+
+  relation hasDecisionAuthority [
+    from GraphElement
+    to DecisionAuthority
+  ]
+
+  relation routesThrough [
+    from RuntimeComponent
+    to RuntimeComponent
+  ]
+
+  relation authorizedBy [
+    from GraphElement
+    to Scope
+  ]
+
+  relation sourcedFrom [
+    from GraphElement
+    to Provider
+  ]
+
+  relation references [
+    from GraphElement
+    to GraphElement
+  ]
+
+  relation contains [
+    from GraphElement
+    to GraphElement
+  ]
+}

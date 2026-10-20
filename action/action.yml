@@ -1,0 +1,52 @@
+# Modified for standalone extraction; see docs/extraction-manifest.json.
+name: LaunchEcho Context Graph Check
+description: Build, test, license-check, and pack a Context Graph distribution without semantic credentials
+author: LaunchEcho
+
+inputs:
+  node-version:
+    description: Node.js version used by the toolkit
+    required: false
+    default: '24'
+  pnpm-version:
+    description: pnpm version used by the toolkit
+    required: false
+    default: '10.18.2'
+  working-directory:
+    description: Repository directory containing the Context Graph root scripts
+    required: false
+    default: '.'
+  compile-ontology:
+    description: Compile the configured ontology after deterministic package checks
+    required: false
+    default: 'false'
+
+runs:
+  using: composite
+  steps:
+    - name: Set up pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: ${{ inputs.pnpm-version }}
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: pnpm
+
+    - name: Install dependencies
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: pnpm install --frozen-lockfile
+
+    - name: Validate independently publishable packages
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: pnpm context-graph:publication-check
+
+    - name: Compile ontology
+      if: inputs.compile-ontology == 'true'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: pnpm context-graph ontology compile --ref HEAD

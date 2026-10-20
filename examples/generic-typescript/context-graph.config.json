@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "repositoryRoot": ".",
+  "repositoryId": "example/generic-typescript",
+  "namespace": "https://example.test/context/",
+  "semanticSources": [
+    "docs"
+  ],
+  "codeRoots": [
+    "src"
+  ],
+  "contractPatterns": [],
+  "evidenceRoots": [
+    "test"
+  ],
+  "semantic": {
+    "provider": "codex-cli",
+    "model": "gpt-6-astra",
+    "reasoningEffort": "medium",
+    "promptVersion": "generic-semantic-v3",
+    "extractorVersion": "1.1.0",
+    "adapterVersion": "1.1.0",
+    "ontologyVersion": "1.1.0",
+    "minimumConfidence": 0.7,
+    "failOnUnresolved": true,
+    "concurrency": 1
+  },
+  "scip": {
+    "version": "0.4.0",
+    "command": "bundled-scip-typescript",
+    "args": [
+      "index",
+      "--no-global-caches",
+      "--infer-tsconfig"
+    ]
+  },
+  "ontology": {
+    "toolVersion": "oml2owl-gradle-2.13.1",
+    "containerImage": "gradle:8.10.2-jdk21@sha256:963d59f7f22767da4efbcf46b661361b61af5fb88b0309da1071c4234c647eba",
+    "projectPath": "ontology"
+  },
+  "runtimeEvidence": [],
+  "storagePath": ".context-graph",
+  "x-extraction-modifications": "Portable example model profile; runtime evidence is opt-in."
+}

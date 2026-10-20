@@ -1,0 +1,37 @@
+[
+  {
+    "name": "openCAESAR OML toolchain and core vocabularies",
+    "version": "2.13.x / 5.1.0",
+    "license": "Apache-2.0",
+    "homepage": "https://github.com/opencaesar",
+    "distribution": "Downloaded by the pinned ontology build; not redistributed in npm packages"
+  },
+  {
+    "name": "SCIP TypeScript",
+    "version": "0.4.0",
+    "license": "Apache-2.0",
+    "homepage": "https://github.com/sourcegraph/scip-typescript",
+    "distribution": "Development/runtime indexing tool; not bundled in npm package output"
+  },
+  {
+    "name": "OpenTelemetry Collector",
+    "version": "0.136.0",
+    "license": "Apache-2.0",
+    "homepage": "https://github.com/open-telemetry/opentelemetry-collector-releases",
+    "distribution": "Digest-pinned CI validation image; not redistributed in npm packages"
+  },
+  {
+    "name": "Gradle JDK 21 container",
+    "version": "8.10.2",
+    "license": "Third-party image license set",
+    "homepage": "https://hub.docker.com/_/gradle",
+    "distribution": "Digest-pinned build image; not redistributed in npm packages"
+  },
+  {
+    "name": "Codex CLI",
+    "version": "Host provided",
+    "license": "Host installation terms",
+    "homepage": "https://developers.openai.com/codex/cli",
+    "distribution": "Invoked from the host only; never bundled or redistributed"
+  }
+]
