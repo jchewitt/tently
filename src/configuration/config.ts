@@ -19,6 +19,8 @@ export interface ContextGraphConfig {
   readonly evidenceRoots: readonly string[];
   readonly semantic: {
     readonly provider: 'codex-cli' | 'module';
+    /** Codex authentication only; secrets stay in the process environment. */
+    readonly auth?: { readonly mode: 'chatgpt' } | { readonly mode: 'api-key'; readonly apiKeyEnv?: string };
     readonly providerModule?: string;
     readonly providerIdentity?: string;
     readonly timeoutMs?: number;
@@ -243,6 +245,19 @@ function validateConfig(value: unknown, absolutePath: string): asserts value is 
     if (value.semantic.provider === 'module') {
       requireConfig(isNonEmptyString(value.semantic.providerModule) && isNonEmptyString(value.semantic.providerIdentity),
         'module providers require providerModule and providerIdentity', absolutePath);
+    }
+    if (value.semantic.auth !== undefined) {
+      const auth = value.semantic.auth;
+      requireConfig(value.semantic.provider === 'codex-cli' && isRecord(auth),
+        'semantic.auth must be an object for codex-cli only', absolutePath);
+      if (isRecord(auth)) {
+        requireConfig(auth.mode === 'chatgpt' || auth.mode === 'api-key',
+          'semantic.auth.mode must be chatgpt or api-key', absolutePath);
+        requireConfig(Object.keys(auth).every(key => key === 'mode' || (auth.mode === 'api-key' && key === 'apiKeyEnv')),
+          'semantic.auth accepts only mode and, for api-key, apiKeyEnv; never store credentials here', absolutePath);
+        requireConfig(auth.apiKeyEnv === undefined || (typeof auth.apiKeyEnv === 'string' && /^[A-Za-z_][A-Za-z0-9_]*$/.test(auth.apiKeyEnv)),
+          'semantic.auth.apiKeyEnv must name an environment variable', absolutePath);
+      }
     }
     for (const [field, max] of [['timeoutMs', 300_000], ['retries', 2], ['maxDocuments', 1000], ['maxSourceBytes', 1_048_576]] as const) {
       const item = value.semantic[field];

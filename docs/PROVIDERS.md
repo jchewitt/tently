@@ -14,9 +14,65 @@ Evidence authority is assigned by source approval policy, never by the provider.
 
 Codex receives a single numbered public or explicitly selected local document in an isolated
 temporary directory. Shell tooling, user config and rules are disabled; authentication remains
-managed by the installed CLI. The child inherits only the explicit environment allowlist.
+managed by the installed CLI, with the explicit authentication selection below. The child
+inherits only the explicit environment allowlist and, in API mode, the selected API key.
 Prompts, provider stderr and credentials are never printed by progress/error handling.
 Artifact storage contains model output and must remain private with the source repository.
+
+## Codex authentication
+
+Status: implemented in unreleased source; validation is **tentative**, pending independent
+maintainer testing. Published 0.1.0 does not contain this option. Both modes still use Codex CLI;
+this is not a direct OpenAI API provider or a fix for the managed-cloud filesystem issue.
+
+Merge one of these fragments into your existing `context-graph.config.json`:
+
+```json
+{ "semantic": { "provider": "codex-cli", "auth": { "mode": "chatgpt" } } }
+```
+
+Omitting `auth` also selects `chatgpt`; `init` writes it explicitly. Sign in using `codex login`
+and select ChatGPT. Tently checks `codex login status` before an uncached extraction and requires
+it to report ChatGPT login. A missing, unrecognized or API-key login fails before model execution.
+There is no automatic API fallback. Existing saved API logins are not changed or logged out by
+Tently. The status probe has a maximum five-second timeout in addition to the extraction timeout.
+This mode uses your plan's Codex allowance and limits.
+
+```json
+{
+  "semantic": {
+    "provider": "codex-cli",
+    "auth": { "mode": "api-key", "apiKeyEnv": "TENTLY_CODEX_API_KEY" }
+  }
+}
+```
+
+API mode uses separately billed API access. Supply the named variable through your local secret
+manager or trusted automation environment. `apiKeyEnv` defaults to `CODEX_API_KEY` when omitted.
+Tently passes only the selected key as `CODEX_API_KEY` to `codex exec`, which supports per-invocation
+API authentication without an interactive login. Missing or blank keys fail without falling back
+to saved authentication. A key's presence does not establish validity, model access or available
+quota. Authentication failures do not trigger a switch to the other mode.
+
+Never put a key value in JSON. Unknown `auth` fields are rejected, and this option is only valid
+for `codex-cli`. Ambient `OPENAI_API_KEY`, `CODEX_API_KEY` and `OPENAI_BASE_URL` are not inherited
+implicitly. To use `OPENAI_API_KEY`, explicitly name it in `apiKeyEnv` in API mode. Custom API
+endpoints are not part of this change. Proxy and CA settings remain supported.
+
+`doctor` reports the selected mode, ChatGPT login status, or API key presence. API mode reports
+`key-present-unverified` and `codexAuthenticated: null`; it never makes a paid authentication probe.
+Status output and credential values are not logged. Authentication does not change built-in
+semantic artifact identity, so selecting another mode or rotating a key does not force extraction
+of unchanged documents. Querying saved snapshots does not require authentication.
+
+Ordinary deterministic CI needs neither mode. Keep live semantic CI opt-in and restricted to
+trusted inputs, with narrowly scoped secret exposure and small document budgets. OpenAI's
+[automation documentation](https://developers.openai.com/codex/noninteractive/) describes
+`CODEX_API_KEY` and recommends its Codex GitHub Action for protected API authentication in Actions.
+Compatibility with that action's proxy is not validated here. Trusted persistent runners can
+continue using their ChatGPT login; this change does not provision or copy account sessions.
+
+## Limits and reuse
 
 Defaults are at most 8 documents per hydration, 64 KiB per source, a 120-second timeout per
 request, no retries, and the configured concurrency (validated at 1–4). Source budgets are checked

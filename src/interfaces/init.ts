@@ -56,7 +56,7 @@ export async function prepareProjectConfig(options: InitOptions = {}) {
     contractPatterns: [],
     evidenceRoots: paths(options.evidenceRoots ?? detectedEvidence),
     semantic: {
-      provider: 'codex-cli', model: options.model ?? 'gpt-6-astra', reasoningEffort: 'medium',
+      provider: 'codex-cli', auth: { mode: 'chatgpt' }, model: options.model ?? 'gpt-6-astra', reasoningEffort: 'medium',
       promptVersion: 'generic-semantic-v3', extractorVersion: '1.1.0', adapterVersion: '1.1.0',
       ontologyVersion: '1.1.0', minimumConfidence: 0.7, failOnUnresolved: true, concurrency: 1,
       maxDocuments: 8, maxSourceBytes: 65_536, timeoutMs: 120_000, retries: 0,

@@ -23,6 +23,11 @@ The post-release module-organization increment is described in
 public entry points remain stable, and proposed internal dependency restrictions are advisory
 pending explicit owner approval. It does not publish a replacement for npm 0.1.0.
 
+The following unreleased increment adds explicit Codex authentication configuration: ChatGPT
+login by default, API-key mode by opt-in, and presence-only API diagnostics. Validation is
+tentative pending independent maintainer testing; no new live model results are claimed.
+See [provider configuration](PROVIDERS.md#codex-authentication) and the validation record.
+
 Next work should be separate, reviewed increments: fix native Windows exact-byte archive handling,
 concurrent atomic snapshot-head replacement, CRLF integrity checks and symlink fixtures;
 run bounded semantic-quality evaluations; retain the passing hosted Ubuntu CI gate; validate fresh-cloud

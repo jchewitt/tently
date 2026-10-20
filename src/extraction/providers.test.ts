@@ -75,13 +75,13 @@ it('retries only explicit transient failures and includes reasoning settings in 
     expect(options?.timeoutMs).toBe(120_000);
     if (++calls === 1) throw new SemanticProviderError('exit', 'Temporary failure', true);
     await writeFile(args[args.indexOf('--output-last-message') + 1]!, '{"assertions":[],"diagnostics":[],"oml":""}');
-  } });
+  } }, async () => 'chatgpt');
   await extractor.extract(source, context);
   expect(calls).toBe(2);
   expect(extractor.identity).not.toBe(new CodexCliSemanticExtractor({ ...config, reasoningEffort: 'high' }).identity);
   const failing = new CodexCliSemanticExtractor(config, { async run() {
     calls++; throw new SemanticProviderError('exit', 'Not transient');
-  } });
+  } }, async () => 'chatgpt');
   await expect(failing.extract(source, context)).rejects.toThrow('Not transient');
   expect(calls).toBe(3);
 });

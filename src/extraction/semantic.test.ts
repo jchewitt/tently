@@ -114,7 +114,7 @@ describe('SemanticHydrator', () => {
           'utf8',
         );
       },
-    });
+    }, async () => 'chatgpt');
 
     await extractor.extract(source, context);
     delete process.env.CONTEXT_GRAPH_TEST_SECRET;
@@ -216,7 +216,7 @@ describe('SemanticHydrator', () => {
         if (!outputPath) throw new Error('Missing output path');
         await writeFile(outputPath, JSON.stringify(output));
       },
-    });
+    }, async () => 'chatgpt');
     const hydrator = new SemanticHydrator(semanticConfig, store, extractor);
     const fresh = await hydrator.hydrate(source, context);
     const reused = await hydrator.hydrate(source, context);

@@ -39,6 +39,11 @@ ignore rules alone. Configuration remains JSON; `config show` displays the valid
 Review the selected sources, configure Codex authentication when using semantic documents,
 and commit the inputs you want indexed before hydrating:
 
+In unreleased source, `semantic.auth.mode` defaults to `chatgpt`, using your existing Codex
+ChatGPT login. API billing requires explicitly selecting `api-key`; credentials stay in an
+environment variable. See [authentication configuration](docs/PROVIDERS.md#codex-authentication)
+for both modes and their tentative validation status. Published 0.1.0 predates this option.
+
 ```sh
 npx @launch-echo/tently hydrate --ref HEAD
 npx @launch-echo/tently impact scan --changed-file src/search.ts --json

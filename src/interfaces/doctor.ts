@@ -3,6 +3,7 @@ import { promisify } from 'node:util';
 import { loadConfig } from "../configuration/config.js";
 import { resolveStorageRoot } from "../configuration/cache.js";
 import { FileSnapshotStore } from "../storage/storage.js";
+import { readCodexLoginMode, semanticCommandEnvironment } from '../extraction/codex-auth.js';
 
 /** Reads readiness only. It never installs tools, prints credentials, or starts a model. */
 export async function diagnoseSetup(configPath: string) {
@@ -16,8 +17,13 @@ export async function diagnoseSetup(configPath: string) {
   };
   const git = await probe('git', ['--version']);
   const codex = await probe(process.platform === 'win32' ? 'codex.exe' : 'codex', ['--version']);
-  const authentication = codex.available
-    ? await probe(process.platform === 'win32' ? 'codex.exe' : 'codex', ['login', 'status']) : undefined;
+  const auth = config.semantic.auth;
+  const authMode = config.semantic.provider === 'codex-cli' ? auth?.mode ?? 'chatgpt' : undefined;
+  const apiKeyEnv = auth?.mode === 'api-key' ? auth.apiKeyEnv ?? 'CODEX_API_KEY' : undefined;
+  const apiKeyPresent = apiKeyEnv ? Boolean(process.env[apiKeyEnv]?.trim()) : undefined;
+  const loginMode = codex.available && authMode === 'chatgpt'
+    ? await readCodexLoginMode(process.platform === 'win32' ? 'codex.exe' : 'codex', semanticCommandEnvironment(process.env))
+    : undefined;
   const docker = config.ontology.backend === 'opencaesar' ? await probe('docker', ['info']) : undefined;
   const saved = await new FileSnapshotStore(resolveStorageRoot(repositoryRoot, config)).readHead('default');
   return {
@@ -25,7 +31,13 @@ export async function diagnoseSetup(configPath: string) {
     savedSnapshot: saved?.manifest.snapshotId ?? null,
     semanticProvider: config.semantic.provider,
     codexAvailable: codex.available,
-    codexAuthenticated: Boolean(authentication?.available && /logged in/i.test(authentication.output)),
+    codexAuthMode: authMode,
+    codexLoginMode: loginMode,
+    codexApiKeyEnv: apiKeyEnv,
+    codexApiKeyPresent: apiKeyPresent,
+    codexAuthenticated: authMode === 'chatgpt' ? loginMode === 'chatgpt' : null,
+    codexAuthStatus: authMode === 'api-key' ? (apiKeyPresent ? 'key-present-unverified' : 'missing-key')
+      : authMode === 'chatgpt' ? (loginMode === 'chatgpt' ? 'chatgpt-login-present' : 'chatgpt-login-required') : 'not-applicable',
     moduleProvider: config.semantic.provider === 'module' ? 'loaded only during extraction; trusted local code' : undefined,
     ontologyBackend: config.ontology.backend ?? 'rdf', dockerReady: docker?.available,
     limits: { maxDocuments: config.semantic.maxDocuments ?? 8, maxSourceBytes: config.semantic.maxSourceBytes ?? 65_536,

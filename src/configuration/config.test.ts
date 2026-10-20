@@ -44,6 +44,20 @@ function withoutPath(path: string): object {
 }
 
 describe('loadConfig', () => {
+  it('accepts explicit auth modes and rejects inline credentials or invalid key references', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'context-graph-config-auth-'));
+    const path = join(root, 'config.json');
+    for (const auth of [undefined, { mode: 'chatgpt' }, { mode: 'api-key' }, { mode: 'api-key', apiKeyEnv: 'TENTLY_KEY' }]) {
+      await writeFile(path, JSON.stringify({ ...validConfig, semantic: { ...validConfig.semantic, auth } }));
+      await expect(loadConfig(path)).resolves.toBeDefined();
+    }
+    for (const auth of [null, { mode: 'auto' }, { mode: 'chatgpt', apiKeyEnv: 'KEY' },
+      { mode: 'api-key', apiKeyEnv: 'not a variable' }, { mode: 'api-key', apiKey: 'never-store-secrets' }]) {
+      await writeFile(path, JSON.stringify({ ...validConfig, semantic: { ...validConfig.semantic, auth } }));
+      await expect(loadConfig(path)).rejects.toThrow('semantic.auth');
+    }
+  });
+
   it('resolves an explicit config against the original pnpm invocation directory', async () => {
     const initialDirectory = await mkdtemp(join(tmpdir(), 'context-graph-config-'));
     const packageDirectory = join(initialDirectory, 'lib', 'graph');

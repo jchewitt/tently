@@ -248,14 +248,14 @@
       "destinationPath": "src/configuration/config.test.ts",
       "sourceSha256": "70bcda6d6b48ff6fa03223c9420fe3e0e3e32c688e0a14f11034515e0707dee4",
       "modified": true,
-      "destinationSha256": "ef4a9620368f799cfe8c904cf1ec20f07945c7c4ae911c7438e1567389720b87"
+      "destinationSha256": "f9ff1de04f38b3d7dafd1417bd11c7bf539f760d0a8b93f41333d5d4588a8162"
     },
     {
       "sourcePath": "tools/context-graph/src/config.ts",
       "destinationPath": "src/configuration/config.ts",
       "sourceSha256": "e9ee8cf2134d274aa6f6a21545959fbec97e958181d9032c073293f28e04d6ca",
       "modified": true,
-      "destinationSha256": "79f4b1efc82fd9b9b84240f1e69206eaec8525b80fa3b7fbc444d826ffde53de"
+      "destinationSha256": "ce6550967829b74147909121735c4dccf70982c3f9ee9ddc860b4f63535d5de0"
     },
     {
       "sourcePath": "tools/context-graph/src/core.ts",
@@ -444,14 +444,14 @@
       "destinationPath": "src/extraction/semantic.test.ts",
       "sourceSha256": "908fe8166dd63f499c28b2c4d20db2e0110b453f66421b2154461287c2d94dac",
       "modified": true,
-      "destinationSha256": "f1bf983397fb3f850cf85918108614ffae4e4794acf0e357aeda3fdd6be89521"
+      "destinationSha256": "9d32d504064d12c133cfbe7393f7887af7a02e36fcd309be568e2b5f23ddc1f4"
     },
     {
       "sourcePath": "tools/context-graph/src/semantic.ts",
       "destinationPath": "src/extraction/semantic.ts",
       "sourceSha256": "1a41fb3fc5a9508c76be59d1c50b74d70ec96411fcbb7f63b0e098c1813d8473",
       "modified": true,
-      "destinationSha256": "74dd747e26f5244c078458220c3d4b229b213681d5e85b1a4d2e260b9a90c4a3"
+      "destinationSha256": "3ae30e57eddb0bd8e05d6a4ee014bf281961de8464c290470a2c833391739182"
     },
     {
       "sourcePath": "tools/context-graph/src/snapshot-checks.test.ts",
@@ -656,6 +656,8 @@
     "src/application/overlay.ts",
     "src/application/saved-evidence.ts",
     "src/cli.ts",
+    "src/extraction/codex-auth.test.ts",
+    "src/extraction/codex-auth.ts",
     "src/extraction/providers.test.ts",
     "src/extraction/providers.ts",
     "src/extraction/semantic-process.ts",

@@ -2,6 +2,9 @@
 import { mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { prepareCodexAuthentication, readCodexLoginMode, type CodexLoginProbe, type SemanticCommandEnvironment } from './codex-auth.js';
+export { semanticCommandEnvironment } from './codex-auth.js';
+export type { SemanticCommandEnvironment } from './codex-auth.js';
 import { runSemanticProcess, SemanticProviderError, type SemanticRunOptions } from "./semantic-process.js";
 export { SemanticProviderError } from "./semantic-process.js";
 export type { SemanticRunOptions } from "./semantic-process.js";
@@ -137,43 +140,6 @@ export interface SemanticCommandRunner {
   ): Promise<void>;
 }
 
-export type SemanticCommandEnvironment = Record<string, string | undefined>;
-
-const semanticEnvironmentAllowlist = [
-  'APPDATA',
-  'CODEX_HOME',
-  'COMSPEC',
-  'HOME',
-  'HTTP_PROXY',
-  'HTTPS_PROXY',
-  'LANG',
-  'LC_ALL',
-  'LOCALAPPDATA',
-  'NODE_EXTRA_CA_CERTS',
-  'NO_PROXY',
-  'OPENAI_API_KEY',
-  'OPENAI_BASE_URL',
-  'PATH',
-  'PATHEXT',
-  'SSL_CERT_FILE',
-  'SYSTEMROOT',
-  'TEMP',
-  'TMP',
-  'USERPROFILE',
-  'WINDIR',
-] as const;
-
-export function semanticCommandEnvironment(
-  source: Readonly<Record<string, string | undefined>>,
-): SemanticCommandEnvironment {
-  const result: SemanticCommandEnvironment = {};
-  for (const allowed of semanticEnvironmentAllowlist) {
-    const match = Object.keys(source).find((key) => key.toUpperCase() === allowed);
-    if (match && source[match] !== undefined) result[allowed] = source[match];
-  }
-  return result;
-}
-
 const spawnSemanticCommand: SemanticCommandRunner = { run: runSemanticProcess };
 
 const kinds: readonly GraphNodeKind[] = [
@@ -300,6 +266,7 @@ export class CodexCliSemanticExtractor implements SemanticExtractor {
   constructor(
     private readonly config: ContextGraphConfig['semantic'],
     private readonly runner: SemanticCommandRunner = spawnSemanticCommand,
+    private readonly loginProbe: CodexLoginProbe = readCodexLoginMode,
   ) {
     this.identity = `codex-cli:${config.model}:${config.reasoningEffort}:${config.promptVersion}:contract-v2`;
   }
@@ -313,6 +280,8 @@ export class CodexCliSemanticExtractor implements SemanticExtractor {
     if (Buffer.byteLength(source.content) > (this.config.maxSourceBytes ?? 65_536)) {
       throw new SemanticProviderError('invalid-output', 'Semantic source exceeds configured byte budget');
     }
+    const command = process.platform === 'win32' ? 'codex.exe' : 'codex';
+    const environment = await prepareCodexAuthentication(this.config.auth, process.env, command, options, this.loginProbe);
     const runRoot = await mkdtemp(join(tmpdir(), 'context-graph-codex-'));
     const schemaPath = join(runRoot, 'schema.json');
     const outputPath = join(runRoot, 'output.json');
@@ -345,7 +314,6 @@ export class CodexCliSemanticExtractor implements SemanticExtractor {
       '',
       numberedSource,
     ].join('\n');
-    const command = process.platform === 'win32' ? 'codex.exe' : 'codex';
     const args = [
       'exec',
       '--ephemeral',
@@ -372,7 +340,7 @@ export class CodexCliSemanticExtractor implements SemanticExtractor {
       const retries = this.config.retries ?? 0;
       for (let attempt = 0; ; attempt++) {
         try {
-          await this.runner.run(command, args, runRoot, prompt, semanticCommandEnvironment(process.env),
+          await this.runner.run(command, args, runRoot, prompt, environment,
             { ...options, timeoutMs: options.timeoutMs ?? this.config.timeoutMs ?? 120_000 });
           break;
         } catch (error) {

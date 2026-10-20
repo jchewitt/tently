@@ -370,3 +370,24 @@ an intentionally unavailable module provider and `eligibleForCurrentDiffValidati
 Changing the checkpoint digest caused verification to fail; restoring the original proof passed
 again. Governance passed with the same 11 advisories, and inventory validation passed. This is
 a rehearsal, not a claim that environment publication or a new-task restoration occurred.
+
+## Explicit Codex authentication modes — tentative
+
+2026-10-20: implemented after `79b100c`, in the commit containing this entry. Unreleased source
+defaults to ChatGPT login and offers explicit API-key authentication through a named environment
+variable. Existing npm 0.1.0 is unchanged. `init` emits the default; `doctor` distinguishes a
+ChatGPT login from an unverified API key. Saved-query access and built-in artifact identity do
+not depend on the selected authentication mode.
+
+Build/type compilation passed on the current Linux cloud (Node 24.19.0). Regression cases were
+added for mode selection, credential filtering, missing-key/no-fallback behavior and configuration
+validation; existing fake-runner tests now inject the login-status probe. These tests and the full
+publication gate were **not run locally for this change**, per the maintainer's request to defer
+testing. No model calls, paid API requests or npm publication occurred. Earlier live Codex and
+deterministic passes do not validate this increment.
+
+Independent validation remains tentative: run the deterministic suite, then verify ChatGPT login
+with ambient API variables present, API mode with a valid and invalid/missing selected key,
+doctor's presence-only reporting, and a bounded public-example hydration with artifact reuse.
+Record CLI/model versions and actual results separately. Hosted API authentication, native Windows
+behavior and any Codex GitHub Action proxy integration are not established by compilation.
