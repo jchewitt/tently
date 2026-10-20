@@ -11,7 +11,7 @@ importers:
       '@comunica/query-sparql':
         specifier: 5.4.1
         version: 5.4.1
-      '@launchecho/context-graph-core':
+      '@launch-echo/tently-core':
         specifier: workspace:^
         version: link:packages/core
       '@modelcontextprotocol/sdk':

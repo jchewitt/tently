@@ -1,5 +1,5 @@
 {
-  "name": "@launchecho/context-graph-core",
+  "name": "@launch-echo/tently-core",
   "version": "0.1.0",
   "description": "Neutral contracts and deterministic utilities for commit-keyed context graphs",
   "license": "Apache-2.0",

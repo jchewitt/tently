@@ -3,6 +3,11 @@
 Environment: Linux cloud, Node 24.19.0, pnpm 10.18.2. Source imported from
 `fda97e0146099543aeaa6b338ef2b0e9fab0d1d6`. No source application was built or changed.
 
+The milestone entries below record the original cloud checks. Subsequent
+[HDesk validation](#hdesk-validation-of-6710e9391a6a01345dab5f5be4ae0656e1c9d1ae)
+establishes live Codex success on Windows and the full deterministic checks on WSL,
+while identifying remaining native Windows issues.
+
 ## Milestone 1: standalone baseline
 
 Passed `pnpm context-graph:publication-check`:
@@ -34,7 +39,7 @@ committed materializations without changing Git status or registered worktrees.
 
 The full baseline suite also passed after the main lifecycle change. Draft overlays and later
 milestones require separate validation. Symlink/submodule materialization and archives over
-128 MiB are explicitly unsupported; Windows/macOS remain untested.
+128 MiB are explicitly unsupported; Windows/macOS were untested at this milestone.
 
 ## Milestone 2b: draft overlays
 
@@ -109,7 +114,7 @@ authorized the GitHub export documented below.
 
 `scripts/cloud-install.sh` was executed successfully in the managed environment. The installed
 consumer is a fresh-install smoke test; restoration into a fresh cloud task is a separate check. Live Codex extraction remains blocked as recorded above.
-Windows, macOS, hosted CI and optional formal compiler execution remain untested.
+Windows, macOS, hosted CI and optional formal compiler execution were untested in that cloud run.
 
 ## Secondary review fixes and authorized GitHub export
 
@@ -139,3 +144,96 @@ rechecked against the recorded source SHA, and the destination history scan foun
 or common credential-token signatures. This bounded scan supplements the reviewed file inventory. The user authorized pushing the reviewed destination commits to
 `https://github.com/jchewitt/tently` for local testing. Package registry releases and visibility
 changes are excluded. Source remains read-only; no source history is included in this repository.
+
+## HDesk validation of 6710e9391a6a01345dab5f5be4ae0656e1c9d1ae
+
+Tested destination commit: `6710e9391a6a01345dab5f5be4ae0656e1c9d1ae`.
+Evidence source: HDesk results supplied by the maintainer, recorded here without rerunning
+the Windows or WSL checks in the cloud. HDesk reported no source changes or pushes.
+These results apply to this commit and the environments specified below.
+
+### PASS: live Codex end-to-end on Windows
+
+Environment: Windows, Node 24.2.0, Codex 0.153.4, `gpt-6-astra` with `medium` reasoning.
+The unchanged adapter extracted the public example, validated citations and schema, ran real
+SCIP indexing and RDF/SHACL, published and queried the snapshot, and reused its semantic artifact
+on a second hydration.
+
+| Observation | Result |
+| --- | --- |
+| Semantic facts | 4 |
+| Total snapshot facts | 12 |
+| Query facts | 11 |
+| Second hydration: extracted / reused artifacts | 0 / 1 |
+| Second hydration: snapshot identity / content digest | Both unchanged |
+
+This establishes a live adapter pass for the public example. The earlier cloud filesystem failure
+remains specific to that environment; broader semantic-quality evaluation is still separate.
+
+### PASS: WSL deterministic and installed-consumer checks
+
+Environment: WSL Ubuntu-22.04, Node 24.6.0, pnpm 10.18.2. Passed frozen installation, build,
+114 deterministic tests, architecture checks with 10 advisory findings, inventory, licenses
+and the fresh packed-consumer smoke test.
+
+The aggregate command initially stopped at a harness pnpm-store mismatch. After correcting
+that configuration, licenses and packaging passed independently. These are passing component
+results, not a claim that the initial aggregate invocation completed successfully.
+
+All three **original** `src/mcp-startup.test.ts` tests passed in WSL:
+
+- `rebuilds missing workspace outputs and initializes clean JSON-RPC from another cwd`
+- `rebuilds stale workspace outputs and initializes clean JSON-RPC from another cwd`
+- `fails clearly on a compiler error without sending diagnostics on protocol stdout`
+
+These tests were excluded only from the later native Windows subset because fixture creation
+attempted a file symlink for `.modules.yaml` and received `EPERM`. They are validated in WSL,
+not generally unvalidated. Separate native Windows launcher/MCP initialization, `impact.scan`
+discovery and missing-snapshot reporting also passed.
+
+### Native Windows follow-up
+
+The native Windows subset reported **108 passed, 2 failed, 1 optional skipped**, with the
+three fixture tests above excluded. This is not a full native Windows suite pass.
+
+- `git archive` inherits `core.autocrlf=true` and changes committed LF bytes. A focused probe
+  confirms `git -c core.autocrlf=false archive ...` preserves exact bytes. The implementation
+  fix and regression coverage remain follow-up work.
+- Concurrent snapshot-head replacement fails with rename `EPERM` at `src/storage.ts:22`
+  in the tested commit. Sequential publication passes. A fix must preserve atomic replacement
+  and cross-process guarantees; sequential success does not validate concurrency.
+- Improve CRLF checkout integrity checks and discovery of npm-installed Codex executables.
+- Address the native Windows `.modules.yaml` symlink fixture limitation before claiming
+  those three tests pass natively.
+
+Docker is optional for openCAESAR and is not required by the default RDF backend. Optional
+formal compiler execution, browser interaction, macOS, hosted CI, fresh-cloud restoration
+and broader semantic-quality evaluation remain separate validation work.
+
+## CLI setup and npm release preparation
+
+The maintainer selected the `@launch-echo` npm scope. The toolkit is now
+`@launch-echo/tently`, with `@launch-echo/tently-core` as a transitive dependency.
+Original source inventory hashes and attribution are retained.
+
+The Linux cloud publication gate passed with 117 deterministic tests (1 core + 116
+toolkit/example), one optional Docker/OML test skipped, and 11 advisory architecture findings.
+The additional advisory is `runInit` complexity (21 against the configured threshold of 20);
+it remains flagged as new, with no automatic baseline or exception. Approved rules pass.
+Inventory and license checks pass.
+
+New tests cover project defaults, explicit source selection without source-approval promotion,
+nested configuration paths, CRLF ignore-file preservation, overwrite refusal, non-interactive
+flags, and `config show`/`config validate` without Git or a configured provider. A separate PTY
+check exercised interactive cancellation and confirmation on Linux.
+
+The packed-package smoke serves the two local archives from a disposable scoped registry.
+An npm exec invocation requests only `@launch-echo/tently`, resolves core transitively, infers
+the `tently` executable, initializes a fresh project, and validates/displays its configuration.
+The separate installed consumer passes real SCIP, RDF/SPARQL/SHACL, visualization and MCP.
+This verifies npx installation mechanics without claiming public npm publication.
+
+`npm whoami` returned `ENEEDAUTH`; public registry reads found neither selected package.
+Registry authentication and public-registry installation remain pending. No npm publication
+has occurred. The HDesk Windows/WSL results above still refer to their original tested SHA;
+the new setup/release commands have not been tested on native Windows.

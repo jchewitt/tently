@@ -3,6 +3,7 @@ dist/
 .context-graph/
 *.tgz
 coverage/
+.release/
 .env
 .env.*
 !.env.example

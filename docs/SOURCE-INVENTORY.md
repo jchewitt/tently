@@ -36,6 +36,8 @@ Minimal destination equivalents replace root automation; no monorepo lockfile is
 
 On 2026-10-20 the user authorized pushing the reviewed destination to `jchewitt/tently` after
 fixing the secondary review findings, so it can be cloned and tested locally. This authorization
-covers the destination Git repository only. Package names retain compatibility and attribution;
-registry ownership and release naming remain unverified. No package registry release or repository
-visibility change is authorized. `extraction-manifest.json` records the scoped authorization.
+initially covered the destination Git repository only. A subsequent request authorizes npm
+publication using the maintainer-selected `@launch-echo` scope. The destination packages are now
+`@launch-echo/tently` and `@launch-echo/tently-core`; original notices and source hashes remain
+unchanged. Registry authentication is still pending. No repository visibility change is authorized.
+`extraction-manifest.json` records both authorization scopes.

@@ -51,5 +51,13 @@ but its tiny public-example invocation exited immediately with a read-only files
 Live extraction is therefore unverified here; deterministic adapter, timeout, retry, citation,
 budget and cache tests pass. No private source was submitted in that check.
 
+HDesk subsequently reported a live end-to-end pass at commit
+`6710e9391a6a01345dab5f5be4ae0656e1c9d1ae` on Windows, Node 24.2.0, Codex 0.153.4,
+`gpt-6-astra`/`medium`, using the unchanged adapter and public example. Citation/schema
+validation, real SCIP, RDF/SHACL, snapshot publication/querying and repeat artifact reuse passed.
+See [validation](VALIDATION.md#hdesk-validation-of-6710e9391a6a01345dab5f5be4ae0656e1c9d1ae)
+for counts and scope. Native Windows npm Codex executable discovery still needs improvement;
+this public-example pass does not establish broader semantic quality.
+
 Provider-dependent tests must remain opt-in, use tiny public fixtures, avoid credentials in
 untrusted CI, and record model/version/date separately from deterministic test results.

@@ -19,12 +19,12 @@ for (const record of reviewed) {
 }
 const packageTargets = [
   {
-    name: '@launchecho/context-graph-core',
+    name: '@launch-echo/tently-core',
     path: resolve(toolkitRoot, 'packages', 'core', 'THIRD_PARTY_NOTICES.md'),
     includeExternalTools: false,
   },
   {
-    name: '@launchecho/context-graph-toolkit',
+    name: '@launch-echo/tently',
     path: resolve(toolkitRoot, 'THIRD_PARTY_NOTICES.md'),
     includeExternalTools: true,
   },
@@ -62,7 +62,7 @@ function dependencyRows(report) {
   const unsupported = [];
   for (const [license, dependencies] of Object.entries(report)) {
     for (const dependency of dependencies) {
-      if (dependency.name.startsWith('@launchecho/context-graph-')) continue;
+      if (['@launch-echo/tently', '@launch-echo/tently-core'].includes(dependency.name)) continue;
       const exceptions = dependency.versions.map((version) => reviewed.find((record) =>
         record.name === dependency.name && record.version === version && record.expression === license));
       if (!isAllowedLicenseExpression(license) && !exceptions.every(Boolean)) {

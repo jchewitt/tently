@@ -1,16 +1,19 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
-import { spawnSync } from 'node:child_process';
-import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { execFile, spawnSync } from 'node:child_process';
+import { createServer } from 'node:http';
+import { createHash } from 'node:crypto';
+import { promisify } from 'node:util';
+import { access, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 
 const toolkitRoot = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const packages = [
-  ['@launchecho/context-graph-core', resolve(toolkitRoot, 'packages', 'core')],
-  ['@launchecho/context-graph-toolkit', toolkitRoot],
+  ['@launch-echo/tently-core', resolve(toolkitRoot, 'packages', 'core')],
+  ['@launch-echo/tently', toolkitRoot],
 ];
 
 function run(command, args, cwd) {
@@ -32,6 +35,20 @@ function runPnpm(args, cwd) {
       : 'pnpm';
   const commandArgs = npmExecutable ? [npmExecutable, ...args] : args;
   return run(command, commandArgs, cwd);
+}
+
+async function npmCliPath() {
+  // Invoke npm's JavaScript entry point directly, including on Windows where npm.cmd
+  // cannot be launched through execFile without a shell.
+  const candidates = [
+    ...(process.env.npm_execpath?.endsWith('npm-cli.js') ? [process.env.npm_execpath] : []),
+    join(dirname(process.execPath), 'node_modules/npm/bin/npm-cli.js'),
+    resolve(dirname(process.execPath), '../lib/node_modules/npm/bin/npm-cli.js'),
+  ];
+  for (const candidate of candidates) {
+    try { await access(candidate); return candidate; } catch {}
+  }
+  throw new Error('npm CLI not found beside Node; install Node with npm to run the npx smoke test');
 }
 
 const destination = await mkdtemp(join(tmpdir(), 'context-graph-pack-'));
@@ -64,7 +81,7 @@ try {
       if (!entries.includes(required))
         throw new Error(`${expectedName} archive is missing ${required}`);
     }
-    if (expectedName.endsWith('-toolkit')) {
+    if (expectedName === '@launch-echo/tently') {
       for (const asset of [
         'dist/cli.js', 'dist/mcp.js',
         'examples/generic-typescript/context-graph.config.json',
@@ -88,11 +105,68 @@ try {
     if (ranges.some((range) => String(range).startsWith('workspace:'))) {
       throw new Error(`${expectedName} archive retains an unpublished workspace dependency range`);
     }
+    if (expectedName === '@launch-echo/tently' &&
+        packedManifest.bin?.[expectedName.split('/').at(-1)] !== 'dist/cli.js') {
+      throw new Error('Package must expose its basename as a CLI binary for npx executable inference');
+    }
   }
 
-  const coreArchive = archives.get('@launchecho/context-graph-core');
-  const toolkitArchive = archives.get('@launchecho/context-graph-toolkit');
+  const coreArchive = archives.get('@launch-echo/tently-core');
+  const toolkitArchive = archives.get('@launch-echo/tently');
   if (!coreArchive || !toolkitArchive) throw new Error('Publication smoke archives are incomplete');
+  const freshProject = join(destination, 'fresh-project');
+  await mkdir(join(freshProject, 'src'), { recursive: true });
+  await writeFile(join(freshProject, 'package.json'), '{"name":"fresh-npx-project","private":true}');
+  // Serve only these scoped packages from a disposable registry. This verifies one-package
+  // npx inference and automatic core dependency installation before any public publish.
+  const registryPackages = new Map();
+  for (const [name, directory] of packages) {
+    const manifest = JSON.parse(run('tar', ['-xOf', archives.get(name), 'package/package.json'], directory));
+    registryPackages.set(name, { manifest, bytes: await readFile(archives.get(name)) });
+  }
+  let registryUrl;
+  const registry = createServer((request, response) => {
+    const path = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
+    const tarball = path.endsWith('.tgz');
+    const name = path.slice(1).replace(/\.tgz$/, '');
+    const item = registryPackages.get(name);
+    if (!item) { response.writeHead(404); response.end(); return; }
+    if (tarball) { response.end(item.bytes); return; }
+    const { manifest, bytes } = item;
+    response.setHeader('content-type', 'application/json');
+    response.end(JSON.stringify({ name, 'dist-tags': { latest: manifest.version }, versions: {
+      [manifest.version]: { ...manifest, dist: { tarball: `${registryUrl}/${name}.tgz`,
+        integrity: `sha512-${createHash('sha512').update(bytes).digest('base64')}` } },
+    } }));
+  });
+  await new Promise((resolve, reject) => {
+    registry.once('error', reject);
+    registry.listen(0, '127.0.0.1', resolve);
+  });
+  try {
+    registryUrl = `http://127.0.0.1:${registry.address().port}`;
+    await writeFile(join(freshProject, '.npmrc'), `@launch-echo:registry=${registryUrl}\n`);
+    const npmCli = await npmCliPath();
+    const version = registryPackages.get('@launch-echo/tently').manifest.version;
+    const npx = async (...args) => (await promisify(execFile)(process.execPath,
+      [npmCli, 'exec', '--yes', '--', `@launch-echo/tently@${version}`, ...args],
+      { cwd: freshProject, timeout: 180_000, maxBuffer: 4 * 1024 * 1024 })).stdout;
+    const setup = await npx('init', '--yes', '--semantic-source', 'docs/intent');
+    if (!setup.includes('Setup made no model requests')) throw new Error('Packed npx initialization failed');
+    const initialized = JSON.parse(await readFile(join(freshProject, 'context-graph.config.json'), 'utf8'));
+    if (initialized.repositoryId !== 'fresh-npx-project' || initialized.approvedIntentSources.length ||
+        initialized.semanticSources.join(',') !== 'docs/intent') throw new Error('Unexpected generated config');
+    if (!JSON.parse(await npx('config', 'validate')).valid) throw new Error('Generated config is invalid');
+    if (JSON.parse(await npx('config', 'show')).repositoryId !== 'fresh-npx-project') {
+      throw new Error('Packed config show failed');
+    }
+    if (!(await readFile(join(freshProject, '.gitignore'), 'utf8')).includes('.context-graph/')) {
+      throw new Error('Setup did not exclude generated evidence from Git');
+    }
+  } finally {
+    registry.closeAllConnections();
+    await new Promise((resolve) => registry.close(resolve));
+  }
   const consumer = join(destination, 'consumer');
   await mkdir(join(consumer, 'src'), { recursive: true });
   const fileDependency = (path) => `file:${path.replaceAll('\\', '/')}`;
@@ -106,12 +180,12 @@ try {
           private: true,
           type: 'module',
           dependencies: {
-            '@launchecho/context-graph-core': fileDependency(coreArchive),
-            '@launchecho/context-graph-toolkit': fileDependency(toolkitArchive),
+            '@launch-echo/tently-core': fileDependency(coreArchive),
+            '@launch-echo/tently': fileDependency(toolkitArchive),
           },
           pnpm: {
             overrides: {
-              '@launchecho/context-graph-core': fileDependency(coreArchive),
+              '@launch-echo/tently-core': fileDependency(coreArchive),
             },
           },
         },
@@ -143,10 +217,10 @@ try {
   ]);
   runPnpm(['install', '--prefer-offline', '--ignore-scripts', '--no-frozen-lockfile'], consumer);
   const staticModule = pathToFileURL(
-    join(consumer, 'node_modules', '@launchecho', 'context-graph-toolkit', 'dist', 'static.js'),
+    join(consumer, 'node_modules', '@launch-echo', 'tently', 'dist', 'static.js'),
   ).href;
   const toolkitModule = pathToFileURL(
-    join(consumer, 'node_modules', '@launchecho', 'context-graph-toolkit', 'dist', 'index.js'),
+    join(consumer, 'node_modules', '@launch-echo', 'tently', 'dist', 'index.js'),
   ).href;
   await writeFile(
     join(consumer, 'smoke.mjs'),
@@ -236,7 +310,7 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
     consumer,
   );
   run(process.execPath, ['smoke.mjs'], consumer);
-  const installedRoot = join(consumer, 'node_modules', '@launchecho', 'context-graph-toolkit');
+  const installedRoot = join(consumer, 'node_modules', '@launch-echo', 'tently');
   const config = JSON.parse(await readFile(
     join(installedRoot, 'examples/generic-typescript/context-graph.config.json'), 'utf8',
   ));
@@ -264,7 +338,7 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
   } finally {
     await client.close();
   }
-  console.log('Installed consumer: runtime assets, TypeScript indexing, SCIP facts, RDF/SPARQL/SHACL, HTML/DOT/SVG and MCP passed.');
+  console.log('Packed npm exec/npx setup and config passed. Installed consumer: runtime assets, TypeScript indexing, SCIP facts, RDF/SPARQL/SHACL, HTML/DOT/SVG and MCP passed.');
 } finally {
   await rm(destination, { recursive: true, force: true });
 }

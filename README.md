@@ -1,4 +1,4 @@
-# Context Graph Toolkit
+# Tently — Context Graph Toolkit
 
 An extracted Apache-2.0 toolkit for connecting product intent, contracts, implementation,
 tests and observed runtime evidence. Derived from LaunchEcho Context Graph; see
@@ -6,6 +6,55 @@ tests and observed runtime evidence. Derived from LaunchEcho Context Graph; see
 
 This standalone implementation uses small, recorded delivery milestones. See [roadmap](docs/ROADMAP.md) and
 [validation](docs/VALIDATION.md) for completed checks and limitations.
+
+## Set up a project
+
+The npm package is `@launch-echo/tently`; its neutral `@launch-echo/tently-core` dependency is
+installed automatically. The first registry release is prepared but still requires an
+authenticated publisher in the `launch-echo` npm organization. The commands below become
+available from the public registry after publication; local archive testing is described below.
+
+From your TypeScript project's directory, after publication:
+
+```sh
+npx @launch-echo/tently init
+npx @launch-echo/tently config validate
+npx @launch-echo/tently doctor
+```
+
+`init` asks for the repository ID, code roots, selected document paths and model, then writes
+`context-graph.config.json` and adds `.context-graph/` to `.gitignore`. It fills in the internal
+version fields, requires no Git commit or Codex login to run, and refuses to overwrite existing
+configuration. Setup makes no model requests. For automation:
+
+```sh
+npx @launch-echo/tently init --yes --repository-id your-org/your-project --code-root src --semantic-source docs/product --evidence-root tests
+```
+
+Source flags may be repeated. Without `--semantic-source`, non-interactive setup selects no
+documents. Owner-approved sources always start empty; explicitly review and set
+`approvedIntentSources` in the JSON file. Select contracts using `contractPatterns`.
+Use `--config .config/context-graph.json` for another configuration location,
+`--directory /path/to/project` to initialize another project, or `--no-gitignore` to leave
+ignore rules alone. Configuration remains JSON; `config show` displays the validated settings.
+
+Review the selected sources, configure Codex authentication when using semantic documents,
+and commit the inputs you want indexed before hydrating:
+
+```sh
+npx @launch-echo/tently hydrate --ref HEAD
+npx @launch-echo/tently impact scan --changed-file src/search.ts --json
+```
+
+Hydration with selected documents may incur model charges. Saved queries do not call a model.
+Docker is optional for openCAESAR; the default RDF backend needs no Docker.
+For a project-local dependency, install `npm install --save-dev @launch-echo/tently` and use
+`npx tently` or `npx context-graph`. MCP clients can launch
+`npx --yes --package @launch-echo/tently context-graph-mcp` with `CONTEXT_GRAPH_CONFIG` set to
+the project's absolute configuration path. Pin a reviewed version for reproducible agent setup.
+
+Linux/WSL is the validated full-suite path. Native Windows has a live Codex pass but still has
+archive-byte and concurrent snapshot replacement issues; see the [validation record](docs/VALIDATION.md).
 
 ## Development
 
@@ -33,7 +82,14 @@ Configure semantic source selection, TypeScript roots/indexer arguments, contrac
 evidence roots, runtime evidence, storage and optional adapter explicitly.
 
 Install the locally packed core and toolkit tarballs together. The installed commands are
-`context-graph` and `context-graph-mcp`. Pass `--config /absolute/path/context-graph.config.json`
+`tently`, `context-graph` and `context-graph-mcp`. For example, after preparing a release:
+
+```sh
+npm install --save-dev /path/to/tently/.release/launch-echo-tently-core-0.1.0.tgz /path/to/tently/.release/launch-echo-tently-0.1.0.tgz
+npx tently init
+```
+
+Pass `--config /absolute/path/context-graph.config.json`
 to the CLI or set `CONTEXT_GRAPH_CONFIG` for MCP. No launcher rebuild is required for installed
 packages. `node mcp-launcher.mjs` is for development in this repository.
 
@@ -69,9 +125,12 @@ See `examples/pipeline` for a six-stage asynchronous flow and `docs/ADR-004-rdf-
 for query bounds and authority configuration.
 
 Never submit credentials, account data or private runtime payloads as semantic sources.
-Live provider tests are separate from deterministic CI. The reviewed GitHub export is authorized
-for local testing; package registry publication and repository visibility changes require
-separate maintainer authorization.
+Live provider tests are separate from deterministic CI. The maintainer authorized the GitHub
+export and requested npm publication under `@launch-echo`. Registry publication still requires
+an authorized npm identity. Repository visibility changes require separate authorization.
+
+See [npm release instructions](docs/RELEASING.md) for prepared archives, integrity checks and
+the core-before-toolkit publication sequence.
 
 See [provider contract](docs/PROVIDERS.md) for bounded extraction and adapters, and
 [architecture policy](docs/architecture-policy.md) for deterministic governance.

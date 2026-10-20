@@ -15,7 +15,7 @@ describe('standalone architecture boundary', () => {
       );
     }
     const manifest = JSON.parse(await readFile(join(sourceRoot, '..', 'package.json'), 'utf8'));
-    expect(manifest.dependencies['@launchecho/context-graph-core']).toBe('workspace:^');
+    expect(manifest.dependencies['@launch-echo/tently-core']).toBe('workspace:^');
     expect(manifest.dependencies['@sourcegraph/scip-typescript']).toBe('0.4.0');
     expect(JSON.stringify(manifest.dependencies)).not.toMatch(/tradepilot/i);
     expect(JSON.stringify(manifest.devDependencies)).not.toMatch(/tradepilot/i);
@@ -37,7 +37,7 @@ describe('standalone architecture boundary', () => {
     expect(manifest.dependencies ?? {}).toEqual({});
     for (const file of (await readdir(join(core, 'src'))).filter((f) => f.endsWith('.ts'))) {
       expect(await readFile(join(core, 'src', file), 'utf8')).not.toMatch(
-        /from ['"](?:@launchecho\/context-graph-toolkit|\.\.\/\.\.\/\.\.\/src)/,
+        /from ['"](?:@launch-echo\/tently|\.\.\/\.\.\/\.\.\/src)/,
       );
     }
   });

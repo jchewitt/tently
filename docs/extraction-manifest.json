@@ -24,7 +24,7 @@
       "destinationPath": "THIRD_PARTY_NOTICES.md",
       "sourceSha256": "c98c42f3c3c74f4c4f38f45b785ea15de439ad6471d82040d13100b36616b01e",
       "modified": true,
-      "destinationSha256": "0bf2953f64c14daae2dfc06a795141fd154cf081da69e09e76d0efe48db25d88"
+      "destinationSha256": "5e1847931d106ca13440c3e6ff6792ceed89d75f8fad8aa42a30d266be313e19"
     },
     {
       "sourcePath": "tools/context-graph/action/action.yml",
@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "c791e23cb73c8787d55d17519b18e8516ff5e7b9cbff2aed86cd93e2a3472edc"
+      "destinationSha256": "e1bbfd7186a0239ec5b645efa79174c040aeb1776559f7ece53b92cf168d1af4"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -128,22 +128,22 @@
       "sourcePath": "tools/context-graph/packages/core/README.md",
       "destinationPath": "packages/core/README.md",
       "sourceSha256": "6044bf7b9a3dc793f41e2ff048546ed11938957d10a5b143eb1739ac4cd7477c",
-      "modified": false,
-      "destinationSha256": "6044bf7b9a3dc793f41e2ff048546ed11938957d10a5b143eb1739ac4cd7477c"
+      "modified": true,
+      "destinationSha256": "d6a9a456382aa6aa02cc5058aedaedc080f667d4764f5f463d6befe2096a9c18"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/THIRD_PARTY_NOTICES.md",
       "destinationPath": "packages/core/THIRD_PARTY_NOTICES.md",
       "sourceSha256": "e08f9da53b082a0235f81686c17ac2a780851ab692c9420f249ffaaef18b6862",
       "modified": true,
-      "destinationSha256": "8d2be5c5bc35dd9655629b708a8b387d4d5e6060f9333386db8dbfebc70bb392"
+      "destinationSha256": "3b76831dad96e27dc151d64ecae1fc4e871034e5d77e7b3f8ce66810def1aa1f"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/package.json",
       "destinationPath": "packages/core/package.json",
       "sourceSha256": "2a29066eb8452f22fafcb06bb035a84dda93c5705dba32aba600a1b7e5aaf19c",
       "modified": true,
-      "destinationSha256": "6e6d7b49e262132a6cc110f08b8392c42016feeb144910e9f5e0e4a014b76702"
+      "destinationSha256": "d42d9e0256a62c96b86bb3e06842ad8ae13bb08977f7b03bb640fd21f98c71a9"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/core.ts",
@@ -192,14 +192,14 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "57e1838ab7a133090ddecc9d88f9ccdaafe3c49a54ee95ddef6f4709e949dc93"
+      "destinationSha256": "07e59360014380187befc3099d6c4f05412a475040130f5ab294fb25616b62f3"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
       "destinationPath": "scripts/generate-third-party-notices.mjs",
       "sourceSha256": "42cd4996ecab49b008634958e47b0a9eadf9ea775678b8daaeeafea59eaabadf",
       "modified": true,
-      "destinationSha256": "67b79d7d10ec8023c19976bab5b0a62beddd103529ec7d3cb9ac2b4c22f94f2e"
+      "destinationSha256": "a6e4e062afadb1993363337009d9e1bc0cd1256d6b1503bd57cf6289e9c806df"
     },
     {
       "sourcePath": "tools/context-graph/src/agent-context.test.ts",
@@ -241,7 +241,7 @@
       "destinationPath": "src/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
       "modified": true,
-      "destinationSha256": "e068b83718436f7c59d85870f374a548d9097cf68de4dde85148e85ce215ad7b"
+      "destinationSha256": "b405f04022b5125be8fca5f5fa9210777a08d62daca159b22429dad02b1442e3"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
@@ -261,8 +261,8 @@
       "sourcePath": "tools/context-graph/src/core.ts",
       "destinationPath": "src/core.ts",
       "sourceSha256": "75d219741da5b74c23f0e281ec7ef6888c7a54a5224ca73bd2db6bde71c83f6c",
-      "modified": false,
-      "destinationSha256": "75d219741da5b74c23f0e281ec7ef6888c7a54a5224ca73bd2db6bde71c83f6c"
+      "modified": true,
+      "destinationSha256": "55f2c263194f774870c86895043c2efdfa33e2c5f68a7f0dc57596dd4a27fd8b"
     },
     {
       "sourcePath": "tools/context-graph/src/diagnostics.test.ts",
@@ -339,7 +339,7 @@
       "destinationPath": "src/mcp-startup.test.ts",
       "sourceSha256": "0793f213a0a6a8b4a4c68d12f6333127738f47f3e2c53b1882e9b45f45d1695f",
       "modified": true,
-      "destinationSha256": "f4e032cb0d4db0877b8656f7cb8049a46bcac793ce6131567490dc76dcd2d4cf"
+      "destinationSha256": "260fa45c5eabe58142f7195eb79b23fa5650a46bf273ef1b773766cdb3ff9fe8"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp.ts",
@@ -506,8 +506,8 @@
       "sourcePath": "tools/context-graph/src/util.ts",
       "destinationPath": "src/util.ts",
       "sourceSha256": "75d219741da5b74c23f0e281ec7ef6888c7a54a5224ca73bd2db6bde71c83f6c",
-      "modified": false,
-      "destinationSha256": "75d219741da5b74c23f0e281ec7ef6888c7a54a5224ca73bd2db6bde71c83f6c"
+      "modified": true,
+      "destinationSha256": "55f2c263194f774870c86895043c2efdfa33e2c5f68a7f0dc57596dd4a27fd8b"
     },
     {
       "sourcePath": "tools/context-graph/src/visualization.test.ts",
@@ -593,6 +593,7 @@
     "docs/ADR-006-provider-boundaries.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/PROVIDERS.md",
+    "docs/RELEASING.md",
     "docs/ROADMAP.md",
     "docs/SOURCE-INVENTORY.md",
     "docs/VALIDATION.md",
@@ -633,6 +634,7 @@
     "pnpm-workspace.yaml",
     "reviewed-licenses.json",
     "scripts/cloud-install.sh",
+    "scripts/release.mjs",
     "scripts/update-inventory.mjs",
     "src/architecture.test.ts",
     "src/authority.ts",
@@ -640,6 +642,8 @@
     "src/doctor.ts",
     "src/governance.test.ts",
     "src/governance.ts",
+    "src/init.test.ts",
+    "src/init.ts",
     "src/module-resolution.ts",
     "src/overlay.test.ts",
     "src/overlay.ts",
@@ -660,5 +664,16 @@
     "scope": "Push reviewed destination commits to https://github.com/jchewitt/tently for local checkout and testing",
     "packageRegistryRelease": false,
     "repositoryVisibilityChange": false
+  },
+  "npmPublicationAuthorization": {
+    "requested": true,
+    "registry": "https://registry.npmjs.org",
+    "scope": "@launch-echo",
+    "packages": [
+      "@launch-echo/tently",
+      "@launch-echo/tently-core"
+    ],
+    "authenticationVerified": false,
+    "published": false
   }
 }

@@ -41,7 +41,7 @@ async function unbuiltCheckout() {
     // Reuse installed third-party dependencies, but wire workspace packages to the unbuilt
     // fixture. The launcher must build these outputs rather than borrowing the real checkout's.
     for (const entry of await readdir(join(source, 'node_modules'))) {
-      if (entry === '@launchecho' || entry === '.bin') continue;
+      if (entry === '@launch-echo' || entry === '.bin') continue;
       const dependency = join(source, 'node_modules', entry);
       const directory = (await stat(dependency)).isDirectory();
       await symlink(
@@ -50,11 +50,11 @@ async function unbuiltCheckout() {
         directory ? (process.platform === 'win32' ? 'junction' : 'dir') : 'file',
       );
     }
-    await mkdir(join(target, 'node_modules', '@launchecho'), { recursive: true });
+    await mkdir(join(target, 'node_modules', '@launch-echo'), { recursive: true });
     for (const name of ['core']) {
       await symlink(
         join(toolkit, 'packages', name),
-        join(target, 'node_modules', '@launchecho', `context-graph-${name}`),
+        join(target, 'node_modules', '@launch-echo', `tently-${name}`),
         process.platform === 'win32' ? 'junction' : 'dir',
       );
     }

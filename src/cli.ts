@@ -15,6 +15,8 @@ import { basename, dirname, join } from 'node:path';
 import { analyzeArchitecture, type ArchitecturePolicy } from './governance.js';
 import { FileSnapshotStore } from './storage.js';
 import { diagnoseSetup } from './doctor.js';
+import { runInit } from './init.js';
+import { loadConfig } from './config.js';
 
 function valueAfter(args: readonly string[], name: string): string | undefined {
   const index = args.indexOf(name);
@@ -52,7 +54,18 @@ export function impactRequestFromArgs(args: readonly string[]): ImpactScanReques
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   if (args.includes('--help') || !args.length) {
-    process.stdout.write('context-graph doctor|hydrate|overlay|impact scan|sparql|validate|govern|visualize|diagnostics show|invariant check|clean-compare|ontology compile\nUse --config <file>; queries accept --snapshot <id>. impact scan accepts --changed-file, --capability, --max-facts, --max-depth, --continuation. See README.md for examples.\n');
+    process.stdout.write('context-graph init|config show|config validate|doctor|hydrate|overlay|impact scan|sparql|validate|govern|visualize|diagnostics show|invariant check|clean-compare|ontology compile\nUse --config <file>; queries accept --snapshot <id>. impact scan accepts --changed-file, --capability, --max-facts, --max-depth, --continuation.\ninit [--yes] [--directory <project>] [--config <file>] [--repository-id <id>] [--code-root <path>] [--semantic-source <path>] [--evidence-root <path>] [--model <name>] [--no-gitignore]\nSource flags may be repeated. init never overwrites an existing config. See README.md for examples.\n');
+    return;
+  }
+  if (args[0] === 'init') {
+    await runInit(args.slice(1));
+    return;
+  }
+  if (args[0] === 'config') {
+    if (!['show', 'validate'].includes(args[1] ?? '')) throw new Error('Usage: context-graph config show|validate [--config <file>]');
+    const loaded = await loadConfig(valueAfter(args, '--config') ?? defaultConfigPath());
+    process.stdout.write(`${JSON.stringify(args[1] === 'show' ? loaded.config :
+      { valid: true, configPath: loaded.configPath, repositoryRoot: loaded.repositoryRoot }, null, 2)}\n`);
     return;
   }
   if (args[0] === 'govern') {
