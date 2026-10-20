@@ -1,3 +1,4 @@
+// Modified for standalone extraction; see docs/extraction-manifest.json.
 import type { AgentSemanticScopeResolver } from './agent-context.js';
 import type { ImpactScanRequest, SnapshotStore } from './core.js';
 import type { GitRepository } from './git.js';

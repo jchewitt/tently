@@ -118,7 +118,7 @@ export class RdfEvidenceGraph {
     if (ast.type !== 'query' || ast.queryType !== 'SELECT' || ast.from || hasService(ast)) {
       throw new Error('Only local read queries are supported; remote datasets and updates are disabled');
     }
-    const stream = await engine.queryBindings(sparql, { sources: [this.dataset] });
+    const stream = await engine.queryBindings(sparql, { sources: [this.dataset], unionDefaultGraph: true });
     const rows: Record<string, string>[] = [];
     let truncated = false;
     for await (const binding of stream) {

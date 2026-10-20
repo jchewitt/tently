@@ -2,6 +2,7 @@
 name: context-graph-development
 description: Use commit-keyed context graph evidence for nontrivial repository changes that may affect multiple components, contracts, invariants, or validation surfaces.
 ---
+<!-- Modified for standalone extraction; see docs/extraction-manifest.json. -->
 
 # Context Graph Development
 

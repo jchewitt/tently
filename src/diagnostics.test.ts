@@ -1,3 +1,4 @@
+// Modified for standalone extraction; see docs/extraction-manifest.json.
 import { describe, expect, it } from 'vitest';
 import type { GraphDiagnostic, GraphFact } from './core.js';
 import { diagnosticSummary, MAX_DIAGNOSTICS_PER_KIND, selectDiagnostics } from './diagnostics.js';

@@ -1,3 +1,4 @@
+// Modified for standalone extraction; see docs/extraction-manifest.json.
 export type GraphNodeKind =
   | 'Project'
   | 'Document'

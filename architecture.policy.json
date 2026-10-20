@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "roots": ["src", "packages/core/src"],
+  "modules": [
+    {"id":"core","path":"^packages/core/","domain":"graph","layer":"contracts"},
+    {"id":"toolkit","path":"^src/","domain":"graph","layer":"application"}
+  ],
+  "contracts": [{"path":"packages/core/src/core.ts","owner":"core"}],
+  "rules": [
+    {
+      "id":"neutral-core-boundary",
+      "kind":"forbidden-import",
+      "from":"^packages/core/",
+      "to":"^src/",
+      "approved":true,
+      "approvalRef":"docs/architecture-policy.md#neutral-core"
+    },
+    {
+      "id":"canonical-contract-owner",
+      "kind":"contract-owner",
+      "approved":true,
+      "approvalRef":"docs/architecture-policy.md#neutral-core"
+    },
+    {"id":"dependency-cycles","kind":"no-cycles","approved":false}
+  ],
+  "advisory":{"maxLines":500,"maxComplexity":20,"duplicateMinTokens":80},
+  "baseline":[],
+  "exceptions":[]
+}

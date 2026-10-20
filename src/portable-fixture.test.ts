@@ -1,3 +1,4 @@
+// Modified for standalone extraction; see docs/extraction-manifest.json.
 import { execFile } from 'node:child_process';
 import { access, cp, mkdtemp, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -53,7 +54,7 @@ describe('portable generic fixture', () => {
     await expect(access(join(root, 'index.scip'))).rejects.toThrow();
     expect(
       await readFile(
-        resolve(loaded.repositoryRoot, loaded.config.ontology.projectPath, 'build.gradle'),
+        resolve(loaded.repositoryRoot, 'ontology', 'build.gradle'),
         'utf8',
       ),
     ).toContain('oml2owl-gradle:2.13.1');

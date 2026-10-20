@@ -1,0 +1,57 @@
+{
+  "sourceCommit": "479f3f5831229634c306c046a6b55c67d190f50f",
+  "kind": "advisory-inventory",
+  "approval": "Initial existing-debt inventory requested by extraction task; no hard-gate waivers",
+  "tools": {
+    "dependencyCruiser": "18.7.0",
+    "eslint": "10.13.0",
+    "jscpd": "5.4.1"
+  },
+  "findings": [
+    {
+      "category": "advisory",
+      "ruleId": "eslint:complexity",
+      "from": "src/cli.ts",
+      "to": "43",
+      "message": "Async function 'main' has a complexity of 23. Maximum allowed is 20. Size/complexity is a review signal, not proof of modularity.",
+      "fingerprint": "44fd67050497f68d00400c8d11246ed898daaa68fe6d13a5612cd208d7a42520",
+      "disposition": "new"
+    },
+    {
+      "category": "advisory",
+      "ruleId": "eslint:complexity",
+      "from": "src/config.ts",
+      "to": "87",
+      "message": "Function 'validateConfig' has a complexity of 36. Maximum allowed is 20. Size/complexity is a review signal, not proof of modularity.",
+      "fingerprint": "5936354742c2edc5b0318cd7bcb79fc9ce00d4d9a1179f904704dfb40ead9311",
+      "disposition": "new"
+    },
+    {
+      "category": "advisory",
+      "ruleId": "eslint:max-lines",
+      "from": "src/query.test.ts",
+      "to": "518",
+      "message": "File has too many lines (551). Maximum allowed is 500. Size/complexity is a review signal, not proof of modularity.",
+      "fingerprint": "cce159e6ca24eb0a5664fdae95979705904f8e1c69aae310dfb0a60beca6d13d",
+      "disposition": "new"
+    },
+    {
+      "category": "advisory",
+      "ruleId": "eslint:complexity",
+      "from": "src/telemetry.ts",
+      "to": "84",
+      "message": "Async method 'collect' has a complexity of 42. Maximum allowed is 20. Size/complexity is a review signal, not proof of modularity.",
+      "fingerprint": "f896c17c33d1a99ac4287c805f067a26f9fb8cf3cf9af10e8239b17abdb556ba",
+      "disposition": "new"
+    },
+    {
+      "category": "advisory",
+      "ruleId": "eslint:max-lines",
+      "from": "src/visualization.ts",
+      "to": "529",
+      "message": "File has too many lines (635). Maximum allowed is 500. Size/complexity is a review signal, not proof of modularity.",
+      "fingerprint": "8db629c5ab9aa7681f447b1acad521abccc3a2db5f79634c298b1741a9866cc4",
+      "disposition": "new"
+    }
+  ]
+}

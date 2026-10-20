@@ -15,6 +15,7 @@ import { verifyPipeline } from '../examples/pipeline/test/pipeline.test.js';
 import { sha256, stableJson } from './util.js';
 import type { ContextGraphConfig } from './config.js';
 import type { GraphFact } from './core.js';
+import { DirectRdfOntologyCompiler } from './ontology.js';
 
 describe('unified evidence graph', () => {
   it('extracts public prose and real TypeScript across queue boundaries, with SPARQL/projection equivalence', async () => {
@@ -57,9 +58,7 @@ describe('unified evidence graph', () => {
         },
       }),
       staticIndexer: new ScipTypeScriptIndexer(config.scip, storage),
-      ontologyCompiler: { async compile(_id, artifacts) {
-        return { root: '', rdfFiles: [], digest: sha256(stableJson(artifacts.map((a) => a.oml))) };
-      } },
+      ontologyCompiler: new DirectRdfOntologyCompiler(storage),
       runtimeEvidenceProvider: { collect: async () => [] },
       extractorFactory: (scip) => [
         new RepositoryFileExtractor(repository, ['src', 'test'], scip.digest),
@@ -69,6 +68,9 @@ describe('unified evidence graph', () => {
       invariantEvaluators: [],
     });
     const { snapshot } = await hydrator.hydrate({ ref: 'HEAD', headName: 'default' });
+    const repeated = await hydrator.hydrate({ ref: 'HEAD', headName: 'default' });
+    expect(repeated.semanticReused).toBe(6);
+    expect(repeated.snapshot.manifest.contentDigest).toBe(snapshot.manifest.contentDigest);
     expect(snapshot.facts.filter((f) => f.authority === 'declared')).toHaveLength(12);
     const graph = new RdfEvidenceGraph(snapshot);
     expect((await graph.validate()).conforms).toBe(true);

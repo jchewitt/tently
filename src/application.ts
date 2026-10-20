@@ -1,3 +1,4 @@
+// Modified for standalone extraction; see docs/extraction-manifest.json.
 import { SavedEvidenceQueryService } from './saved-evidence.js';
 import { sha256, stableJson } from './util.js';
 import { AgentSemanticScopeResolver, PreparedImpactQueryService } from './agent-context.js';
@@ -10,7 +11,7 @@ import type {
 } from './core.js';
 import { GitRepository } from './git.js';
 import { ContextGraphHydrator } from './hydrator.js';
-import { OpenCaesarOntologyCompiler } from './ontology.js';
+import { OpenCaesarOntologyCompiler, DirectRdfOntologyCompiler } from './ontology.js';
 import { SnapshotImpactQueryService } from './query.js';
 import { CodexCliSemanticExtractor, SemanticHydrator } from './semantic.js';
 import { SemanticArtifactStore, FileSnapshotStore } from './storage.js';
@@ -63,11 +64,11 @@ export async function createContextGraphApplication(configPath: string) {
   const semanticExtractor = new CodexCliSemanticExtractor(config.semantic);
   const semanticHydrator = new SemanticHydrator(config.semantic, artifactStore, semanticExtractor);
   const staticIndexer = new ScipTypeScriptIndexer(config.scip, storageRoot);
-  const ontologyCompiler = new OpenCaesarOntologyCompiler(
+  const ontologyCompiler = config.ontology.backend === 'opencaesar' ? new OpenCaesarOntologyCompiler(
     config.ontology,
     repositoryRoot,
     storageRoot,
-  );
+  ) : new DirectRdfOntologyCompiler(storageRoot);
   const runtimeEvidenceProvider = new OtlpJsonRuntimeEvidenceProvider(
     config.runtimeEvidence,
     config.runtimeEvidencePolicy,

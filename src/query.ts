@@ -1,3 +1,4 @@
+// Modified for standalone extraction; see docs/extraction-manifest.json.
 import { contextPackEvidenceAuthority } from './authority.js';
 import { RdfEvidenceGraph } from './rdf.js';
 import { sha256, stableJson } from './util.js';

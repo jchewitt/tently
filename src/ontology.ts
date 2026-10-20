@@ -1,5 +1,8 @@
+// Modified for standalone extraction; see docs/extraction-manifest.json.
 import { randomUUID } from 'node:crypto';
 import { withCommittedTree } from './committed-tree.js';
+import { DataFactory, Store, Writer } from 'n3';
+import { CG, nodeIri } from './rdf.js';
 import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -128,6 +131,9 @@ export class OpenCaesarOntologyCompiler implements OntologyCompiler {
         new OpenCaesarOntologyCompiler(this.config, root, this.storageRoot).compile(snapshotId, artifacts));
     }
     await this.checkReady();
+    if (!this.config.projectPath || !this.config.containerImage) {
+      throw new Error('Optional openCAESAR requires projectPath and containerImage');
+    }
     const source = resolve(this.repositoryRoot, this.config.projectPath);
     const work = join(this.storageRoot, 'work', `ontology-${snapshotId}-${randomUUID()}`);
     await rm(work, { recursive: true, force: true });
@@ -185,5 +191,31 @@ export class OpenCaesarOntologyCompiler implements OntologyCompiler {
       })),
     );
     return { root: rdfRoot, rdfFiles, digest: sha256(stableJson(digestParts)) };
+  }
+}
+
+/** Default compiler preserves asserted semantics without Java, Docker, or an OWL reasoner. */
+export class DirectRdfOntologyCompiler implements OntologyCompiler {
+  constructor(private readonly storageRoot: string) {}
+
+  async compile(snapshotId: string, artifacts: readonly SemanticArtifact[]): Promise<OntologyCompileResult> {
+    const { namedNode } = DataFactory;
+    const dataset = new Store();
+    for (const artifact of [...artifacts].sort((a, b) => a.key.localeCompare(b.key))) {
+      for (const fact of artifact.facts) {
+        dataset.addQuad(namedNode(nodeIri(fact.subject.id)), namedNode(CG + fact.predicate),
+          namedNode(nodeIri(fact.object.id)));
+      }
+    }
+    const writer = new Writer({ format: 'N-Triples' });
+    writer.addQuads(dataset.getQuads(null, null, null, null));
+    const text = await new Promise<string>((accept, reject) =>
+      writer.end((error, value) => error ? reject(error) : accept(value)));
+    const content = text.split('\n').filter(Boolean).sort().join('\n') + '\n';
+    const root = join(this.storageRoot, 'work', `rdf-${snapshotId}-${randomUUID()}`);
+    await mkdir(root, { recursive: true });
+    const path = join(root, 'semantic.nt');
+    await writeFile(path, content);
+    return { root, rdfFiles: [path], digest: sha256(content) };
   }
 }

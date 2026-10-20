@@ -9,475 +9,554 @@
       "sourcePath": "tools/context-graph/LICENSE",
       "destinationPath": "LICENSE",
       "sourceSha256": "bb28c48e3e078166e91cfc2b6db7ffebb8a0973b9e23b3df060561292d8d69ec",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "bb28c48e3e078166e91cfc2b6db7ffebb8a0973b9e23b3df060561292d8d69ec"
     },
     {
       "sourcePath": "tools/context-graph/NOTICE",
       "destinationPath": "NOTICE",
       "sourceSha256": "7da207430dc2c3a7d73c3f7b5462e640139d4f034505b94795c9449ed1874871",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "7da207430dc2c3a7d73c3f7b5462e640139d4f034505b94795c9449ed1874871"
     },
     {
       "sourcePath": "tools/context-graph/THIRD_PARTY_NOTICES.md",
       "destinationPath": "THIRD_PARTY_NOTICES.md",
       "sourceSha256": "c98c42f3c3c74f4c4f38f45b785ea15de439ad6471d82040d13100b36616b01e",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "b3e8dae05b4a400e06a18bc808c801bc9b4d6011b932fd7231f942f0c41d2793"
     },
     {
       "sourcePath": "tools/context-graph/action/action.yml",
       "destinationPath": "action/action.yml",
       "sourceSha256": "424b1c9d10411f849611539bb0b82d3240013ccc7dfc2912017500f5392d42cc",
-      "modified": true
+      "modified": true,
+      "destinationSha256": "1691d9e228415dfe5c7efaa5f6b9b9cb5c4ed7a3bc1fb8f395b70a41bbf7c597"
     },
     {
       "sourcePath": "tools/context-graph/examples/generic-typescript/context-graph.config.json",
       "destinationPath": "examples/generic-typescript/context-graph.config.json",
       "sourceSha256": "dea69d1fd3c2a5c38dd3923fb31cf5488b1cedccd73d27e73b572ff97a920d64",
-      "modified": true
+      "modified": true,
+      "destinationSha256": "5b5fac44aec7a7210e3b9c77fb28707f6c911fb19d8c73140327a693ef151991"
     },
     {
       "sourcePath": "tools/context-graph/examples/generic-typescript/docs/search-capability.md",
       "destinationPath": "examples/generic-typescript/docs/search-capability.md",
       "sourceSha256": "ad05079d50a30de5a5dab0d0709d4b35dd903123c46cd3b80be4d6b864bfe176",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "ad05079d50a30de5a5dab0d0709d4b35dd903123c46cd3b80be4d6b864bfe176"
     },
     {
       "sourcePath": "tools/context-graph/examples/generic-typescript/ontology/build.gradle",
       "destinationPath": "examples/generic-typescript/ontology/build.gradle",
       "sourceSha256": "355ca8c7f17cfff25f8e20e0b1c20789f2f12fb0f3540c9d32e964cf773018bf",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "355ca8c7f17cfff25f8e20e0b1c20789f2f12fb0f3540c9d32e964cf773018bf"
     },
     {
       "sourcePath": "tools/context-graph/examples/generic-typescript/ontology/catalog.xml",
       "destinationPath": "examples/generic-typescript/ontology/catalog.xml",
       "sourceSha256": "79eed4f266cd31f6cd709dd1a6416eb89ee4ebf9cda2471e36cae555428f2cc6",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "79eed4f266cd31f6cd709dd1a6416eb89ee4ebf9cda2471e36cae555428f2cc6"
     },
     {
       "sourcePath": "tools/context-graph/examples/generic-typescript/ontology/settings.gradle",
       "destinationPath": "examples/generic-typescript/ontology/settings.gradle",
       "sourceSha256": "e0cb6374333cfe8c39f7791dccaad0375297d4e1fb1385909509954daec7dee5",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "e0cb6374333cfe8c39f7791dccaad0375297d4e1fb1385909509954daec7dee5"
     },
     {
       "sourcePath": "tools/context-graph/examples/generic-typescript/ontology/src/oml/context-graph.dev/core.oml",
       "destinationPath": "examples/generic-typescript/ontology/src/oml/context-graph.dev/core.oml",
       "sourceSha256": "795c7b4490bd4f2e32af8eb50ea74dc4ba317d99d15dba556d9a56b39bbd3155",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "795c7b4490bd4f2e32af8eb50ea74dc4ba317d99d15dba556d9a56b39bbd3155"
     },
     {
       "sourcePath": "tools/context-graph/examples/generic-typescript/package.json",
       "destinationPath": "examples/generic-typescript/package.json",
       "sourceSha256": "2169cffe7916ad96cf30f94b35c25a6a70b5050d05ec3586b3fe6552c1166934",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "2169cffe7916ad96cf30f94b35c25a6a70b5050d05ec3586b3fe6552c1166934"
     },
     {
       "sourcePath": "tools/context-graph/examples/generic-typescript/src/search.ts",
       "destinationPath": "examples/generic-typescript/src/search.ts",
       "sourceSha256": "aa865e86b6b80fb38e5bca9e48223d3aaf579dc60f4eed2a959fc70e0df6335e",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "aa865e86b6b80fb38e5bca9e48223d3aaf579dc60f4eed2a959fc70e0df6335e"
     },
     {
       "sourcePath": "tools/context-graph/examples/generic-typescript/test/search.test.ts",
       "destinationPath": "examples/generic-typescript/test/search.test.ts",
       "sourceSha256": "6b98d9e7aa36cc02d6a1ef10acfdf13197276100eac8dd07ae42d5bf4b716d45",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "6b98d9e7aa36cc02d6a1ef10acfdf13197276100eac8dd07ae42d5bf4b716d45"
     },
     {
       "sourcePath": "tools/context-graph/examples/generic-typescript/tsconfig.json",
       "destinationPath": "examples/generic-typescript/tsconfig.json",
       "sourceSha256": "a17aa32444c0c221cf70e409eda56832cda18c66014fc6ff1924fcf1108d0c2e",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "a17aa32444c0c221cf70e409eda56832cda18c66014fc6ff1924fcf1108d0c2e"
     },
     {
       "sourcePath": "tools/context-graph/package.json",
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
-      "modified": true
+      "modified": true,
+      "destinationSha256": "6a8d3be3cc9dc7e6a4354e067ec413fe88c44f012c062c95a0ccffda8bd84ac5"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
       "destinationPath": "packages/core/LICENSE",
       "sourceSha256": "bb28c48e3e078166e91cfc2b6db7ffebb8a0973b9e23b3df060561292d8d69ec",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "bb28c48e3e078166e91cfc2b6db7ffebb8a0973b9e23b3df060561292d8d69ec"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/NOTICE",
       "destinationPath": "packages/core/NOTICE",
       "sourceSha256": "a0369b76d11e8afd6e821aacb44bd91bd88360970795138d3ab636150fde732c",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "a0369b76d11e8afd6e821aacb44bd91bd88360970795138d3ab636150fde732c"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/README.md",
       "destinationPath": "packages/core/README.md",
       "sourceSha256": "6044bf7b9a3dc793f41e2ff048546ed11938957d10a5b143eb1739ac4cd7477c",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "6044bf7b9a3dc793f41e2ff048546ed11938957d10a5b143eb1739ac4cd7477c"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/THIRD_PARTY_NOTICES.md",
       "destinationPath": "packages/core/THIRD_PARTY_NOTICES.md",
       "sourceSha256": "e08f9da53b082a0235f81686c17ac2a780851ab692c9420f249ffaaef18b6862",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "8d2be5c5bc35dd9655629b708a8b387d4d5e6060f9333386db8dbfebc70bb392"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/package.json",
       "destinationPath": "packages/core/package.json",
       "sourceSha256": "2a29066eb8452f22fafcb06bb035a84dda93c5705dba32aba600a1b7e5aaf19c",
-      "modified": true
+      "modified": true,
+      "destinationSha256": "6e6d7b49e262132a6cc110f08b8392c42016feeb144910e9f5e0e4a014b76702"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/core.ts",
       "destinationPath": "packages/core/src/core.ts",
       "sourceSha256": "cb3f4eb7bfe9f458494607406664445a276aad37235930a043d400ea9211ed16",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "4ff78e55f5a10f1700742b62d6e3e7aa83571e728467a44c8bf295142504c030"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/index.ts",
       "destinationPath": "packages/core/src/index.ts",
       "sourceSha256": "6cbf51e60ac8c7b21b04870b50b92f6da0a1a3b2fa9dd21331e7e83e7beced05",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "6cbf51e60ac8c7b21b04870b50b92f6da0a1a3b2fa9dd21331e7e83e7beced05"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/util.test.ts",
       "destinationPath": "packages/core/src/util.test.ts",
       "sourceSha256": "714dfd3569286452576d2323c11a9a1fe99e5e7a903a6a6ae78fd30c88d347bd",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "714dfd3569286452576d2323c11a9a1fe99e5e7a903a6a6ae78fd30c88d347bd"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/util.ts",
       "destinationPath": "packages/core/src/util.ts",
       "sourceSha256": "d1f470c590e56c5f38f0135232c86ee1166fb36c30d129fda42978b7ad0c9c25",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "d1f470c590e56c5f38f0135232c86ee1166fb36c30d129fda42978b7ad0c9c25"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/tsconfig.eslint.json",
       "destinationPath": "packages/core/tsconfig.eslint.json",
       "sourceSha256": "42f03a29011ddb1f7912c0fbc0825299e15eac81875bcf7096fb28ddf716fb6a",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "42f03a29011ddb1f7912c0fbc0825299e15eac81875bcf7096fb28ddf716fb6a"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/tsconfig.json",
       "destinationPath": "packages/core/tsconfig.json",
       "sourceSha256": "7d3443935799690b283584c2add850d336acfe256c3d1a40593c37bf51ee7a8b",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "7d3443935799690b283584c2add850d336acfe256c3d1a40593c37bf51ee7a8b"
     },
     {
       "sourcePath": "tools/context-graph/scripts/check-publication.mjs",
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
-      "modified": true
+      "modified": true,
+      "destinationSha256": "7add8308b2aeb7bf24785029eaad43d1e437fb19d867e28140e545ace164d7d3"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
       "destinationPath": "scripts/generate-third-party-notices.mjs",
       "sourceSha256": "42cd4996ecab49b008634958e47b0a9eadf9ea775678b8daaeeafea59eaabadf",
-      "modified": true
+      "modified": true,
+      "destinationSha256": "67b79d7d10ec8023c19976bab5b0a62beddd103529ec7d3cb9ac2b4c22f94f2e"
     },
     {
       "sourcePath": "tools/context-graph/src/agent-context.test.ts",
       "destinationPath": "src/agent-context.test.ts",
       "sourceSha256": "cb87b9b7e18ae5d8ba39d4ebf1d45556479d6efb3ffa75276bc6164ee2bf30f1",
-      "modified": true
+      "modified": true,
+      "destinationSha256": "22a072fa7ad5b2dd086454eca99d76ac30facfced94877153c0c51a8ceab1252"
     },
     {
       "sourcePath": "tools/context-graph/src/agent-context.ts",
       "destinationPath": "src/agent-context.ts",
       "sourceSha256": "0a45ce6d878f3c2c19a1707b799e8c1d6e9e99ab5cb068aa73088b32f420aa23",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "5119fa400afb7298412b690fddd6e8442b0e589e57b0922757a5fc9867ec7e21"
     },
     {
       "sourcePath": "tools/context-graph/src/application.test.ts",
       "destinationPath": "src/application.test.ts",
       "sourceSha256": "bd4dd2f797a38ed1e5e6d0f820494ea51aa8a7193c3446fbf645c66d063a613b",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "bd4dd2f797a38ed1e5e6d0f820494ea51aa8a7193c3446fbf645c66d063a613b"
     },
     {
       "sourcePath": "tools/context-graph/src/application.ts",
       "destinationPath": "src/application.ts",
       "sourceSha256": "22e0fa1312c652f3e5ab2078d8c7e03d3b0235231e220df3349eb60622f78469",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "96720e8c8e7be8f019ce4eedda5bfacda8540bab31f5324592e81b446a71d2bc"
     },
     {
       "sourcePath": "tools/context-graph/src/cache.ts",
       "destinationPath": "src/cache.ts",
       "sourceSha256": "c65c9803657762dbcfd482c58820950d938694a8432f38d65cc35a86eeca216d",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "5f35d581ce2951301d2444f951fa6893ca20c9b4ec0529ec563fe7d3c82c9126"
     },
     {
       "sourcePath": "tools/context-graph/src/cli.ts",
       "destinationPath": "src/cli.ts",
       "sourceSha256": "c68f5f35a5325cc03811b0d4ffb6d58c31a9b4e6115fcb2c5e4fda9560a34714",
-      "modified": true
+      "modified": true,
+      "destinationSha256": "52fdf7a6cf534e5aadb5e7957febd1e9622ada0217015ae3c8fc875dea1feb27"
     },
     {
       "sourcePath": "tools/context-graph/src/config.test.ts",
       "destinationPath": "src/config.test.ts",
       "sourceSha256": "70bcda6d6b48ff6fa03223c9420fe3e0e3e32c688e0a14f11034515e0707dee4",
-      "modified": true
+      "modified": true,
+      "destinationSha256": "0d0c1aa07ab0be5fb0dbb6a6920f8911e2763e2773a38e0d9cc670b1f9833dd6"
     },
     {
       "sourcePath": "tools/context-graph/src/config.ts",
       "destinationPath": "src/config.ts",
       "sourceSha256": "e9ee8cf2134d274aa6f6a21545959fbec97e958181d9032c073293f28e04d6ca",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "2ee49d75a84fb7c99326b78ee8ccebf7d08f2789d14e34bf97b494b7430eca6b"
     },
     {
       "sourcePath": "tools/context-graph/src/core.ts",
       "destinationPath": "src/core.ts",
       "sourceSha256": "75d219741da5b74c23f0e281ec7ef6888c7a54a5224ca73bd2db6bde71c83f6c",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "75d219741da5b74c23f0e281ec7ef6888c7a54a5224ca73bd2db6bde71c83f6c"
     },
     {
       "sourcePath": "tools/context-graph/src/diagnostics.test.ts",
       "destinationPath": "src/diagnostics.test.ts",
       "sourceSha256": "55e6301694a4aee4a96b32c423fac10759995e9977d28a47dc7628d86ded3e4e",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "916914e3399ad5d52a718c5f8c26b8d90da4e6970c9b33ad245b3a76364ba51e"
     },
     {
       "sourcePath": "tools/context-graph/src/diagnostics.ts",
       "destinationPath": "src/diagnostics.ts",
       "sourceSha256": "19045b253527d4b4c6f45520d926a034936ad296bc115c74c7012d0efe59a396",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "19045b253527d4b4c6f45520d926a034936ad296bc115c74c7012d0efe59a396"
     },
     {
       "sourcePath": "tools/context-graph/src/document.ts",
       "destinationPath": "src/document.ts",
       "sourceSha256": "62a2da37d8cc0637b192b7e70ae7a0dce72244d335da9df0e0ad9b0eb7c4e1f1",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "62a2da37d8cc0637b192b7e70ae7a0dce72244d335da9df0e0ad9b0eb7c4e1f1"
     },
     {
       "sourcePath": "tools/context-graph/src/git.test.ts",
       "destinationPath": "src/git.test.ts",
       "sourceSha256": "ab00e7a88a68a503a4a0ab580fbaf5aa631a8fd0268adc137606a9cefe36196a",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "ab00e7a88a68a503a4a0ab580fbaf5aa631a8fd0268adc137606a9cefe36196a"
     },
     {
       "sourcePath": "tools/context-graph/src/git.ts",
       "destinationPath": "src/git.ts",
       "sourceSha256": "484d3986633bb32ccc3b665f2144007a213c303df51b375c1d653729921d6d2c",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "86ee18b144d8fd4513fb89e3a7ab1ce157abf5e3f0f7452e58cf3891bfed4973"
     },
     {
       "sourcePath": "tools/context-graph/src/glob.ts",
       "destinationPath": "src/glob.ts",
       "sourceSha256": "4beb02e66774bb2c286f1e60762f01c6a432b0050d3ffd1cbd6913361802c26e",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "4beb02e66774bb2c286f1e60762f01c6a432b0050d3ffd1cbd6913361802c26e"
     },
     {
       "sourcePath": "tools/context-graph/src/hydrator.test.ts",
       "destinationPath": "src/hydrator.test.ts",
       "sourceSha256": "95f20a526fe69ce3a506ef01da1c20827e09d631a34126e781a07979cc43de07",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "dc56568e53f9ae4f734c2422eeaf5e5719acc474004947ea2681972f1309af4f"
     },
     {
       "sourcePath": "tools/context-graph/src/hydrator.ts",
       "destinationPath": "src/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "1f98c84ab7f1cbf4ee8ed031361b04725a317bfb1cbd55eefc139d48c7937c35"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",
       "destinationPath": "src/index.ts",
       "sourceSha256": "a3545649f67fc0bf0496298e3f1dca1e91aa7cb68ec112c34b99a5785fa83f3c",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "94698200b12bd813954ac0dc66d12b8ca3a11e67279317f012d953b3e0824a72"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-facade.ts",
       "destinationPath": "src/mcp-facade.ts",
       "sourceSha256": "1ea8db04b9e148d995ca7d350e8de1e0744ac71db1c71484993d2bb3b548ee76",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "1ea8db04b9e148d995ca7d350e8de1e0744ac71db1c71484993d2bb3b548ee76"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp-startup.test.ts",
       "destinationPath": "src/mcp-startup.test.ts",
       "sourceSha256": "0793f213a0a6a8b4a4c68d12f6333127738f47f3e2c53b1882e9b45f45d1695f",
-      "modified": true
+      "modified": true,
+      "destinationSha256": "f4e032cb0d4db0877b8656f7cb8049a46bcac793ce6131567490dc76dcd2d4cf"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp.ts",
       "destinationPath": "src/mcp.ts",
       "sourceSha256": "ee4ffeffb2eea9f8a1097373ade12402ccf8c4fd3c9c38f6a98d8ee8c7b30595",
-      "modified": true
+      "modified": true,
+      "destinationSha256": "658c15f678b8af2bed7a595a613dcf925f24ede40a55152e642c8a80dc237c48"
     },
     {
       "sourcePath": "tools/context-graph/src/ontology.integration.test.ts",
       "destinationPath": "src/ontology.integration.test.ts",
       "sourceSha256": "eb7812ce13095fde82f7ec0ba4f73e79876da8cea93797a7b228c3216032e98b",
-      "modified": true
+      "modified": true,
+      "destinationSha256": "5e6debd4021d75ed03104dd9143aaecd93ecccbc3fece97d643773a1a10c23a2"
     },
     {
       "sourcePath": "tools/context-graph/src/ontology.test.ts",
       "destinationPath": "src/ontology.test.ts",
       "sourceSha256": "724f30b939bb64ffb23e812963dc7f244b3eceaef194deb05f324ab20cf83f3d",
-      "modified": true
+      "modified": true,
+      "destinationSha256": "f88f57071bf89d352ee54c0f3bbfd86927360db2856af8a1aa4a51f4c962bd8c"
     },
     {
       "sourcePath": "tools/context-graph/src/ontology.ts",
       "destinationPath": "src/ontology.ts",
       "sourceSha256": "800fd0a0f8d7e43dcc598a168640563e26919fa2f1fcc871f0a842510b78f319",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "a7b5ce73e1b0bb796dee6751e7a536f71e0aec2c13b22926d2f17ba5c7f699cc"
     },
     {
       "sourcePath": "tools/context-graph/src/portable-fixture.test.ts",
       "destinationPath": "src/portable-fixture.test.ts",
       "sourceSha256": "82de68e48008136238f09666e7b33213a7e46817cd4f11ed753420e11faf9558",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "6672fcfe02799aae2e63be90c181f08acd10979aeeb9c6fccea0734b660e4a7e"
     },
     {
       "sourcePath": "tools/context-graph/src/process.ts",
       "destinationPath": "src/process.ts",
       "sourceSha256": "4722900b5824c320c41e4d131ea637aab40e86835f7850103e2c7e5907e6d9b9",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "4722900b5824c320c41e4d131ea637aab40e86835f7850103e2c7e5907e6d9b9"
     },
     {
       "sourcePath": "tools/context-graph/src/query.test.ts",
       "destinationPath": "src/query.test.ts",
       "sourceSha256": "ba07c52566da979fcbb451b0c0c99b466521993cb49415ff8b35df2b01d4ecaf",
-      "modified": true
+      "modified": true,
+      "destinationSha256": "7e00422ae1310f8c06898cac034c67d76e29b161666a2fed02897c7f75728b9d"
     },
     {
       "sourcePath": "tools/context-graph/src/query.ts",
       "destinationPath": "src/query.ts",
       "sourceSha256": "4d67f87ca660cefe9686fb5b775f86a997a25d539819ea81d321c8bd1e0aaa39",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "dcf3bafb1eba16e2db8e41d5e9f4d55a789c2e9f3f904768c2477511dbfa8a7c"
     },
     {
       "sourcePath": "tools/context-graph/src/request.test.ts",
       "destinationPath": "src/request.test.ts",
       "sourceSha256": "3caf615893e2b90bbe0bc37417dea14c2a71fb72671df1209114a53841c9b80b",
-      "modified": true
+      "modified": true,
+      "destinationSha256": "721224ebc5f9a8e89a620adb5392530a5eea37118ae5050959ac61f8d0c55dce"
     },
     {
       "sourcePath": "tools/context-graph/src/request.ts",
       "destinationPath": "src/request.ts",
       "sourceSha256": "4a3081549cab56fce144ee86208b8c800f26dfbe0d1a3950551d2f313cbf5b9d",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "7566286184f1039684efacf191574b9763a2bb171fcb388a54bb49cba672f998"
     },
     {
       "sourcePath": "tools/context-graph/src/runtime-evidence.test.ts",
       "destinationPath": "src/runtime-evidence.test.ts",
       "sourceSha256": "f3ac2b3cbc18ac0fd783f303a18446b502ad2aa21478bd2f42a849680ebae565",
-      "modified": true
+      "modified": true,
+      "destinationSha256": "4724288f2f4479864cb59099e678fc02f9f0226398756b71052209871632a91a"
     },
     {
       "sourcePath": "tools/context-graph/src/runtime-evidence.ts",
       "destinationPath": "src/runtime-evidence.ts",
       "sourceSha256": "7f080b6e9a888080e8ebcac089fdea1895577f4109b5a6105637e0c1a484ccab",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "7f080b6e9a888080e8ebcac089fdea1895577f4109b5a6105637e0c1a484ccab"
     },
     {
       "sourcePath": "tools/context-graph/src/semantic-citations.test.ts",
       "destinationPath": "src/semantic-citations.test.ts",
       "sourceSha256": "b36fc8d447c3df48e733dce981929d23c779ba198322f87fb0aaedf02e17008a",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "b36fc8d447c3df48e733dce981929d23c779ba198322f87fb0aaedf02e17008a"
     },
     {
       "sourcePath": "tools/context-graph/src/semantic-citations.ts",
       "destinationPath": "src/semantic-citations.ts",
       "sourceSha256": "226ebb77133a04b8f14b4aa52d4dac522aaff0f07e963ea82ebbb820c5d84fbe",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "226ebb77133a04b8f14b4aa52d4dac522aaff0f07e963ea82ebbb820c5d84fbe"
     },
     {
       "sourcePath": "tools/context-graph/src/semantic.test.ts",
       "destinationPath": "src/semantic.test.ts",
       "sourceSha256": "908fe8166dd63f499c28b2c4d20db2e0110b453f66421b2154461287c2d94dac",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "908fe8166dd63f499c28b2c4d20db2e0110b453f66421b2154461287c2d94dac"
     },
     {
       "sourcePath": "tools/context-graph/src/semantic.ts",
       "destinationPath": "src/semantic.ts",
       "sourceSha256": "1a41fb3fc5a9508c76be59d1c50b74d70ec96411fcbb7f63b0e098c1813d8473",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "1a41fb3fc5a9508c76be59d1c50b74d70ec96411fcbb7f63b0e098c1813d8473"
     },
     {
       "sourcePath": "tools/context-graph/src/snapshot-checks.test.ts",
       "destinationPath": "src/snapshot-checks.test.ts",
       "sourceSha256": "a16c1676f3168fcc87c1fe095c4cb164c0a8738cc3610f1a92bb54ea75267400",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "a16c1676f3168fcc87c1fe095c4cb164c0a8738cc3610f1a92bb54ea75267400"
     },
     {
       "sourcePath": "tools/context-graph/src/snapshot-checks.ts",
       "destinationPath": "src/snapshot-checks.ts",
       "sourceSha256": "3c8e01b886d49ce8323b6275019fd503ec3bbbb21671808e228880cc0f853d07",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "88d1cc27b4e9ccd6122300c377f58492f5633116848b6aa154d654f002fc1279"
     },
     {
       "sourcePath": "tools/context-graph/src/static.test.ts",
       "destinationPath": "src/static.test.ts",
       "sourceSha256": "9def1cfe0fc0349ad59709555a63a9261d56ff7379f155fce58f26a552278fbc",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "9def1cfe0fc0349ad59709555a63a9261d56ff7379f155fce58f26a552278fbc"
     },
     {
       "sourcePath": "tools/context-graph/src/static.ts",
       "destinationPath": "src/static.ts",
       "sourceSha256": "f8dcff3e10361314c06911dc7cec1e2cb0f8d9af68a6c61a30b2a741c5c3a385",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "b9016fed20bf357a3db9627434ff68c53c0e041c4d800910f43ec4cdbb2f5f9c"
     },
     {
       "sourcePath": "tools/context-graph/src/storage.ts",
       "destinationPath": "src/storage.ts",
       "sourceSha256": "9e38af8e34dc84ccaed5322b37b485e60706c68542271926228fb6d4af3d1f71",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "27cffa911f20939d4d47d8e1141414419a42657b197b0a7394903312c64edd68"
     },
     {
       "sourcePath": "tools/context-graph/src/telemetry.test.ts",
       "destinationPath": "src/telemetry.test.ts",
       "sourceSha256": "5f2960ab6984768ec3c2a92274d25dcef206765f7a759887ff365f1bef6bc30d",
-      "modified": true
+      "modified": true,
+      "destinationSha256": "63c056b87100349a2ca62a3ffc9510ee55eed73bdb1cd057a11605411960f4af"
     },
     {
       "sourcePath": "tools/context-graph/src/telemetry.ts",
       "destinationPath": "src/telemetry.ts",
       "sourceSha256": "0b47b195855af387787e52a72954219741781aec675e844c59d5f2b195851ade",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "0b47b195855af387787e52a72954219741781aec675e844c59d5f2b195851ade"
     },
     {
       "sourcePath": "tools/context-graph/src/util.ts",
       "destinationPath": "src/util.ts",
       "sourceSha256": "75d219741da5b74c23f0e281ec7ef6888c7a54a5224ca73bd2db6bde71c83f6c",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "75d219741da5b74c23f0e281ec7ef6888c7a54a5224ca73bd2db6bde71c83f6c"
     },
     {
       "sourcePath": "tools/context-graph/src/visualization.test.ts",
       "destinationPath": "src/visualization.test.ts",
       "sourceSha256": "86562e8b91d7b5650d9244e5c6f2948c2f6332524e3907c9e8909f9594d69c0a",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "86562e8b91d7b5650d9244e5c6f2948c2f6332524e3907c9e8909f9594d69c0a"
     },
     {
       "sourcePath": "tools/context-graph/src/visualization.ts",
       "destinationPath": "src/visualization.ts",
       "sourceSha256": "4839a5cfbd0a97bf3d338e59eca752a9b96812b464c0369da93a55d209120ab7",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "dd71655b9fb797ab4d3e0b115bc0e4d7055f095474fcdac8bad404d08e4501ae"
     },
     {
       "sourcePath": "tools/context-graph/templates/context-graph-development/SKILL.md",
       "destinationPath": "templates/context-graph-development/SKILL.md",
       "sourceSha256": "caec3ca03124a078b460377386a76d1d3fb363be10b63bba8d936b5ecced3ef8",
-      "modified": false
+      "modified": true,
+      "destinationSha256": "7da58797e2b13915ecdec577725a7eedca8decce167f913c3b499efb31b95ea0"
     },
     {
       "sourcePath": "tools/context-graph/third-party-tools.json",
       "destinationPath": "third-party-tools.json",
       "sourceSha256": "c55ad21c24cf09ae1c68a27dda5d60fe5b86f1929b9cb84f1a358824af2ca060",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "c55ad21c24cf09ae1c68a27dda5d60fe5b86f1929b9cb84f1a358824af2ca060"
     },
     {
       "sourcePath": "tools/context-graph/tsconfig.eslint.json",
       "destinationPath": "tsconfig.eslint.json",
       "sourceSha256": "0de07626d5c6c4eb5d11608c14afecf9a37621d2ac7daa99009f9bbb63d4848e",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "0de07626d5c6c4eb5d11608c14afecf9a37621d2ac7daa99009f9bbb63d4848e"
     },
     {
       "sourcePath": "tools/context-graph/tsconfig.json",
       "destinationPath": "tsconfig.json",
       "sourceSha256": "47a1ef42bf8086e9aee1fe44f28954094dc4a014a534ee236a157c5e034dec96",
-      "modified": false
+      "modified": false,
+      "destinationSha256": "47a1ef42bf8086e9aee1fe44f28954094dc4a014a534ee236a157c5e034dec96"
     },
     {
       "sourcePath": "tools/context-graph/vitest.config.ts",
       "destinationPath": "vitest.config.ts",
       "sourceSha256": "7e195350e8e200f0bd22fdab49004d19331c466f6cb97b0a0bb7100750edbdc6",
-      "modified": true
+      "modified": true,
+      "destinationSha256": "6fc655cfcf8d7fbc5d064a12d96af7e8b0af8013e564dccc8c9c654602b6009f"
     }
   ],
   "exclusions": [
@@ -496,5 +575,71 @@
     "pnpm-workspace.yaml",
     "tsconfig.json",
     ".github/workflows/context-graph.yml"
+  ],
+  "authoredPaths": [
+    ".github/workflows/check.yml",
+    ".gitignore",
+    "CONTRIBUTING.md",
+    "README.md",
+    "SECURITY.md",
+    "architecture.context-graph.config.json",
+    "architecture.policy.json",
+    "context-graph.config.json",
+    "docs/ADR-001-standalone-baseline.md",
+    "docs/ADR-002-saved-evidence.md",
+    "docs/ADR-003-draft-overlays.md",
+    "docs/ADR-004-rdf-query-path.md",
+    "docs/ADR-005-governance-and-optional-oml.md",
+    "docs/ROADMAP.md",
+    "docs/SOURCE-INVENTORY.md",
+    "docs/VALIDATION.md",
+    "docs/architecture-baseline.json",
+    "docs/architecture-policy.md",
+    "docs/extraction-manifest.json",
+    "docs/licenses/REVIEW.md",
+    "docs/licenses/lru-cache-11.5.3-BlueOak.md",
+    "docs/licenses/negotiate-1.0.1-BSD.txt",
+    "docs/licenses/spark-md5-3.0.2-MIT.txt",
+    "examples/generic-typescript/context-graph.oml.config.json",
+    "examples/pipeline/context-graph.config.json",
+    "examples/pipeline/docs/admission.md",
+    "examples/pipeline/docs/analysis.md",
+    "examples/pipeline/docs/discovery.md",
+    "examples/pipeline/docs/execution.md",
+    "examples/pipeline/docs/outcomes.md",
+    "examples/pipeline/docs/planning.md",
+    "examples/pipeline/package.json",
+    "examples/pipeline/src/admission.ts",
+    "examples/pipeline/src/analysis.ts",
+    "examples/pipeline/src/contracts/admission.ts",
+    "examples/pipeline/src/contracts/analysis.ts",
+    "examples/pipeline/src/contracts/discovery.ts",
+    "examples/pipeline/src/contracts/execution.ts",
+    "examples/pipeline/src/contracts/outcomes.ts",
+    "examples/pipeline/src/contracts/planning.ts",
+    "examples/pipeline/src/discovery.ts",
+    "examples/pipeline/src/execution.ts",
+    "examples/pipeline/src/outcomes.ts",
+    "examples/pipeline/src/planning.ts",
+    "examples/pipeline/src/queue.ts",
+    "examples/pipeline/test/pipeline.test.ts",
+    "examples/pipeline/tsconfig.json",
+    "mcp-launcher.mjs",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
+    "reviewed-licenses.json",
+    "scripts/update-inventory.mjs",
+    "src/architecture.test.ts",
+    "src/authority.ts",
+    "src/committed-tree.ts",
+    "src/governance.test.ts",
+    "src/governance.ts",
+    "src/overlay.test.ts",
+    "src/overlay.ts",
+    "src/rdf-ontology.test.ts",
+    "src/rdf.test.ts",
+    "src/rdf.ts",
+    "src/saved-evidence.ts",
+    "src/snapshot-lifecycle.test.ts"
   ]
 }

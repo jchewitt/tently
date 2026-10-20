@@ -28,7 +28,7 @@ const validConfig = {
     concurrency: 1,
   },
   scip: { version: '1', command: 'scip', args: [] },
-  ontology: { toolVersion: '1', containerImage: 'image@sha256:digest', projectPath: 'ontology' },
+  ontology: { backend: 'opencaesar', toolVersion: '1', containerImage: 'image@sha256:digest', projectPath: 'ontology' },
   runtimeEvidence: [],
   storagePath: '.context-graph',
 };

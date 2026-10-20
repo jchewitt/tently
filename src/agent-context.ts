@@ -1,3 +1,4 @@
+// Modified for standalone extraction; see docs/extraction-manifest.json.
 import { basename } from 'node:path';
 
 import type { ContextGraphConfig } from './config.js';

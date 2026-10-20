@@ -11,6 +11,9 @@ import { visualizeContextPack } from './visualization.js';
 import { buildWorkingOverlay } from './overlay.js';
 import { RdfEvidenceGraph } from './rdf.js';
 import { readFile } from 'node:fs/promises';
+import { basename, dirname, join } from 'node:path';
+import { analyzeArchitecture, type ArchitecturePolicy } from './governance.js';
+import { FileSnapshotStore } from './storage.js';
 
 function valueAfter(args: readonly string[], name: string): string | undefined {
   const index = args.indexOf(name);
@@ -47,6 +50,15 @@ export function impactRequestFromArgs(args: readonly string[]): ImpactScanReques
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
+  if (args[0] === 'govern') {
+    const policyFile = resolve(valueAfter(args, '--policy') ?? 'architecture.policy.json');
+    const policy = JSON.parse(await readFile(policyFile, 'utf8')) as ArchitecturePolicy;
+    const result = await analyzeArchitecture(dirname(policyFile), policy, basename(policyFile));
+    await new FileSnapshotStore(join(dirname(policyFile), '.context-graph')).write(result.snapshot);
+    process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+    if (!result.passed) process.exitCode = 1;
+    return;
+  }
   const configPath = valueAfter(args, '--config') ?? defaultConfigPath();
   const application = await createContextGraphApplication(configPath);
   const [command, subcommand] = args;

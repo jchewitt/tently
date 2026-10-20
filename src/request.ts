@@ -1,3 +1,4 @@
+// Modified for standalone extraction; see docs/extraction-manifest.json.
 import type { ImpactScanRequest } from './core.js';
 
 const allowedFields = new Set([

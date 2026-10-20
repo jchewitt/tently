@@ -60,3 +60,14 @@ fixed it, and the affected static/RDF tests passed. Live model comprehension is 
 License inventories include exact-version reviewed notices for three newly encountered expressions.
 
 Milestone 3 final rerun: 102 deterministic tests passed (1 core + 101 toolkit/example); one optional OML integration test skipped.
+
+## Milestone 4: architecture and optional OML
+
+Passed build and 34 focused tests. The governance integration uses dependency-cruiser, ESLint and
+jscpd, checks positive and negative imports, a transitive SPARQL inference, cycles, conflicting
+owners, missing imports, baseline scope, and valid/expired exceptions. The initial extraction
+commit was separately analyzed in an isolated tree to record five existing advisory findings.
+The current repository passed approved rules with eight advisory size/complexity findings.
+
+Direct-RDF/OML assertion parity and real pipeline incremental reuse passed. Actual openCAESAR
+compilation and OWL reasoning remain unverified; no active OWL reasoner is claimed.

@@ -47,7 +47,10 @@
     "context-graph:licenses": "node scripts/generate-third-party-notices.mjs",
     "context-graph:licenses:check": "node scripts/generate-third-party-notices.mjs --check",
     "context-graph:pack:check": "node scripts/check-publication.mjs",
-    "context-graph:publication-check": "pnpm build && pnpm test && pnpm context-graph:licenses:check && pnpm context-graph:pack:check"
+    "context-graph:publication-check": "pnpm build && pnpm test && pnpm inventory:check && pnpm context-graph:licenses:check && pnpm context-graph:pack:check",
+    "inventory:update": "node scripts/update-inventory.mjs",
+    "inventory:check": "node scripts/update-inventory.mjs --check",
+    "govern": "tsx src/cli.ts govern"
   },
   "engines": {
     "node": ">=20.11.0"
@@ -75,6 +78,10 @@
   "devDependencies": {
     "@types/n3": "1.26.1",
     "@types/node": "20.19.11",
+    "@typescript-eslint/parser": "8.72.0",
+    "dependency-cruiser": "18.7.0",
+    "eslint": "10.13.0",
+    "jscpd": "5.4.1",
     "tsx": "4.20.5",
     "typescript": "5.5.4",
     "vitest": "3.2.4"

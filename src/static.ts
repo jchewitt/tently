@@ -1,3 +1,4 @@
+// Modified for standalone extraction; see docs/extraction-manifest.json.
 import { randomUUID } from 'node:crypto';
 import { withCommittedTree } from './committed-tree.js';
 import { copyFile, mkdir, readFile, rename, stat, writeFile } from 'node:fs/promises';

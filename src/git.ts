@@ -1,3 +1,4 @@
+// Modified for standalone extraction; see docs/extraction-manifest.json.
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 

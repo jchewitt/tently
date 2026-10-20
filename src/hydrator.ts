@@ -1,3 +1,4 @@
+// Modified for standalone extraction; see docs/extraction-manifest.json.
 import type { ContextGraphConfig } from './config.js';
 import type {
   ExtractionContext,

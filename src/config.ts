@@ -1,3 +1,4 @@
+// Modified for standalone extraction; see docs/extraction-manifest.json.
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
@@ -34,9 +35,10 @@ export interface ContextGraphConfig {
     readonly args: readonly string[];
   };
   readonly ontology: {
+    readonly backend?: 'rdf' | 'opencaesar';
     readonly toolVersion: string;
-    readonly containerImage: string;
-    readonly projectPath: string;
+    readonly containerImage?: string;
+    readonly projectPath?: string;
     readonly usedVocabularyIris?: readonly string[];
     readonly includedDescriptionIris?: readonly string[];
   };
@@ -278,12 +280,19 @@ function validateConfig(value: unknown, absolutePath: string): asserts value is 
 
   requireConfig(isRecord(value.ontology), 'ontology must be an object', absolutePath);
   if (isRecord(value.ontology)) {
-    for (const field of ['toolVersion', 'containerImage', 'projectPath'] as const) {
+    requireConfig(value.ontology.backend === undefined || ['rdf', 'opencaesar'].includes(String(value.ontology.backend)),
+      'ontology.backend must be rdf or opencaesar', absolutePath);
+    for (const field of ['toolVersion'] as const) {
       requireConfig(
         isNonEmptyString(value.ontology[field]),
         `ontology.${field} must be a non-empty string`,
         absolutePath,
       );
+    }
+    for (const field of ['containerImage', 'projectPath'] as const) {
+      if (value.ontology.backend === 'opencaesar' || value.ontology[field] !== undefined) {
+        requireConfig(isNonEmptyString(value.ontology[field]), `ontology.${field} must be a non-empty string`, absolutePath);
+      }
     }
     for (const field of ['usedVocabularyIris', 'includedDescriptionIris'] as const) {
       if (value.ontology[field] !== undefined) {

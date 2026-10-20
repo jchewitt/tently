@@ -37,9 +37,8 @@
     ]
   },
   "ontology": {
-    "toolVersion": "oml2owl-gradle-2.13.1",
-    "containerImage": "gradle:8.10.2-jdk21@sha256:963d59f7f22767da4efbcf46b661361b61af5fb88b0309da1071c4234c647eba",
-    "projectPath": "../generic-typescript/ontology"
+    "backend": "rdf",
+    "toolVersion": "rdf-record-v1"
   },
   "runtimeEvidence": [],
   "storagePath": ".context-graph",
