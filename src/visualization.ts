@@ -9,9 +9,10 @@ import type {
   GraphNodeKind,
   ImpactQueryService,
   ImpactScanRequest,
-  RuntimeTraceReference,
+  GraphFact,
 } from './core.js';
 import { contextPackEvidenceAuthority, contextPackLaneForFact } from './query.js';
+import { viewerScript } from './viewer-interaction.js';
 import { diagnosticSummary } from './diagnostics.js';
 
 export type ContextGraphVisualizationFormat = 'dot' | 'html' | 'svg';
@@ -20,6 +21,7 @@ export interface VisualizationWriteOptions {
   readonly outputPath: string;
   readonly format?: ContextGraphVisualizationFormat;
   readonly force?: boolean;
+  readonly sourceUrlTemplate?: string;
 }
 
 export interface VisualizationWriteResult {
@@ -39,6 +41,7 @@ interface VisualNode {
   readonly label: string;
   readonly kind: GraphNodeKind;
   readonly column: VisualColumn;
+  readonly cluster: string;
 }
 
 interface VisualEdge {
@@ -49,6 +52,8 @@ interface VisualEdge {
   readonly authority: EvidenceAuthority;
   readonly provenance: string;
   readonly detail: string;
+  readonly source: GraphFact['provenance'];
+  readonly sourceUrl?: string;
 }
 
 interface VisualModel {
@@ -137,61 +142,9 @@ function addNode(
     id: node.id,
     label: node.label,
     kind: node.kind,
+    cluster: String(node.attributes?.module ?? node.attributes?.layer ?? node.kind),
     column: visualColumn(node.kind, selectedLanes),
   });
-}
-
-function runtimeCapabilityId(reference: RuntimeTraceReference): string | undefined {
-  if (!reference.capability) return undefined;
-  return `capability:${reference.capability.replace(/^(?:[^:]+:)?capability:/, '')}`;
-}
-
-function runtimeVisualEdge(
-  reference: RuntimeTraceReference,
-  nodes: Map<string, VisualNode>,
-): VisualEdge {
-  const serviceId = `runtime-service:${reference.serviceName}`;
-  addNode(nodes, {
-    id: serviceId,
-    kind: 'Component',
-    label: reference.serviceName,
-    attributes: { evidenceLayer: 'observed' },
-  });
-  const capabilityId = runtimeCapabilityId(reference);
-  let targetId: string;
-  if (capabilityId && nodes.has(capabilityId)) {
-    targetId = capabilityId;
-  } else if (capabilityId) {
-    targetId = `runtime-${capabilityId}`;
-    addNode(nodes, {
-      id: targetId,
-      kind: 'Evidence',
-      label: `Observed capability: ${reference.capability ?? capabilityId}`,
-      attributes: { evidenceLayer: 'observed' },
-    });
-  } else {
-    targetId = `runtime-trace:${reference.traceId}:${reference.spanId}`;
-    addNode(nodes, {
-      id: targetId,
-      kind: 'Evidence',
-      label: `Trace ${reference.traceId.slice(0, 12)}`,
-      attributes: { evidenceLayer: 'observed' },
-    });
-  }
-  return {
-    id: `runtime:${reference.traceId}:${reference.spanId}`,
-    from: serviceId,
-    to: targetId,
-    label: reference.operation ?? 'observed',
-    authority: 'observed',
-    provenance: reference.sourcePath,
-    detail: [
-      `trace ${reference.traceId}`,
-      `${reference.serviceName}@${reference.serviceVersion}`,
-      reference.environment ?? 'unknown environment',
-      reference.observedAt ?? 'unknown observation time',
-    ].join('; '),
-  };
 }
 
 function assertVisualizationBounds(pack: ContextPack): void {
@@ -207,7 +160,18 @@ function assertVisualizationBounds(pack: ContextPack): void {
   }
 }
 
-function visualModel(pack: ContextPack): VisualModel {
+export function sourceLink(source: GraphFact['provenance'], template?: string): string | undefined {
+  if (!template) return undefined;
+  if (!template.includes('{commit}') || !template.includes('{path}')) throw new Error('Source URL template must include {commit} and {path}');
+  if (source.path.startsWith('/') || source.path.includes('\\') || source.path.split('/').some(part => part === '..' || part === '.')) throw new Error('Source path must be repository relative');
+  const url = new URL(template.replaceAll('{commit}', encodeURIComponent(source.commitSha))
+    .replaceAll('{path}', source.path.split('/').map(encodeURIComponent).join('/'))
+    .replaceAll('{line}', String(source.startLine)));
+  if (url.protocol !== 'https:' || url.username || url.password) throw new Error('Source URL template must use HTTPS without credentials');
+  return url.href;
+}
+
+function visualModel(pack: ContextPack, sourceUrlTemplate?: string): VisualModel {
   assertVisualizationBounds(pack);
   const nodes = new Map<string, VisualNode>();
   const selectedLanes = new Map<string, Set<ContextPackLane>>();
@@ -231,16 +195,16 @@ function visualModel(pack: ContextPack): VisualModel {
       label: fact.predicate,
       authority: contextPackEvidenceAuthority(fact),
       provenance: `${fact.provenance.path}:${fact.provenance.startLine}`,
-      detail: `confidence ${fact.confidence}; ${fact.extractor.id}@${fact.extractor.version}`,
+      detail: `confidence ${fact.confidence}; ${fact.extractor.id}@${fact.extractor.version}; source ${fact.sourceAuthority ?? 'see citation'}; extraction ${fact.extractionReview ?? 'unspecified'}`,
+      source: fact.provenance,
+      sourceUrl: sourceLink(fact.provenance, sourceUrlTemplate),
     });
-  }
-  for (const reference of pack.runtimeEvidence) {
-    edges.push(runtimeVisualEdge(reference, nodes));
   }
   return {
     nodes: [...nodes.values()].sort(
       (left, right) =>
         columns.indexOf(left.column) - columns.indexOf(right.column) ||
+        left.cluster.localeCompare(right.cluster) ||
         left.label.localeCompare(right.label) ||
         left.id.localeCompare(right.id),
     ),
@@ -262,22 +226,26 @@ function positionedNodes(model: VisualModel): {
   const rowHeight = 78;
   const headerHeight = 104;
   const positioned: PositionedNode[] = [];
-  let maxRows = 1;
+  let maxHeight = 320;
   for (const [columnIndex, column] of columns.entries()) {
     const members = model.nodes.filter((node) => node.column === column);
-    maxRows = Math.max(maxRows, members.length);
-    members.forEach((node, rowIndex) => {
+    let y = headerHeight;
+    let cluster = '';
+    members.forEach((node) => {
+      if (node.cluster !== cluster) { y += 24; cluster = node.cluster; }
       positioned.push({
         ...node,
         x: margin + columnIndex * columnWidth,
-        y: headerHeight + rowIndex * rowHeight,
+        y,
       });
+      y += rowHeight;
     });
+    maxHeight = Math.max(maxHeight, y);
   }
   return {
     nodes: positioned,
     width: margin * 2 + columnWidth * columns.length - 32,
-    height: Math.max(420, headerHeight + maxRows * rowHeight + margin),
+    height: Math.max(420, maxHeight + margin),
   };
 }
 
@@ -371,7 +339,7 @@ export function renderContextPackSvg(pack: ContextPack): string {
       const search = [source.label, target.label, edge.label, edge.provenance, edge.detail].join(
         ' ',
       );
-      return `<g class="visual-edge authority-${edge.authority}" data-visual-edge="true" data-authority="${edge.authority}" data-from="${escapeXml(
+      return `<g class="visual-edge authority-${edge.authority}" data-visual-edge="true" data-edge-id="${escapeXml(edge.id)}" data-authority="${edge.authority}" data-from="${escapeXml(
         source.id,
       )}" data-to="${escapeXml(target.id)}" data-search="${escapeXml(search.toLowerCase())}">
   <title>${escapeXml(`${source.label} —${edge.label}→ ${target.label}; ${edge.provenance}; ${edge.detail}`)}</title>
@@ -386,7 +354,7 @@ export function renderContextPackSvg(pack: ContextPack): string {
         node,
       ) => `<g class="visual-node column-${node.column}" data-visual-node="true" data-node-id="${escapeXml(
         node.id,
-      )}" data-search="${escapeXml(`${node.label} ${node.kind} ${node.id}`.toLowerCase())}" transform="translate(${node.x} ${node.y})">
+      )}" role="button" tabindex="0" aria-label="${escapeXml(node.label)}" data-cluster="${escapeXml(node.cluster)}" data-search="${escapeXml(`${node.label} ${node.kind} ${node.id}`.toLowerCase())}" transform="translate(${node.x} ${node.y})">
   <title>${escapeXml(`${node.label} (${node.kind}) · ${node.id}`)}</title>
   <rect width="228" height="52" rx="9" />
   <text class="node-label" x="12" y="22">${escapeXml(truncated(node.label))}</text>
@@ -400,6 +368,9 @@ export function renderContextPackSvg(pack: ContextPack): string {
         `<text class="column-heading" x="${36 + index * 284}" y="76">${escapeXml(columnLabels[column])}</text>`,
     )
     .join('\n');
+  const clusterHeadings = layout.nodes.filter((node, index, nodes) => index === 0 ||
+    node.column !== nodes[index - 1]!.column || node.cluster !== nodes[index - 1]!.cluster)
+    .map((node) => `<text data-cluster-heading="${escapeXml(node.cluster)}" x="${node.x}" y="${node.y - 8}" class="node-kind">${escapeXml(truncated(node.cluster))}</text>`).join('');
   const markers = (Object.entries(authorityColors) as [EvidenceAuthority, string][])
     .map(
       ([authority, color]) =>
@@ -437,6 +408,7 @@ export function renderContextPackSvg(pack: ContextPack): string {
   )}</text>
 <text x="36" y="53" fill="#64748b" font-size="11">${model.nodes.length} nodes · ${model.edges.length} relationships · bounded to ${pack.facts.length} facts</text>
 ${headings}
+${clusterHeadings}
 ${edgeMarkup}
 ${nodeMarkup}
 </svg>`;
@@ -448,8 +420,8 @@ function detailList(items: readonly string[], empty: string): string {
     : `<p>${escapeXml(empty)}</p>`;
 }
 
-export function renderContextPackHtml(pack: ContextPack): string {
-  const model = visualModel(pack);
+export function renderContextPackHtml(pack: ContextPack, sourceUrlTemplate?: string): string {
+  const model = visualModel(pack, sourceUrlTemplate);
   const svg = renderContextPackSvg(pack);
   const nodes = new Map(model.nodes.map((node) => [node.id, node]));
   const relationships = model.edges
@@ -458,7 +430,7 @@ export function renderContextPackHtml(pack: ContextPack): string {
       const target = nodes.get(edge.to);
       const sourceLabel = source?.label ?? edge.from;
       const targetLabel = target?.label ?? edge.to;
-      return `<tr data-relationship-row data-authority="${edge.authority}" data-search="${escapeXml(
+      return `<tr data-relationship-row data-edge-id="${escapeXml(edge.id)}" data-authority="${edge.authority}" data-search="${escapeXml(
         `${sourceLabel} ${edge.from} ${targetLabel} ${edge.to} ${edge.label} ${edge.provenance} ${edge.detail}`.toLowerCase(),
       )}"><td><span class="layer layer-${edge.authority}">${edge.authority}</span></td><td><strong>${escapeXml(
         sourceLabel,
@@ -466,7 +438,7 @@ export function renderContextPackHtml(pack: ContextPack): string {
         edge.label,
       )}</td><td><strong>${escapeXml(targetLabel)}</strong><br /><code>${escapeXml(
         edge.to,
-      )}</code></td><td>${escapeXml(edge.provenance)}</td></tr>`;
+      )}</code></td><td>${edge.sourceUrl ? `<a href="${escapeXml(edge.sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeXml(edge.provenance)}</a>` : escapeXml(edge.provenance)}</td></tr>`;
     })
     .join('');
   const controls = (Object.keys(authorityColors) as EvidenceAuthority[])
@@ -515,6 +487,14 @@ export function renderContextPackHtml(pack: ContextPack): string {
     .layer-draft { background: ${authorityColors.draft}; }
     pre { font-size: 11px; overflow: auto; white-space: pre-wrap; }
     .is-hidden { display: none !important; }
+    .visual-node { cursor: pointer; }
+    .visual-node.is-selected rect { stroke: #be123c; stroke-width: 3; }
+    .visual-edge.is-highlighted { opacity: 1; }
+    .visual-edge.is-highlighted path { stroke: #be123c; stroke-width: 4; }
+    #node-detail { overflow-wrap: anywhere; max-height: 440px; overflow: auto; }
+    #path-status { max-width: 450px; }
+    select { max-width: 260px; padding: 6px; }
+    .evidence-status { background: #fff7ed; padding: 12px 24px; overflow-wrap: anywhere; }
     @media (max-width: 900px) { main { grid-template-columns: 1fr; } .relationships { grid-column: 1; } }
   </style>
 </head>
@@ -526,12 +506,28 @@ export function renderContextPackHtml(pack: ContextPack): string {
   <div class="controls" aria-label="Graph filters">
     <input id="graph-search" type="search" placeholder="Search nodes, relations, or source paths" aria-label="Search graph" />
     ${controls}
+    <label>Cluster <select id="graph-cluster"><option value="">All</option>${[...new Set(model.nodes.map(node => node.cluster))].sort().map(cluster => `<option value="${escapeXml(cluster)}">${escapeXml(cluster)}</option>`).join('')}</select></label>
+    <label><input type="checkbox" id="neighbors-only" /> Selected node and neighbors</label>
+    <label>Path target <select id="path-target">${model.nodes.map(node => `<option value="${escapeXml(node.id)}">${escapeXml(node.label)}</option>`).join('')}</select></label>
+    <button id="highlight-path" type="button">Highlight directed path</button>
+    <span id="path-status" aria-live="polite"></span>
     <button id="reset-filters" type="button">Reset</button>
     <span id="visible-count" aria-live="polite"></span>
   </div>
+  <section class="evidence-status" aria-label="Evidence status">
+    <strong>${pack.snapshot.overlayDigest ? 'DRAFT overlay' : pack.evidenceState?.stale ? 'HISTORICAL evidence' : pack.evidenceState ? 'Saved evidence at current commit' : 'Saved evidence — current checkout not assessed'}</strong>
+    <p>Configuration: ${escapeXml(pack.snapshot.configurationDigest ?? 'unknown')}; ${pack.evidenceState ? (pack.evidenceState.configurationMatches ? 'matches current configuration' : 'configuration mismatch') : 'configuration match unknown'}.
+    Scope: ${escapeXml(pack.snapshot.scope?.join(', ') ?? 'unknown')}.
+    Excluded working paths: ${pack.evidenceState?.excludedWorkingChanges.length ?? 'unknown'}. This view does not validate the current diff.</p>
+    <p>${pack.exploration ? `${pack.exploration.returned}/${pack.exploration.reachableFacts} reachable facts on this page; max depth ${pack.exploration.maxDepth}; ${pack.exploration.truncated ? 'TRUNCATED' : 'not truncated within this scope'}${pack.exploration.depthLimitReached ? '; depth limit reached — rerun with greater --max-depth' : ''}` : 'Query completeness metadata unavailable.'}</p>
+    ${pack.exploration?.continuation ? `<details><summary>Continue agent/CLI query with this token</summary><code>${escapeXml(pack.exploration.continuation)}</code></details>` : ''}
+    ${pack.evidenceState?.excludedWorkingChanges.length ? `<details><summary>Excluded working changes</summary>${detailList(pack.evidenceState.excludedWorkingChanges, '')}</details>` : ''}
+  </section>
   <main>
     <section class="panel canvas" aria-label="Context graph">${svg}</section>
     <aside>
+      <section class="panel"><h2>Node and source evidence</h2><div id="node-detail">Select a node to inspect its cited relationships.</div></section>
+      <section class="panel"><h2>Runtime references</h2>${detailList(pack.runtimeEvidence.map(reference => `${reference.serviceName}: ${reference.operation ?? 'observation'} · ${reference.sourcePath} · ${reference.observedAt ?? 'time unknown'}`), 'None in this page.')}<p>Edges are only the facts returned by the agent query. References do not create extra relationships.</p></section>
       <section class="panel">
         <h2>Coverage</h2>
         ${Object.entries(pack.coverage.counts)
@@ -568,49 +564,8 @@ export function renderContextPackHtml(pack: ContextPack): string {
     </details>
   </main>
   <script id="context-pack" type="application/json">${jsonForHtml(pack)}</script>
-  <script>
-    (() => {
-      const search = document.getElementById('graph-search');
-      const reset = document.getElementById('reset-filters');
-      const count = document.getElementById('visible-count');
-      const layers = [...document.querySelectorAll('[data-layer]')];
-      const edges = [...document.querySelectorAll('[data-visual-edge]')];
-      const nodes = [...document.querySelectorAll('[data-visual-node]')];
-      const rows = [...document.querySelectorAll('[data-relationship-row]')];
-      const update = () => {
-        const query = search.value.trim().toLowerCase();
-        const enabled = new Set(layers.filter((item) => item.checked).map((item) => item.dataset.layer));
-        const connected = new Set();
-        let visibleEdges = 0;
-        for (const edge of edges) {
-          const visible = enabled.has(edge.dataset.authority) && (!query || edge.dataset.search.includes(query));
-          edge.classList.toggle('is-hidden', !visible);
-          if (visible) {
-            visibleEdges += 1;
-            connected.add(edge.dataset.from);
-            connected.add(edge.dataset.to);
-          }
-        }
-        for (const node of nodes) {
-          const visible = connected.has(node.dataset.nodeId) || (visibleEdges === 0 && query && node.dataset.search.includes(query));
-          node.classList.toggle('is-hidden', !visible);
-        }
-        for (const row of rows) {
-          const visible = enabled.has(row.dataset.authority) && (!query || row.dataset.search.includes(query));
-          row.classList.toggle('is-hidden', !visible);
-        }
-        count.textContent = visibleEdges + ' visible relationships';
-      };
-      search.addEventListener('input', update);
-      layers.forEach((item) => item.addEventListener('change', update));
-      reset.addEventListener('click', () => {
-        search.value = '';
-        layers.forEach((item) => { item.checked = true; });
-        update();
-      });
-      update();
-    })();
-  </script>
+  <script id="visual-model" type="application/json">${jsonForHtml(model)}</script>
+  <script>${viewerScript()}</script>
 </body>
 </html>
 `;
@@ -628,10 +583,11 @@ export function resolveVisualizationFormat(
 export function renderContextPackVisualization(
   pack: ContextPack,
   format: ContextGraphVisualizationFormat,
+  sourceUrlTemplate?: string,
 ): string {
   if (format === 'dot') return renderContextPackDot(pack);
   if (format === 'svg') return renderContextPackSvg(pack);
-  return renderContextPackHtml(pack);
+  return renderContextPackHtml(pack, sourceUrlTemplate);
 }
 
 export async function writeContextPackVisualization(
@@ -643,7 +599,7 @@ export async function writeContextPackVisualization(
   const outputPath = resolve(options.outputPath);
   await mkdir(dirname(outputPath), { recursive: true });
   try {
-    await writeFile(outputPath, renderContextPackVisualization(pack, format), {
+    await writeFile(outputPath, renderContextPackVisualization(pack, format, options.sourceUrlTemplate), {
       encoding: 'utf8',
       flag: options.force ? 'w' : 'wx',
     });

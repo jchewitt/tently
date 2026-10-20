@@ -4,34 +4,31 @@
     "version": "2.13.x / 5.1.0",
     "license": "Apache-2.0",
     "homepage": "https://github.com/opencaesar",
-    "distribution": "Downloaded by the pinned ontology build; not redistributed in npm packages"
+    "distribution": "Optional pinned formal ontology compiler; not redistributed in npm packages",
+    "x-extraction-modifications": "Modified for standalone extraction; see docs/extraction-manifest.json."
   },
   {
     "name": "SCIP TypeScript",
     "version": "0.4.0",
     "license": "Apache-2.0",
     "homepage": "https://github.com/sourcegraph/scip-typescript",
-    "distribution": "Development/runtime indexing tool; not bundled in npm package output"
-  },
-  {
-    "name": "OpenTelemetry Collector",
-    "version": "0.136.0",
-    "license": "Apache-2.0",
-    "homepage": "https://github.com/open-telemetry/opentelemetry-collector-releases",
-    "distribution": "Digest-pinned CI validation image; not redistributed in npm packages"
+    "distribution": "Pinned production npm dependency installed alongside the toolkit",
+    "x-extraction-modifications": "Modified for standalone extraction; see docs/extraction-manifest.json."
   },
   {
     "name": "Gradle JDK 21 container",
     "version": "8.10.2",
     "license": "Third-party image license set",
     "homepage": "https://hub.docker.com/_/gradle",
-    "distribution": "Digest-pinned build image; not redistributed in npm packages"
+    "distribution": "Optional digest-pinned formal compiler image; not redistributed in npm packages",
+    "x-extraction-modifications": "Modified for standalone extraction; see docs/extraction-manifest.json."
   },
   {
     "name": "Codex CLI",
     "version": "Host provided",
     "license": "Host installation terms",
     "homepage": "https://developers.openai.com/codex/cli",
-    "distribution": "Invoked from the host only; never bundled or redistributed"
+    "distribution": "Invoked from the host only; never bundled or redistributed",
+    "x-extraction-modifications": "Modified for standalone extraction; see docs/extraction-manifest.json."
   }
 ]

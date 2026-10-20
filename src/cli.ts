@@ -10,7 +10,7 @@ import { compileOntologyAtExactCheckout } from './ontology.js';
 import { visualizeContextPack } from './visualization.js';
 import { buildWorkingOverlay } from './overlay.js';
 import { RdfEvidenceGraph } from './rdf.js';
-import { readFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { basename, dirname, join } from 'node:path';
 import { analyzeArchitecture, type ArchitecturePolicy } from './governance.js';
 import { FileSnapshotStore } from './storage.js';
@@ -60,7 +60,12 @@ async function main(): Promise<void> {
     const policy = JSON.parse(await readFile(policyFile, 'utf8')) as ArchitecturePolicy;
     const result = await analyzeArchitecture(dirname(policyFile), policy, basename(policyFile));
     await new FileSnapshotStore(join(dirname(policyFile), '.context-graph')).write(result.snapshot);
-    process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+    const reportPath = valueAfter(args, '--output');
+    if (reportPath) {
+      await mkdir(dirname(resolve(reportPath)), { recursive: true });
+      await writeFile(resolve(reportPath), `${JSON.stringify(result, null, 2)}\n`);
+      process.stdout.write(`${JSON.stringify({ passed: result.passed, findings: result.findings.length, snapshotId: result.snapshot.manifest.snapshotId, reportPath })}\n`);
+    } else process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
     if (!result.passed) process.exitCode = 1;
     return;
   }
@@ -151,6 +156,7 @@ async function main(): Promise<void> {
         outputPath,
         format: valueAfter(args, '--format') as 'dot' | 'html' | 'svg' | undefined,
         force: args.includes('--force'),
+        sourceUrlTemplate: valueAfter(args, '--source-url-template'),
       },
     );
     process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);

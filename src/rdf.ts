@@ -61,6 +61,8 @@ export class RdfEvidenceGraph {
         commit: fact.provenance.commitSha, sourceDigest: fact.provenance.digest,
         extractor: `${fact.extractor.id}@${fact.extractor.version}`,
         snapshotId: fact.snapshotId, record: stableJson(fact),
+        ...(fact.sourceAuthority ? { sourceAuthority: fact.sourceAuthority } : {}),
+        ...(fact.extractionReview ? { extractionReview: fact.extractionReview } : {}),
       })) this.dataset.addQuad(record, iri(CG + p), literal(value));
       for (const [p, value] of [['startLine', fact.provenance.startLine], ['endLine', fact.provenance.endLine]] as const) {
         this.dataset.addQuad(record, iri(CG + p), literal(String(value), iri(XSD + 'integer')));

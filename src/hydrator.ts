@@ -4,6 +4,7 @@ import type {
   ExtractionContext,
   FactExtractor,
   GraphSnapshot,
+  GraphDiagnostic,
   InvariantEvaluator,
   RuntimeTraceReference,
   RuntimeEvidenceProvider,
@@ -142,7 +143,7 @@ export class ContextGraphHydrator {
         : undefined;
     const configurationDigest = sha256(stableJson(config));
     const scopeDigest = sha256(stableJson(selectedSemanticSources)).slice(0, 12);
-    const effectiveSuffix = [configurationDigest.slice(0, 16), scopeDigest, baseSuffix, runtimeSuffix].filter(Boolean).join('-');
+    const effectiveSuffix = ['graph-v2', configurationDigest.slice(0, 16), scopeDigest, baseSuffix, runtimeSuffix].filter(Boolean).join('-');
     const snapshotId = effectiveSuffix ? `${commitSha}-${effectiveSuffix}` : commitSha;
     const context: ExtractionContext = {
       repositoryRoot: repository.root,
@@ -184,7 +185,7 @@ export class ContextGraphHydrator {
       return { source, ...result };
     });
     const artifacts = hydrated.map((result) => result.artifact);
-    const diagnostics = hydrated.flatMap(({ source, artifact }) =>
+    const diagnostics: GraphDiagnostic[] = hydrated.flatMap(({ source, artifact }) =>
       (artifact.diagnostics ?? []).map((item) => ({
         ...item,
         id: sha256(stableJson({ artifact: artifact.key, diagnostic: item.id, path: source.path })),
@@ -207,7 +208,9 @@ export class ContextGraphHydrator {
           commitSha,
         },
         snapshotId,
-        authority: (config.approvedIntentSources?.some((pattern) =>
+        authority: 'inferred' as const,
+        extractionReview: 'unreviewed' as const,
+        sourceAuthority: (config.approvedIntentSources?.some((pattern) =>
           matchesRepositoryGlob(source.path, pattern)) ? 'declared' : 'inferred') as 'declared' | 'inferred',
       })),
     );
@@ -220,6 +223,18 @@ export class ContextGraphHydrator {
       )
     ).flat();
     const trackedPaths = await repository.listAllFilesAt(commitSha);
+    const tracked = new Set(trackedPaths);
+    for (const fact of semanticFacts) {
+      for (const node of [fact.subject, fact.object]) {
+        const path = node.id.startsWith('component:file:') ? node.id.slice('component:file:'.length) : undefined;
+        if (path && !tracked.has(path)) diagnostics.push({
+          id: sha256(stableJson({ fact: fact.id, missing: path })),
+          kind: 'implementationGaps',
+          reason: `Cited implementation path ${path} is absent from the committed repository.`,
+          relatedNodeIds: [node.id], provenance: [fact.provenance], evidenceScope: 'snapshot-query',
+        });
+      }
+    }
     const documentFacts = linkSemanticDocuments(context, hydrated, trackedPaths);
     options.signal?.throwIfAborted();
     options.onProgress?.({ phase: 'compile-semantic-rdf' });
@@ -277,6 +292,7 @@ export class ContextGraphHydrator {
         scope: selectedSemanticSources,
         ontologyVersion: config.semantic.ontologyVersion,
         extractorVersions: {
+          assembly: 'standalone-graph-v2',
           semantic: config.semantic.extractorVersion,
           scip: scip.version,
           ontology: config.ontology.toolVersion,

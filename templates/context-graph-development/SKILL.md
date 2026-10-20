@@ -19,9 +19,12 @@ only for graph maintenance; omitted and legacy diagnostics do not expand an impl
 3. Inspect product intent, contracts/invariants, implementation/consumers, validation evidence,
    runtime evidence, confidence, unknowns, and source locations. Treat an empty coverage lane or
    relevant runtime gap as unresolved context.
-4. Keep declared intent (docs), implemented behavior (code/contracts/tests), and observed behavior
-   (exact-deployment traces) distinct. Never promote current behavior into product intent.
-5. Query progressively for relationships that need detail; do not dump the entire graph.
+4. Keep source approval, assertion review, implementation, test coverage and observed runtime
+   behavior distinct. An inferred/unreviewed assertion citing an approved owner document still
+   requires checking the citation. Never promote current behavior or model output into intent.
+5. Query progressively for relationships that need detail. Follow continuation tokens and
+   check depth truncation; rerun with a larger maxDepth when needed. Missing pages are not proof
+   of missing dependencies.
 6. Give subagents the bounded Context Pack, snapshot SHA, and unresolved assumptions.
 7. Query again after material diff changes. Historical saved evidence remains useful context but
    cannot satisfy current-diff validation or merge gates.

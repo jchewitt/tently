@@ -4,7 +4,7 @@ An extracted Apache-2.0 toolkit for connecting product intent, contracts, implem
 tests and observed runtime evidence. Derived from LaunchEcho Context Graph; see
 [NOTICE](NOTICE) and the [source inventory](docs/SOURCE-INVENTORY.md).
 
-This is a standalone baseline under development. See [roadmap](docs/ROADMAP.md) and
+This standalone implementation uses small, recorded delivery milestones. See [roadmap](docs/ROADMAP.md) and
 [validation](docs/VALIDATION.md) for completed checks and limitations.
 
 ## Development
@@ -55,7 +55,8 @@ pending re-extraction. Historical or draft evidence cannot validate a current di
 
 Approved owner documents govern intent. Code describes implementation; tests describe what
 was checked; traces describe observed behavior for their deployment. Model assertions require
-valid citations and remain derived evidence. Missing coverage is not a pass.
+valid citations and remain inferred/unreviewed even when their source is explicitly approved.
+Source approval is recorded separately from assertion review. Missing coverage is not a pass.
 
 The current implementation supports TypeScript SCIP indexing, immutable JSON snapshot envelopes,
 a lossless RDF/SPARQL query path, SHACL integrity checks, paginated `impact.scan` traversal and
@@ -69,3 +70,5 @@ and the final export inventory require explicit maintainer authorization.
 
 See [provider contract](docs/PROVIDERS.md) for bounded extraction and adapters, and
 [architecture policy](docs/architecture-policy.md) for deterministic governance.
+
+See the [bounded viewer guide](docs/VIEWER.md) and [cloud setup](docs/CLOUD-ENVIRONMENT.md).

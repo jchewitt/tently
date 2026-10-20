@@ -1,7 +1,11 @@
+// Modified for standalone extraction; see docs/extraction-manifest.json.
 import { mkdtemp, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
+import { Script } from 'node:vm';
+import { findEvidencePath } from './viewer-interaction.js';
+import { runtimeEvidenceFacts } from './runtime-evidence.js';
 import { describe, expect, it, vi } from 'vitest';
 
 import type { ContextPack, GraphFact } from './core.js';
@@ -12,6 +16,7 @@ import {
   renderContextPackHtml,
   renderContextPackSvg,
   resolveVisualizationFormat,
+  sourceLink,
   visualizeContextPack,
   writeContextPackVisualization,
 } from './visualization.js';
@@ -232,7 +237,7 @@ describe('Context Pack visualization', () => {
     expect(renderContextPackHtml(pack)).toBe(html);
     expect(html).toContain('Content-Security-Policy');
     expect(html).toContain('data-layer="declared"');
-    expect(html).toContain('data-authority="observed"');
+    expect(html).toContain('Runtime references');
     expect(html).toContain('Provider ownership remains ambiguous.');
     expect(html).not.toContain(maliciousLabel);
     expect(html).not.toMatch(/(?:src|href)="https?:/);
@@ -241,16 +246,40 @@ describe('Context Pack visualization', () => {
     expect(dot).toContain('Search \\"safe\\" <script>alert(1)</script>');
     expect(svg).toContain('<svg');
     expect(svg).toContain('data-authority="validated"');
-    expect(svg).toContain('data-authority="observed"');
+    expect(svg).not.toContain('runtime-capability:runtime-only');
     expect(svg).toContain('&lt;script&gt;alert(1)&lt;/script&gt;');
-    expect(svg).toContain(
-      'class="visual-node column-evidence" data-visual-node="true" data-node-id="runtime-capability:runtime-only"',
-    );
-    expect(svg).toContain('Observed capability: runtime-only');
-    const intentCluster = dot.match(/subgraph "cluster-intent" \{([\s\S]*?)\n {2}\}/)?.[1];
-    const evidenceCluster = dot.match(/subgraph "cluster-evidence" \{([\s\S]*?)\n {2}\}/)?.[1];
-    expect(intentCluster).not.toContain('runtime-capability:runtime-only');
-    expect(evidenceCluster).toContain('runtime-capability:runtime-only');
+    expect((svg.match(/data-visual-edge="true"/g) ?? []).length).toBe(pack.facts.length);
+    const model = JSON.parse(html.match(/<script id="visual-model" type="application\/json">([\s\S]*?)<\/script>/)![1]!);
+    expect(model.edges.map((edge: { id: string }) => edge.id)).toEqual(pack.facts.map(fact => fact.id));
+    new Script(html.match(/<script>([\s\S]*?)<\/script>/)![1]!);
+
+  });
+
+  it('displays runtime edges only when present as graph facts, with coverage and source navigation', () => {
+    const pack = contextPack();
+    const runtime = runtimeEvidenceFacts({ repositoryRoot: '.', repositoryId: 'example/public', ref: 'HEAD',
+      commitSha: sha, snapshotId: 'snapshot-a', changedPaths: [], deletedPaths: [], renamedPaths: {} }, pack.runtimeEvidence);
+    const view = { ...pack, facts: [...pack.facts, ...runtime],
+      evidenceState: { currentCommit: 'b'.repeat(40), stale: true, configurationMatches: false,
+        excludedWorkingChanges: ['src/draft.ts'], eligibleForCurrentDiffValidation: false as const },
+      exploration: { returned: 4, reachableFacts: 30, maxDepth: 4, truncated: true, depthLimitReached: true, continuation: 'page-token' } };
+    const html = renderContextPackHtml(view, 'https://example.test/repo/blob/{commit}/{path}#L{line}');
+    expect(html).toContain('HISTORICAL evidence'); expect(html).toContain('TRUNCATED');
+    expect(html).toContain('configuration mismatch'); expect(html).toContain('page-token');
+    expect(html).toContain('src/draft.ts'); expect(html).toContain('data-authority="observed"');
+    expect(html).toContain('id="node-detail"'); expect(html).toContain('id="highlight-path"');
+    expect(html).toContain('data-cluster-heading=');
+    expect(html).toContain('https://example.test/repo/blob/' + sha + '/src/search.ts#L12');
+    expect(() => sourceLink(pack.facts[0]!.provenance, 'javascript:{commit}/{path}')).toThrow('HTTPS');
+    expect(() => sourceLink(pack.facts[0]!.provenance, 'https://user:secret@example.test/{commit}/{path}')).toThrow('credentials');
+  });
+
+  it('finds bounded directed paths across all displayed stages without inventing relationships', () => {
+    const edges = Array.from({ length: 6 }, (_, index) => ({ id: 'edge-' + index, from: String(index), to: String(index + 1) }));
+    expect(findEvidencePath(edges, '0', '6').edgeIds).toEqual(edges.map(edge => edge.id));
+    expect(findEvidencePath(edges, '6', '0').found).toBe(false);
+    expect(findEvidencePath(edges, '0', '6', 3)).toMatchObject({ found: false, truncated: true });
+    expect(findEvidencePath([...edges, { id: 'cycle', from: '6', to: '0' }], '0', 'missing').found).toBe(false);
   });
 
   it('rejects inputs above the Context Pack fact bound', () => {

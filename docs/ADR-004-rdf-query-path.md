@@ -20,9 +20,11 @@ results using `--continuation`. Depth exhaustion requires an explicit larger `--
 the result never represents that partial traversal as complete.
 The graph projection itself has a fail-closed 100,000-fact bound.
 
-Only paths explicitly listed in `approvedIntentSources` can produce declared intent.
-Other model-derived assertions, including legacy Codex records without authority, remain inferred.
-Approval is configuration controlled by the owner, never decided by a model.
+Only paths explicitly listed in `approvedIntentSources` receive `sourceAuthority: declared`.
+Their extracted assertions remain `authority: inferred` and `extractionReview: unreviewed`.
+The intent lane can include such evidence, but labels and coverage notes require checking the
+citation; source approval never approves a model assertion or creates a hard rule. Legacy Codex
+records without authority also remain inferred. Approved deterministic policy is separate.
 
 The public pipeline example has six asynchronous stages, shared message types and a runtime
 test. Deterministic tests parse the example prose through a test provider, run real SCIP,

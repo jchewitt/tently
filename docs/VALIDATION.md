@@ -83,3 +83,31 @@ checks that a source-budget failure makes zero provider calls.
 public live test using Codex 0.163.0 / gpt-6-astra exited with status 1 before extraction. A bounded,
 redacted diagnostic identified a read-only filesystem error. Live semantic extraction is blocked
 and unverified in this environment; no credentials or private source were copied to work around it.
+
+## Milestone 6 and final integrated gate
+
+On 2026-10-20, `pnpm context-graph:publication-check` passed end to end:
+
+- Frozen installation and TypeScript builds; 110 deterministic tests passed (1 core + 109 toolkit/example).
+- One optional Docker/openCAESAR integration test skipped.
+- Canonical architecture gate passed; 10 advisory size/complexity findings remain for review.
+- Extraction inventory and production license checks passed.
+- Fresh packed consumer exercised actual TypeScript SCIP extraction, RDF/SPARQL/SHACL projection,
+  HTML/DOT/SVG rendering, installed MCP initialization and missing-snapshot reporting.
+
+The final pipeline test extracts missing implementation paths, explicit ambiguous ownership and
+contradictory node kinds from additional public prose, reports/rejects them, and preserves the last
+valid head. Source approval and unreviewed model assertions remain separately labeled in RDF,
+agent output and the viewer. Snapshot publication also passed concurrent independent-process tests.
+Viewer tests check exact fact/edge identity, safe source links, script syntax, six-edge directed paths,
+cycle termination, bounds and coverage/staleness labels. Browser UI automation was not performed.
+
+All 79 imported original file hashes were rechecked against the recorded source SHA, and destination
+hashes matched the inventory. Export paths contain no Git metadata, credentials, environment files,
+node_modules, generated graph storage or package archives. This local inventory is available for
+maintainer review; it does not authorize public export.
+
+`scripts/cloud-install.sh` was executed successfully in the managed environment. The installed
+consumer is a fresh-install smoke test; restoration of local-only commits into a fresh cloud task
+is a separate unverified limitation. Live Codex extraction remains blocked as recorded above.
+Windows, macOS, hosted CI and optional formal compiler execution remain untested.

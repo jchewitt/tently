@@ -154,7 +154,7 @@ try {
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { ScipSymbolExtractor, ScipTypeScriptIndexer } from ${JSON.stringify(staticModule)};
-import { renderContextPackVisualization } from ${JSON.stringify(toolkitModule)};
+import { renderContextPackVisualization, RdfEvidenceGraph, CG } from ${JSON.stringify(toolkitModule)};
 
 const root = process.cwd();
 const context = {
@@ -183,6 +183,10 @@ const facts = await new ScipSymbolExtractor(repository, index).extract(context);
 if (!index.digest || facts.length < 2) {
   throw new Error('Installed toolkit did not index and parse the SCIP fixture');
 }
+const graph = new RdfEvidenceGraph({ manifest: { schemaVersion:1, repositoryId:'publication-smoke',ref:'HEAD',commitSha:context.commitSha,snapshotId:context.snapshotId,contentDigest:index.digest,generatedAt:'2026-01-01',ontologyVersion:'rdf-v1',extractorVersions:{},semanticModel:'none',semanticPromptVersion:'none',semanticArtifactKeys:[],scipIndexDigest:index.digest,rdfDigest:'' }, facts, invariants:[],runtimeEvidence:[],unresolved:[] });
+if (!(await graph.validate()).conforms) throw new Error('Installed SHACL validation failed');
+const selected = await graph.select('SELECT ?record WHERE { ?record <' + CG + 'authority> ?authority }');
+if (selected.rows.length !== facts.length || (await graph.facts()).length !== facts.length) throw new Error('Installed RDF projection/query mismatch');
 const pack = {
   snapshot: { snapshotId: context.snapshotId, commitSha: context.commitSha, contentDigest: index.digest },
   capabilities: [],
@@ -257,7 +261,7 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
   } finally {
     await client.close();
   }
-  console.log('Installed consumer: runtime assets, TypeScript indexing, SCIP facts, HTML/DOT/SVG and MCP passed.');
+  console.log('Installed consumer: runtime assets, TypeScript indexing, SCIP facts, RDF/SPARQL/SHACL, HTML/DOT/SVG and MCP passed.');
 } finally {
   await rm(destination, { recursive: true, force: true });
 }

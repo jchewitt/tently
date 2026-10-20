@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process';
-import { cp, mkdtemp, readFile } from 'node:fs/promises';
+import { cp, mkdtemp, readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
@@ -41,8 +41,15 @@ describe('unified evidence graph', () => {
           providerCalls++;
           const implementations = [...source.content.matchAll(/The (\w+) stage is implemented by ([^\s]+)\./g)];
           const routes = [...source.content.matchAll(/The (\w+) stage routes through the (\w+) stage/g)];
+          const classifications = [...source.content.matchAll(/The (\w+) stage is classified as (Workflow|Contract)\./g)];
           const line = (index: number) => source.content.slice(0, index).split('\n').length;
           const assertions = [
+            ...classifications.map((match) => ({
+              subject: { id: `workflow:${match[1]}`, kind: match[2] as 'Workflow' | 'Contract', label: match[1]! },
+              predicate: 'references' as const,
+              object: { id: 'document:classification', kind: 'Document' as const, label: 'Classification' },
+              citation: { startLine: line(match.index!), endLine: line(match.index!) }, confidence: 1,
+            })),
             ...implementations.map((match) => ({
               subject: { id: `workflow:${match[1]}`, kind: 'Workflow' as const, label: match[1]! },
               predicate: 'implementedBy' as const,
@@ -56,7 +63,12 @@ describe('unified evidence graph', () => {
               citation: { startLine: line(match.index!), endLine: line(match.index!) }, confidence: 1,
             })),
           ];
-          return { parsed: { assertions, oml: '', diagnostics: [] }, rawModelOutput: JSON.stringify({ assertions }) };
+          const ambiguity = source.content.indexOf('The owner is ambiguous between Team A and Team B.');
+          const diagnostics = ambiguity < 0 ? [] : [{
+            kind: 'ambiguousIntent' as const, reason: 'The source explicitly names two competing owners.',
+            citation: { startLine: line(ambiguity), endLine: line(ambiguity) }, relatedNodeIds: [],
+          }];
+          return { parsed: { assertions, oml: '', diagnostics }, rawModelOutput: JSON.stringify({ assertions, diagnostics }) };
         },
       }),
       staticIndexer: new ScipTypeScriptIndexer(config.scip, storage),
@@ -77,7 +89,9 @@ describe('unified evidence graph', () => {
     const repeated = await hydrator.hydrate({ ref: 'HEAD', headName: 'default' });
     expect(repeated.semanticReused).toBe(6);
     expect(repeated.snapshot.manifest.contentDigest).toBe(snapshot.manifest.contentDigest);
-    expect(snapshot.facts.filter((f) => f.authority === 'declared')).toHaveLength(12);
+    expect(snapshot.facts.filter((f) => f.sourceAuthority === 'declared')).toHaveLength(12);
+    expect(snapshot.facts.filter((f) => f.sourceAuthority === 'declared').every((f) =>
+      f.authority === 'inferred' && f.extractionReview === 'unreviewed')).toBe(true);
     const graph = new RdfEvidenceGraph(snapshot);
     expect((await graph.validate()).conforms).toBe(true);
     expect((await graph.facts()).map((f) => f.id).sort()).toEqual(snapshot.facts.map((f) => f.id).sort());
@@ -85,7 +99,7 @@ describe('unified evidence graph', () => {
       .toBe(stableJson([...snapshot.facts].sort((a, b) => a.id.localeCompare(b.id))));
     const routes = await graph.select(`SELECT ?from ?to WHERE {
       GRAPH ?assertion { ?from <${CG}routesThrough> ?to }
-      ?assertion <${CG}authority> "declared"
+      ?assertion <${CG}sourceAuthority> "declared"; <${CG}authority> "inferred"
     }`);
     expect(routes.rows).toHaveLength(6);
     const service = new SnapshotImpactQueryService(store, 'default');
@@ -116,5 +130,20 @@ describe('unified evidence graph', () => {
     expect((await new RdfEvidenceGraph({ ...snapshot, facts: [malformed] }).validate()).conforms).toBe(false);
     expect(contextPackEvidenceAuthority({ ...snapshot.facts[0]!, authority: undefined,
       extractor: { id: 'codex-cli:legacy', version: '1' } })).toBe('inferred');
+    const changeProse = async (content: string) => {
+      await writeFile(join(root, 'docs/negative.md'), content);
+      await git('add', 'docs/negative.md');
+      await git('-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid',
+        '-c', 'commit.gpgsign=false', 'commit', '--quiet', '-m', 'Public negative source');
+    };
+    await changeProse('# Missing implementation\nThe archival stage is implemented by src/absent.ts.\n');
+    const missing = await hydrator.hydrate({ ref: 'HEAD', headName: 'default' });
+    expect(missing.snapshot.diagnostics?.some((item) =>
+      item.kind === 'implementationGaps' && item.reason.includes('src/absent.ts'))).toBe(true);
+    await changeProse('# Ambiguous intent\nThe owner is ambiguous between Team A and Team B.\n');
+    await expect(hydrator.hydrate({ ref: 'HEAD', headName: 'default' })).rejects.toThrow('Unresolved semantic mappings');
+    await changeProse('# Contradictory identity\nThe discovery stage is classified as Contract.\n');
+    await expect(hydrator.hydrate({ ref: 'HEAD', headName: 'default' })).rejects.toThrow('SHACL');
+    expect((await store.readHead('default'))?.manifest.snapshotId).toBe(missing.snapshot.manifest.snapshotId);
   }, 60_000);
 });

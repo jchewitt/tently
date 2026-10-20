@@ -47,10 +47,10 @@
     "context-graph:licenses": "node scripts/generate-third-party-notices.mjs",
     "context-graph:licenses:check": "node scripts/generate-third-party-notices.mjs --check",
     "context-graph:pack:check": "node scripts/check-publication.mjs",
-    "context-graph:publication-check": "pnpm build && pnpm test && pnpm inventory:check && pnpm context-graph:licenses:check && pnpm context-graph:pack:check",
+    "context-graph:publication-check": "pnpm build && pnpm test && pnpm govern && pnpm inventory:check && pnpm context-graph:licenses:check && pnpm context-graph:pack:check",
     "inventory:update": "node scripts/update-inventory.mjs",
     "inventory:check": "node scripts/update-inventory.mjs --check",
-    "govern": "tsx src/cli.ts govern"
+    "govern": "tsx src/cli.ts govern --policy architecture.policy.json --output .context-graph/architecture-report.json"
   },
   "engines": {
     "node": ">=20.11.0"

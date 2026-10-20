@@ -603,8 +603,7 @@ packages. Their distribution posture remains explicit for extraction and release
 <!-- prettier-ignore -->
 | Tool | Version | License posture | Distribution |
 | --- | --- | --- | --- |
-| [openCAESAR OML toolchain and core vocabularies](https://github.com/opencaesar) | 2.13.x / 5.1.0 | Apache-2.0 | Downloaded by the pinned ontology build; not redistributed in npm packages |
-| [SCIP TypeScript](https://github.com/sourcegraph/scip-typescript) | 0.4.0 | Apache-2.0 | Development/runtime indexing tool; not bundled in npm package output |
-| [OpenTelemetry Collector](https://github.com/open-telemetry/opentelemetry-collector-releases) | 0.136.0 | Apache-2.0 | Digest-pinned CI validation image; not redistributed in npm packages |
-| [Gradle JDK 21 container](https://hub.docker.com/_/gradle) | 8.10.2 | Third-party image license set | Digest-pinned build image; not redistributed in npm packages |
+| [openCAESAR OML toolchain and core vocabularies](https://github.com/opencaesar) | 2.13.x / 5.1.0 | Apache-2.0 | Optional pinned formal ontology compiler; not redistributed in npm packages |
+| [SCIP TypeScript](https://github.com/sourcegraph/scip-typescript) | 0.4.0 | Apache-2.0 | Pinned production npm dependency installed alongside the toolkit |
+| [Gradle JDK 21 container](https://hub.docker.com/_/gradle) | 8.10.2 | Third-party image license set | Optional digest-pinned formal compiler image; not redistributed in npm packages |
 | [Codex CLI](https://developers.openai.com/codex/cli) | Host provided | Host installation terms | Invoked from the host only; never bundled or redistributed |

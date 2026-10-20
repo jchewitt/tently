@@ -24,8 +24,9 @@ for (const entry of manifest.imports) {
     } else if (/\.ya?ml$/.test(target)) {
       content = '# Modified for standalone extraction; see docs/extraction-manifest.json.\n' + content;
     } else if (target.endsWith('.json')) {
-      content = JSON.stringify({ ...JSON.parse(content),
-        'x-extraction-modifications': 'Modified for standalone extraction; see docs/extraction-manifest.json.' }, null, 2) + '\n';
+      const parsed = JSON.parse(content);
+      const annotate = (value) => ({ ...value, 'x-extraction-modifications': 'Modified for standalone extraction; see docs/extraction-manifest.json.' });
+      content = JSON.stringify(Array.isArray(parsed) ? parsed.map(annotate) : annotate(parsed), null, 2) + '\n';
     }
     if (content !== await readFile(target, 'utf8')) {
       if (check) throw new Error(`Missing modification notice: ${entry.destinationPath}`);

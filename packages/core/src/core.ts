@@ -60,6 +60,9 @@ export interface GraphFact {
   readonly confidence: number;
   readonly snapshotId: string;
   readonly authority?: 'declared' | 'implemented' | 'validated' | 'observed' | 'inferred' | 'draft';
+  /** Approval of the source does not constitute review of a model's extracted assertion. */
+  readonly sourceAuthority?: 'declared' | 'inferred' | 'draft';
+  readonly extractionReview?: 'unreviewed' | 'approved' | 'deterministic';
 }
 
 export interface SemanticArtifact {

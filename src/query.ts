@@ -54,7 +54,7 @@ export function contextPackLaneForFact(fact: GraphFact): ContextPackLane | undef
     return 'contractsAndInvariants';
   }
   if (
-    isDeclaredFact(fact) &&
+    (isDeclaredFact(fact) || fact.sourceAuthority === 'declared') &&
     (kinds.has('Document') ||
       kinds.has('Capability') ||
       kinds.has('Workflow') ||
@@ -181,7 +181,7 @@ export class MarkdownContextPackRenderer implements ContextPackRenderer {
           .map(
             (fact) =>
               `- [${contextPackEvidenceAuthority(fact)}] ${fact.subject.label} —${fact.predicate}→ ${fact.object.label} ` +
-              `(\`${fact.provenance.path}:${fact.provenance.startLine}\`, confidence ${fact.confidence})`,
+              `(\`${fact.provenance.path}:${fact.provenance.startLine}\`, confidence ${fact.confidence}${fact.sourceAuthority ? `; source ${fact.sourceAuthority}; extraction ${fact.extractionReview ?? 'unknown'}` : ''})`,
           ),
       ]),
       '',
@@ -388,9 +388,11 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
       suggestedFiles,
       coverage: {
         counts: balanced.counts,
-        gaps: contextPackLanes
+        gaps: [...contextPackLanes
           .filter((lane) => balanced.counts[lane] === 0)
           .map((lane) => `No ${lane} evidence matched this request.`),
+          ...(facts.some((fact) => fact.sourceAuthority === 'declared' && fact.extractionReview === 'unreviewed')
+            ? ['Approved-source extraction remains unreviewed; verify cited intent before using it as a rule or gate.'] : [])],
       },
       diagnostics: selectDiagnostics(snapshot, request, facts, focus, queryDiagnostics),
       exploration: {

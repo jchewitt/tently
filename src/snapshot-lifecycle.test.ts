@@ -42,6 +42,17 @@ describe('saved evidence lifecycle', () => {
     await expect(store.updateHead('default', 'missing')).rejects.toThrow('absent');
     expect(await store.readHead('default')).toEqual(saved);
     await expect(store.readHead('../escape')).rejects.toThrow('Unsafe');
+    const module = new URL('./storage.ts', import.meta.url).href;
+    const concurrent = await Promise.allSettled([1, 2, 3].map((index) =>
+      execute(process.execPath, ['--import', 'tsx', '--input-type=module', '--eval', `
+        import { FileSnapshotStore } from ${JSON.stringify(module)};
+        const store = new FileSnapshotStore(${JSON.stringify(root)});
+        await store.write(${JSON.stringify(snapshot('cross-process', `process-${index}`))});
+        await store.updateHead('processes', 'cross-process');
+      `], { cwd: process.cwd() })));
+    expect(concurrent.filter((result) => result.status === 'fulfilled')).toHaveLength(1);
+    expect(concurrent.filter((result) => result.status === 'rejected')).toHaveLength(2);
+    expect((await store.readHead('processes'))?.manifest.snapshotId).toBe('cross-process');
   });
 
   it('queries historical saved evidence while dirty and isolates committed materialization', async () => {

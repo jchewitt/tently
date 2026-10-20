@@ -1,3 +1,4 @@
+// Modified for standalone extraction; see docs/extraction-manifest.json.
 import type {
   ExtractionContext,
   GraphFact,
@@ -41,6 +42,8 @@ export function linkSemanticDocuments(
     },
     extractor: identity,
     confidence: 1,
+    authority: 'inferred',
+    extractionReview: predicate === 'contains' ? 'unreviewed' : 'deterministic',
     snapshotId: context.snapshotId,
   });
 
