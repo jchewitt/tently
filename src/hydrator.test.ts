@@ -184,6 +184,10 @@ describe('commit-keyed hydration', () => {
     expect(repeated.snapshot.manifest.contentDigest).toBe(first.snapshot.manifest.contentDigest);
     expect(repeated.semanticReused).toBe(1);
     expect(extractionCalls).toBe(1);
+    dockerReady = false;
+    await expect(hydrator.hydrate({ ref: 'HEAD', headName: 'default' })).rejects.toThrow('Docker');
+    expect(await snapshotStore.readHead('default')).toEqual(first.snapshot);
+    dockerReady = true;
 
     acceptedTraceId = 'accepted-trace-refreshed';
     const refreshed = await hydrator.hydrate({ ref: 'HEAD', headName: 'default' });

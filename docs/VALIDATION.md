@@ -24,4 +24,14 @@ The initial pnpm 11 installation exposed a build-script policy mismatch; install
 pinned pnpm 10.18.2 resolved it. Four fixture adaptation failures (paths, sort order and query
 labels) were corrected and the complete gate rerun successfully.
 
-Milestones after the baseline are not yet validated.
+## Milestone 2a: saved evidence lifecycle
+
+Passed TypeScript build, 15 affected tests across hydration, scope selection, lifecycle, final
+checks and real SCIP indexing, followed by the independent package smoke test.
+New checks exercise same-process concurrent publication, immutable conflict rejection, atomic
+head updates, failed refresh preservation, dirty/untracked file reporting and two concurrent
+committed materializations without changing Git status or registered worktrees.
+
+The full baseline suite also passed after the main lifecycle change. Draft overlays and later
+milestones require separate validation. Symlink/submodule materialization and archives over
+128 MiB are explicitly unsupported; Windows/macOS remain untested.

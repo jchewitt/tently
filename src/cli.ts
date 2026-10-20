@@ -46,9 +46,11 @@ async function main(): Promise<void> {
   const application = await createContextGraphApplication(configPath);
   const [command, subcommand] = args;
   if (command === 'hydrate') {
+    const scope = await application.scopeResolver?.resolve(impactRequestFromArgs(args));
     const result = await application.hydrator.hydrate({
       ref: valueAfter(args, '--ref') ?? 'HEAD',
-      headName: application.headName,
+      headName: scope?.headName ?? application.headName,
+      semanticSources: scope?.semanticSources,
       forceSemantic: args.includes('--force-semantic'),
     });
     process.stdout.write(
@@ -102,7 +104,7 @@ async function main(): Promise<void> {
       valueAfter(args, '--ref') ?? 'HEAD',
     );
     process.stdout.write(`${JSON.stringify(snapshot.invariants, null, 2)}\n`);
-    if (snapshot.invariants.some((item) => item.status === 'fail')) process.exitCode = 1;
+    if (snapshot.invariants.some((item) => item.status !== 'pass')) process.exitCode = 1;
     return;
   }
   if (command === 'diagnostics' && subcommand === 'show') {

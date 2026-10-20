@@ -1,10 +1,12 @@
+import { randomUUID } from 'node:crypto';
+import { withCommittedTree } from './committed-tree.js';
 import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 
 import type { ContextGraphConfig } from './config.js';
-import type { SemanticArtifact } from './core.js';
+import type { SemanticArtifact, ExtractionContext } from './core.js';
 import type { GitRepository } from './git.js';
 import { runProcess } from './process.js';
 import { sha256, stableJson } from './util.js';
@@ -20,6 +22,7 @@ export interface OntologyCompiler {
   compile(
     snapshotId: string,
     artifacts: readonly SemanticArtifact[],
+    context?: ExtractionContext,
   ): Promise<OntologyCompileResult>;
 }
 
@@ -118,10 +121,15 @@ export class OpenCaesarOntologyCompiler implements OntologyCompiler {
   async compile(
     snapshotId: string,
     artifacts: readonly SemanticArtifact[],
+    context?: ExtractionContext,
   ): Promise<OntologyCompileResult> {
+    if (context) {
+      return withCommittedTree(context.repositoryRoot, context.commitSha, (root) =>
+        new OpenCaesarOntologyCompiler(this.config, root, this.storageRoot).compile(snapshotId, artifacts));
+    }
     await this.checkReady();
     const source = resolve(this.repositoryRoot, this.config.projectPath);
-    const work = join(this.storageRoot, 'work', `ontology-${snapshotId}`);
+    const work = join(this.storageRoot, 'work', `ontology-${snapshotId}-${randomUUID()}`);
     await rm(work, { recursive: true, force: true });
     await mkdir(dirname(work), { recursive: true });
     const sourceBuild = join(source, 'build');

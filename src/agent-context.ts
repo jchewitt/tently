@@ -106,31 +106,9 @@ export class PreparedImpactQueryService implements ImpactQueryService {
 
   async scan(request: ImpactScanRequest) {
     if (request.snapshotId) {
-      throw new Error(
-        'snapshotId is not accepted in agent-context mode; the service resolves an exact-HEAD scoped snapshot',
-      );
+      return new SnapshotImpactQueryService(this.store, 'default').scan(request);
     }
     const scope = await this.scopeResolver.resolve(request);
-    const runtimeEvidenceRevision = await this.hydrator.collectRuntimeEvidence(scope.commitSha);
-    let snapshot = await this.store.readHead(scope.headName);
-    if (
-      !snapshot ||
-      snapshot.manifest.commitSha !== scope.commitSha ||
-      snapshot.manifest.runtimeEvidenceDigest !== runtimeEvidenceRevision.digest
-    ) {
-      snapshot = (
-        await this.hydrator.hydrate({
-          ref: scope.commitSha,
-          headName: scope.headName,
-          snapshotSuffix: scope.snapshotSuffix,
-          semanticSources: scope.semanticSources,
-          runtimeEvidenceRevision,
-        })
-      ).snapshot;
-    }
-    return new SnapshotImpactQueryService(this.store, scope.headName).scan({
-      ...request,
-      snapshotId: snapshot.manifest.snapshotId,
-    });
+    return new SnapshotImpactQueryService(this.store, scope.headName).scan(request);
   }
 }

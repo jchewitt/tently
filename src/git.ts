@@ -35,7 +35,24 @@ export class GitRepository {
   }
 
   resolveRef(ref: string): Promise<string> {
-    return this.run(['rev-parse', '--verify', `${ref}^{commit}`]);
+    return this.run(['rev-parse', '--verify', '--end-of-options', `${ref}^{commit}`]);
+  }
+
+  async workingChanges(): Promise<readonly string[]> {
+    const output = await this.execute(['status', '--porcelain=v1', '-z', '--untracked-files=all'], false);
+    const records = output.split('\0');
+    const paths = new Set<string>();
+    for (let index = 0; index < records.length; index++) {
+      const record = records[index];
+      if (!record) continue;
+      const path = record.slice(3);
+      if (!path.startsWith('.context-graph/')) paths.add(path);
+      if (/[RC]/.test(record.slice(0, 2))) {
+        const prior = records[++index];
+        if (prior) paths.add(prior);
+      }
+    }
+    return [...paths].sort();
   }
 
   async firstParent(commitSha: string): Promise<string | undefined> {

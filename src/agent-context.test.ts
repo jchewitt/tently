@@ -109,7 +109,7 @@ describe('agent context preparation', () => {
       'docs/policy/policy.md',
       'docs/validation/fulfillment-validation.md',
     ]);
-    expect(resolveStorageRoot('C:/worktree-a', config, 'C:/shared-cache')).toBe(
+    expect(resolveStorageRoot('C:/worktree-a', config, 'C:/shared-cache')).not.toBe(
       resolveStorageRoot('C:/worktree-b', config, 'C:/shared-cache'),
     );
     expect(
@@ -165,21 +165,20 @@ describe('agent context preparation', () => {
       },
     } as unknown as ContextGraphHydrator;
     const request = { ownerDocument: 'docs/intent/fulfillment.md' };
-    await new PreparedImpactQueryService(store, hydrator, resolver).scan(request);
-    await new PreparedImpactQueryService(store, hydrator, resolver).scan(request);
-    expect(hydrateCalls).toBe(1);
+    await expect(new PreparedImpactQueryService(store, hydrator, resolver).scan(request)).rejects.toThrow('No graph snapshot');
+    expect(hydrateCalls).toBe(0);
+    await hydrator.hydrate({ ref: scope.commitSha, headName: scope.headName,
+      snapshotSuffix: scope.snapshotSuffix, runtimeEvidenceRevision: {
+        commitSha: scope.commitSha, digest: runtimeEvidenceDigest, references: [],
+      } });
     const first = await store.readHead(scope.headName);
     runtimeEvidenceDigest = 'runtime-b';
     await new PreparedImpactQueryService(store, hydrator, resolver).scan(request);
-    const refreshed = await store.readHead(scope.headName);
-    expect(hydrateCalls).toBe(2);
-    expect(refreshed?.manifest.snapshotId).not.toBe(first?.manifest.snapshotId);
-    expect(await store.read(first?.manifest.snapshotId ?? '')).toEqual(first);
-    await expect(
-      new PreparedImpactQueryService(store, hydrator, resolver).scan({
-        ...request,
-        snapshotId: 'stale-snapshot',
-      }),
-    ).rejects.toThrow('snapshotId is not accepted in agent-context mode');
+    expect(hydrateCalls).toBe(1);
+    expect(await store.readHead(scope.headName)).toEqual(first);
+    const explicit = await new PreparedImpactQueryService(store, hydrator, resolver).scan({
+      snapshotId: first!.manifest.snapshotId,
+    });
+    expect(explicit.snapshot.snapshotId).toBe(first!.manifest.snapshotId);
   });
 });

@@ -10,6 +10,6 @@ export function resolveStorageRoot(
   userCacheRoot = resolve(homedir(), '.cache', 'context-graph'),
 ): string {
   if (config.storageScope !== 'user') return resolve(repositoryRoot, config.storagePath);
-  const profile = sha256(stableJson(config)).slice(0, 20);
+  const profile = sha256(stableJson({ config, checkout: resolve(repositoryRoot) })).slice(0, 20);
   return resolve(userCacheRoot, profile);
 }

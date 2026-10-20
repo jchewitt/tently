@@ -109,6 +109,8 @@ export interface SnapshotManifest {
   readonly baseSha?: string;
   readonly overlayDigest?: string;
   readonly snapshotId: string;
+  readonly configurationDigest?: string;
+  readonly scope?: readonly string[];
   readonly ontologyVersion: string;
   readonly extractorVersions: Readonly<Record<string, string>>;
   readonly semanticModel: string;
@@ -209,7 +211,14 @@ export interface ImpactScanRequest {
 }
 
 export interface ContextPack {
-  readonly snapshot: Pick<SnapshotManifest, 'snapshotId' | 'commitSha' | 'contentDigest'>;
+  readonly snapshot: Pick<SnapshotManifest, 'snapshotId' | 'commitSha' | 'contentDigest' | 'configurationDigest' | 'scope' | 'baseSha' | 'overlayDigest'>;
+  readonly evidenceState?: {
+    readonly currentCommit?: string;
+    readonly excludedWorkingChanges: readonly string[];
+    readonly stale: boolean;
+    readonly configurationMatches: boolean;
+    readonly eligibleForCurrentDiffValidation: false;
+  };
   readonly capabilities: readonly GraphNode[];
   readonly facts: readonly GraphFact[];
   readonly invariants: readonly InvariantResult[];

@@ -40,11 +40,12 @@ context-graph impact scan --config context-graph.config.json --capability search
 context-graph visualize --config context-graph.config.json --capability search --output graph.html
 ```
 
-At the initial baseline, full semantic hydration requires configured Codex CLI access and
-Docker/openCAESAR. It requires a clean exact-commit checkout. Saved-snapshot queries with the
-generic configuration do not invoke either dependency. Agent auto-preparation and working-change
-overlays are being separated in the next milestone; do not treat historical evidence as proof
-that a current diff is valid.
+Full semantic hydration currently requires configured Codex CLI access and Docker/openCAESAR.
+Committed indexing and ontology input use disposable archives, preserving the active checkout.
+Saved-snapshot queries do not invoke either dependency or refresh automatically. Responses report
+commit, configuration, source scope and excluded working changes. Use `hydrate` explicitly to
+refresh evidence; `--snapshot` selects historical evidence. Working-change overlays are a separate
+milestone. Historical evidence cannot validate a current diff.
 
 ## Evidence limits
 

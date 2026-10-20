@@ -97,7 +97,7 @@ export class ContextGraphHydrator {
   async hydrate(options: HydrationOptions): Promise<HydrationResult> {
     const { config, repository, snapshotStore } = this.dependencies;
     const commitSha = await repository.resolveRef(options.ref);
-    if (options.requireClean !== false) await repository.requireExactCleanCommit(commitSha);
+    if (options.requireClean === true) await repository.requireExactCleanCommit(commitSha);
     await this.dependencies.ontologyCompiler.checkReady?.();
     const prior = await snapshotStore.readHead(options.headName);
     const baseSha =
@@ -129,7 +129,9 @@ export class ContextGraphHydrator {
       config.runtimeEvidence.length > 0
         ? `runtime-${runtimeRevision.digest.slice(0, 12)}`
         : undefined;
-    const effectiveSuffix = [baseSuffix, runtimeSuffix].filter(Boolean).join('-') || undefined;
+    const configurationDigest = sha256(stableJson(config));
+    const scopeDigest = sha256(stableJson(selectedSemanticSources)).slice(0, 12);
+    const effectiveSuffix = [configurationDigest.slice(0, 16), scopeDigest, baseSuffix, runtimeSuffix].filter(Boolean).join('-');
     const snapshotId = effectiveSuffix ? `${commitSha}-${effectiveSuffix}` : commitSha;
     const context: ExtractionContext = {
       repositoryRoot: repository.root,
@@ -197,7 +199,7 @@ export class ContextGraphHydrator {
     ).flat();
     const trackedPaths = await repository.listAllFilesAt(commitSha);
     const documentFacts = linkSemanticDocuments(context, hydrated, trackedPaths);
-    const ontology = await this.dependencies.ontologyCompiler.compile(snapshotId, artifacts);
+    const ontology = await this.dependencies.ontologyCompiler.compile(snapshotId, artifacts, context);
     const runtimeEvidence = runtimeRevision.references;
     const runtimeFacts = runtimeEvidenceFacts(context, runtimeEvidence);
     const facts = [...semanticFacts, ...documentFacts, ...extractorFacts, ...runtimeFacts].sort(
@@ -247,6 +249,8 @@ export class ContextGraphHydrator {
         commitSha,
         baseSha,
         snapshotId,
+        configurationDigest,
+        scope: selectedSemanticSources,
         ontologyVersion: config.semantic.ontologyVersion,
         extractorVersions: {
           semantic: config.semantic.extractorVersion,

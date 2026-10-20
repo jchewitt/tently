@@ -1,4 +1,6 @@
-import { copyFile, mkdir, mkdtemp, readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
+import { randomUUID } from 'node:crypto';
+import { withCommittedTree } from './committed-tree.js';
+import { copyFile, mkdir, readFile, rename, stat, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -21,35 +23,6 @@ export interface StaticIndexer {
   index(context: ExtractionContext): Promise<ScipIndexResult>;
 }
 
-async function withExactCommitWorktree<T>(
-  context: ExtractionContext,
-  operation: (worktreeRoot: string) => Promise<T>,
-): Promise<T> {
-  const worktreesRoot = join(context.repositoryRoot, '.context-graph', 'worktrees');
-  await mkdir(worktreesRoot, { recursive: true });
-  const scratchRoot = await mkdtemp(join(worktreesRoot, 'scip-'));
-  const worktreeRoot = join(scratchRoot, 'checkout');
-  let registered = false;
-  try {
-    await runProcess(
-      'git',
-      ['worktree', 'add', '--detach', worktreeRoot, context.commitSha],
-      context.repositoryRoot,
-    );
-    registered = true;
-    return await operation(worktreeRoot);
-  } finally {
-    if (registered) {
-      await runProcess(
-        'git',
-        ['worktree', 'remove', '--force', worktreeRoot],
-        context.repositoryRoot,
-      );
-    }
-    await rm(scratchRoot, { force: true, recursive: true });
-  }
-}
-
 export class ScipTypeScriptIndexer implements StaticIndexer {
   constructor(
     private readonly config: ContextGraphConfig['scip'],
@@ -60,7 +33,7 @@ export class ScipTypeScriptIndexer implements StaticIndexer {
     const require = createRequire(import.meta.url);
     const destination = join(this.storageRoot, 'scip', `${context.snapshotId}.scip`);
     await mkdir(join(this.storageRoot, 'scip'), { recursive: true });
-    const temporary = `${destination}.${process.pid}.tmp`;
+    const temporary = `${destination}.${randomUUID()}.tmp`;
     const command =
       this.config.command === 'bundled-scip-typescript' ? process.execPath : this.config.command;
     const args =
@@ -72,7 +45,7 @@ export class ScipTypeScriptIndexer implements StaticIndexer {
             temporary,
           ]
         : this.config.args;
-    await withExactCommitWorktree(context, async (worktreeRoot) => {
+    await withCommittedTree(context.repositoryRoot, context.commitSha, async (worktreeRoot) => {
       await runProcess(command, args, worktreeRoot, {
         ...process.env,
         NODE_OPTIONS: process.env.NODE_OPTIONS ?? '--max-old-space-size=8192',

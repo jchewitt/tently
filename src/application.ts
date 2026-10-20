@@ -1,3 +1,5 @@
+import { SavedEvidenceQueryService } from './saved-evidence.js';
+import { sha256, stableJson } from './util.js';
 import { AgentSemanticScopeResolver, PreparedImpactQueryService } from './agent-context.js';
 import { resolveStorageRoot } from './cache.js';
 import { loadConfig } from './config.js';
@@ -96,10 +98,10 @@ export async function createContextGraphApplication(configPath: string) {
   const scopeResolver = config.agentContext
     ? new AgentSemanticScopeResolver(config, repository)
     : undefined;
-  const rawQueryService = new SnapshotImpactQueryService(snapshotStore, headName);
-  const queryService = scopeResolver
+  const rawQueryService = scopeResolver
     ? new PreparedImpactQueryService(snapshotStore, hydrator, scopeResolver)
-    : rawQueryService;
+    : new SnapshotImpactQueryService(snapshotStore, headName);
+  const queryService = new SavedEvidenceQueryService(rawQueryService, repository, sha256(stableJson(config)));
   return {
     ...loaded,
     storageRoot,
@@ -108,7 +110,8 @@ export async function createContextGraphApplication(configPath: string) {
     ontologyCompiler,
     hydrator,
     queryService,
-    snapshotChecks: new SnapshotChecks(snapshotStore, repository, hydrator, scopeResolver),
+    snapshotChecks: new SnapshotChecks(snapshotStore, repository, hydrator, scopeResolver, sha256(stableJson(config))),
+    scopeResolver,
     headName,
   };
 }
