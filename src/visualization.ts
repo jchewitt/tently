@@ -30,7 +30,7 @@ export interface VisualizationWriteResult {
   readonly runtimeEvidenceCount: number;
 }
 
-type EvidenceAuthority = 'declared' | 'implemented' | 'observed' | 'validated';
+type EvidenceAuthority = 'declared' | 'implemented' | 'observed' | 'validated' | 'inferred' | 'draft';
 type VisualColumn = 'intent' | 'contracts' | 'implementation' | 'evidence';
 
 interface VisualNode {
@@ -71,6 +71,8 @@ const columnLabels: Readonly<Record<VisualColumn, string>> = {
   evidence: 'Validation & evidence',
 };
 const authorityColors: Readonly<Record<EvidenceAuthority, string>> = {
+  inferred: '#64748b',
+  draft: '#d97706',
   declared: '#7c3aed',
   implemented: '#0284c7',
   observed: '#ea580c',
@@ -424,6 +426,8 @@ export function renderContextPackSvg(pack: ContextPack): string {
   .authority-implemented path { stroke: ${authorityColors.implemented}; }
   .authority-observed path { stroke: ${authorityColors.observed}; }
   .authority-validated path { stroke: ${authorityColors.validated}; }
+  .authority-inferred path { stroke: ${authorityColors.inferred}; }
+  .authority-draft path { stroke: ${authorityColors.draft}; }
   .is-hidden { display: none; }
 </style>
 <rect width="100%" height="100%" fill="#f8fafc" />
@@ -506,6 +510,8 @@ export function renderContextPackHtml(pack: ContextPack): string {
     .layer-implemented { background: ${authorityColors.implemented}; }
     .layer-observed { background: ${authorityColors.observed}; }
     .layer-validated { background: ${authorityColors.validated}; }
+    .layer-inferred { background: ${authorityColors.inferred}; }
+    .layer-draft { background: ${authorityColors.draft}; }
     pre { font-size: 11px; overflow: auto; white-space: pre-wrap; }
     .is-hidden { display: none !important; }
     @media (max-width: 900px) { main { grid-template-columns: 1fr; } .relationships { grid-column: 1; } }

@@ -31,6 +31,7 @@ function isValidationFact(fact: GraphFact): boolean {
 }
 
 function isDeclaredFact(fact: GraphFact): boolean {
+  if (fact.authority) return fact.authority === 'declared';
   return fact.extractor.id.startsWith('codex-cli:') && !isValidationFact(fact);
 }
 
@@ -62,7 +63,8 @@ export function contextPackLaneForFact(fact: GraphFact): ContextPackLane | undef
 
 export function contextPackEvidenceAuthority(
   fact: GraphFact,
-): 'declared' | 'implemented' | 'observed' | 'validated' {
+): 'declared' | 'implemented' | 'observed' | 'validated' | 'inferred' | 'draft' {
+  if (fact.authority) return fact.authority;
   if (fact.extractor.id === 'otlp-runtime-evidence') return 'observed';
   if (isValidationFact(fact)) return 'validated';
   if (isDeclaredFact(fact)) return 'declared';

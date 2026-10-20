@@ -8,6 +8,7 @@ import { createContextGraphApplication } from './application.js';
 import type { ImpactScanRequest } from './core.js';
 import { compileOntologyAtExactCheckout } from './ontology.js';
 import { visualizeContextPack } from './visualization.js';
+import { buildWorkingOverlay } from './overlay.js';
 
 function valueAfter(args: readonly string[], name: string): string | undefined {
   const index = args.indexOf(name);
@@ -45,6 +46,14 @@ async function main(): Promise<void> {
   const configPath = valueAfter(args, '--config') ?? defaultConfigPath();
   const application = await createContextGraphApplication(configPath);
   const [command, subcommand] = args;
+  if (command === 'overlay') {
+    const base = valueAfter(args, '--base-snapshot');
+    if (!base) throw new Error('overlay requires --base-snapshot <committed snapshot ID>');
+    const result = await buildWorkingOverlay(application.repository, application.config,
+      application.snapshotStore, application.storageRoot, base, valueAfter(args, '--agent'));
+    process.stdout.write(`${JSON.stringify(result.manifest, null, 2)}\n`);
+    return;
+  }
   if (command === 'hydrate') {
     const scope = await application.scopeResolver?.resolve(impactRequestFromArgs(args));
     const result = await application.hydrator.hydrate({

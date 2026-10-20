@@ -58,6 +58,7 @@ export interface GraphFact {
   readonly extractor: ExtractorIdentity;
   readonly confidence: number;
   readonly snapshotId: string;
+  readonly authority?: 'declared' | 'implemented' | 'validated' | 'observed' | 'inferred' | 'draft';
 }
 
 export interface SemanticArtifact {

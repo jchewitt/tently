@@ -5,3 +5,4 @@ export * from './query.js';
 export * from './semantic.js';
 export * from './telemetry.js';
 export * from './visualization.js';
+export * from './overlay.js';

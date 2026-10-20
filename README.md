@@ -45,7 +45,9 @@ Committed indexing and ontology input use disposable archives, preserving the ac
 Saved-snapshot queries do not invoke either dependency or refresh automatically. Responses report
 commit, configuration, source scope and excluded working changes. Use `hydrate` explicitly to
 refresh evidence; `--snapshot` selects historical evidence. Working-change overlays are a separate
-milestone. Historical evidence cannot validate a current diff.
+operation. `context-graph overlay --base-snapshot <id> --agent <name>` captures a bounded draft
+implementation overlay; query its returned ID with `--snapshot`. Changed prose is invalidated
+pending re-extraction. Historical or draft evidence cannot validate a current diff.
 
 ## Evidence limits
 
@@ -54,8 +56,8 @@ was checked; traces describe observed behavior for their deployment. Model asser
 valid citations and remain derived evidence. Missing coverage is not a pass.
 
 The current implementation supports TypeScript SCIP indexing, JSON snapshots, bounded
-`impact.scan` traversal and HTML/DOT/SVG output. SPARQL, SHACL, active OWL reasoning, draft
-overlays and a complete interactive explorer are not part of the initial baseline.
+`impact.scan` traversal and HTML/DOT/SVG output. SPARQL, SHACL, active OWL reasoning and a complete
+interactive explorer are later milestones.
 
 Never submit credentials, account data or private runtime payloads as semantic sources.
 Live provider tests are separate from deterministic CI. Public publication, registry naming

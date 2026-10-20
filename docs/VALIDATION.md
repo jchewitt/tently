@@ -35,3 +35,14 @@ committed materializations without changing Git status or registered worktrees.
 The full baseline suite also passed after the main lifecycle change. Draft overlays and later
 milestones require separate validation. Symlink/submodule materialization and archives over
 128 MiB are explicitly unsupported; Windows/macOS remain untested.
+
+## Milestone 2b: draft overlays
+
+Passed build and five overlay/viewer tests. The overlay test indexes real TypeScript in the
+base and draft, renames a shared interface and updates its consumer, repeats capture to verify
+stable identity, then deletes the consumer and proves the old relationships disappear.
+Committed HEAD and the default snapshot remain unchanged. No live model or runtime is involved.
+
+A first repeatability check caught synthetic-commit timestamps leaking into fact identities.
+Overlay IDs now derive from normalized draft facts and captured bytes; the repeated real-index
+test passes.
