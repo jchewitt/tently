@@ -34,6 +34,28 @@ async function npmCliPath() {
   throw new Error('Install Node with npm before preparing a release');
 }
 
+function registryIntegrity(npmCli, pkg) {
+  let output;
+  try {
+    output = execFileSync(process.execPath,
+      [npmCli, 'view', `${pkg.name}@${pkg.version}`, 'dist.integrity', '--json',
+        '--prefer-online', '--fetch-retries=0', '--fetch-timeout=15000',
+        `--registry=${registry}`, ...authentication.args],
+      { cwd: root, encoding: 'utf8', timeout: 20_000, stdio: ['ignore', 'pipe', 'pipe'] });
+  } catch (error) {
+    let report;
+    try { report = JSON.parse(String(error.stdout)); } catch {}
+    if (report?.error?.code === 'E404') return null;
+    throw new Error(`Unable to check registry state for ${pkg.name}; publication stopped. ` +
+      'Authentication, network and registry errors are not treated as missing packages.');
+  }
+  const integrity = JSON.parse(output);
+  if (typeof integrity !== 'string' || !integrity.startsWith('sha512-')) {
+    throw new Error(`Registry returned invalid integrity for ${pkg.name}; publication stopped`);
+  }
+  return integrity;
+}
+
 async function main() {
   const mode = process.argv[2];
   if (!['--prepare', '--publish'].includes(mode) || process.argv.length !== 3) {
@@ -60,14 +82,21 @@ async function main() {
       const filename = `${name.replace(/^@/, '').replaceAll('/', '-')}-${manifest.version}.tgz`;
       if (!(await readdir(destination)).includes(filename)) throw new Error(`Missing archive: ${filename}`);
       const archive = join(destination, filename);
-      const inspection = JSON.parse(npm('publish', archive, '--dry-run', '--json', '--provenance=false'));
-      if (inspection.name !== name || inspection.version !== manifest.version) throw new Error('Tarball identity mismatch');
-      packages.push({ name, version: manifest.version, filename,
-        integrity: `sha512-${digest(await readFile(archive))}` });
+      const pkg = { name, version: manifest.version, filename,
+        integrity: `sha512-${digest(await readFile(archive))}` };
+      const existing = registryIntegrity(npmCli, pkg);
+      if (existing !== null) {
+        if (existing !== pkg.integrity) throw new Error(`${name}@${pkg.version} already exists with different bytes`);
+        console.log(`Prepared archive matches existing release: ${name}@${pkg.version}`);
+      } else {
+        const inspection = JSON.parse(npm('publish', archive, '--dry-run', '--json', '--provenance=false'));
+        if (inspection.name !== name || inspection.version !== manifest.version) throw new Error('Tarball identity mismatch');
+      }
+      packages.push(pkg);
     }
     const manifest = { commit, registry, packages };
     await writeFile(join(destination, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
-    console.log(`Prepared and dry-run checked ${packages.length} packages at ${commit} in .release/`);
+    console.log(`Prepared and verified ${packages.length} packages at ${commit} in .release/`);
     console.log('Review .release/manifest.json, then run pnpm release:publish with an authorized npm identity.');
     return;
   }
@@ -90,27 +119,7 @@ async function main() {
     const receipt = join(destination, `${pkg.filename}.accepted.json`);
     await publishAndVerify({
       pkg,
-      lookup: () => {
-        let output;
-        try {
-          output = execFileSync(process.execPath,
-            [npmCli, 'view', `${pkg.name}@${pkg.version}`, 'dist.integrity', '--json',
-              '--prefer-online', '--fetch-retries=0', '--fetch-timeout=15000',
-              `--registry=${registry}`, ...authentication.args],
-            { cwd: root, encoding: 'utf8', timeout: 20_000, stdio: ['ignore', 'pipe', 'pipe'] });
-        } catch (error) {
-          let report;
-          try { report = JSON.parse(String(error.stdout)); } catch {}
-          if (report?.error?.code === 'E404') return null;
-          throw new Error(`Unable to check registry state for ${pkg.name}; publication stopped. ` +
-            'Authentication, network and registry errors are not treated as missing packages.');
-        }
-        const integrity = JSON.parse(output);
-        if (typeof integrity !== 'string' || !integrity.startsWith('sha512-')) {
-          throw new Error(`Registry returned invalid integrity for ${pkg.name}; publication stopped`);
-        }
-        return integrity;
-      },
+      lookup: () => registryIntegrity(npmCli, pkg),
       wasAccepted: async () => {
         let saved;
         try { saved = JSON.parse(await readFile(receipt, 'utf8')); }

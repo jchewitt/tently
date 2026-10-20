@@ -300,3 +300,9 @@ before advancing to dependent packages. Seven deterministic tests cover delayed 
 matching existing archives, mismatches, bounded timeout and resume without another upload,
 blocking dependents, registry errors, and publish failure. These tests use controlled registry
 responses; they do not measure npm's processing-time guarantees.
+
+The updated publication gate passed 134 deterministic tests (1 core + 133 toolkit/example),
+with one optional Docker/OML test skipped and the same 11 advisory architecture findings.
+Inventory, licenses and packed-consumer checks passed. The subsequent preparation step
+exposed npm's refusal to dry-run an already published version. Preparation now compares
+existing registry integrity instead, while retaining dry runs for unpublished versions.

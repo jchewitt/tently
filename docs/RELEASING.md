@@ -51,10 +51,13 @@ it does not publish packages to npm. The independent consumer also tests SCIP, R
 visualization and MCP.
 
 The command packs both workspaces with pnpm so `workspace:` dependency ranges become normal
-version ranges, runs `npm publish --dry-run`, and writes `.release/manifest.json` with the
+version ranges, runs `npm publish --dry-run` for unpublished versions, and writes `.release/manifest.json` with the
 source commit, package versions and SHA-512 integrity of each tarball. Review that manifest,
 the package contents and `docs/extraction-manifest.json`. `.release/` is ignored by Git.
 Build outputs, credentials, caches and runtime evidence do not become source commits.
+For an already published version, preparation instead verifies that its registry integrity
+matches the archive; npm rejects a dry-run publish of an existing version too. Different
+bytes at an existing version stop preparation.
 
 ## Publish from an authorized environment
 
