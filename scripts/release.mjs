@@ -6,6 +6,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { pnpmInvocation } from './package-manager.mjs';
 import { npmAuthOptions } from './npm-auth.mjs';
+import { runNpm } from './npm-command.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const destination = join(root, '.release');
@@ -42,7 +43,7 @@ async function main() {
   }
   const commit = git('rev-parse', 'HEAD');
   const npmCli = await npmCliPath();
-  const npm = (...args) => execute(process.execPath, [npmCli, ...args, `--registry=${registry}`, ...authentication.args]);
+  const npm = (...args) => runNpm(npmCli, [...args, `--registry=${registry}`, ...authentication.args], root);
   if (mode === '--prepare') {
     await mkdir(destination, { recursive: true });
     const packages = [];

@@ -63,6 +63,13 @@ npm whoami --registry=https://registry.npmjs.org
 pnpm release:publish
 ```
 
+Run publication directly in an interactive terminal (without piping or redirecting its output).
+Enabling npm 2FA means publication can request an additional browser approval or one-time code;
+complete npm's challenge in that terminal. The registry URL above is the public npm registry.
+The publisher inherits terminal input/output for real publication so npm can perform its normal
+2FA flow. An earlier wrapper captured stdout, which disabled npm's interactive challenge and
+returned `EOTP` immediately. Pull the fix and prepare archives again before retrying.
+
 For the managed cloud, configure `TENTLY_NPM_TOKEN` through secure environment settings with
 access limited to `registry.npmjs.org`, then save and publish the environment configuration.
 The saved requirement alone does not provide a token or activate it. Use a credential authorized

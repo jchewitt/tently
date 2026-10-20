@@ -269,3 +269,14 @@ literal environment-variable references, cleanup and preservation of ordinary np
 when no cloud token is configured. No credential value is stored in that configuration.
 The environment requirement has been saved; an applied credential and public npm publication
 remain pending. These checks do not establish new native Windows or macOS results.
+
+### Interactive npm 2FA follow-up
+
+The maintainer subsequently reported `EOTP` during a real WSL publish attempt after enabling
+2FA. Inspection of npm's authentication code confirms that it declines interactive challenges
+when either stdin or stdout is not a terminal. Our publisher captured stdout, disabling that
+flow. Real publication now inherits all terminal streams; dry-run JSON and registry reads
+remain captured for validation. A subprocess regression test verifies those output behaviors,
+and a Linux pseudo-terminal probe confirms both stdin and stdout reach the publication child
+as terminals. Neither test contacts npm for publication or completes a real browser/OTP
+challenge; that authenticated WSL retry remains operator validation.
