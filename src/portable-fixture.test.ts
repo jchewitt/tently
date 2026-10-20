@@ -1,6 +1,6 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
 import { execFile } from 'node:child_process';
-import { access, cp, mkdtemp, readFile } from 'node:fs/promises';
+import { access, cp, mkdir, mkdtemp, readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { promisify } from 'node:util';
@@ -10,10 +10,37 @@ import { describe, expect, it } from 'vitest';
 import { loadConfig } from './config.js';
 import { GitRepository } from './git.js';
 import { ScipTypeScriptIndexer } from './static.js';
+import { createContextGraphApplication } from './application.js';
 
 const execFileAsync = promisify(execFile);
 
 describe('portable generic fixture', () => {
+  it('hydrates the configured nested example from committed bytes while its checkout is dirty', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'context-graph-nested-hydrate-'));
+    const nested = join(root, 'examples', 'generic-typescript');
+    await mkdir(nested, { recursive: true });
+    await cp(resolve(import.meta.dirname, '..', 'examples', 'generic-typescript'), nested, { recursive: true });
+    const config = JSON.parse(await readFile(join(nested, 'context-graph.config.json'), 'utf8'));
+    config.semantic = { ...config.semantic, provider: 'module', providerModule: './provider.mjs', providerIdentity: 'fixture:1' };
+    await writeFile(join(nested, 'context-graph.config.json'), JSON.stringify(config));
+    await writeFile(join(nested, 'provider.mjs'), `
+      export const createSemanticExtractor = () => ({
+        identity:'fixture:1', extract:async(source)=>{
+          if (source.content === 'dirty') throw Error('Read uncommitted source');
+          return {parsed:{assertions:[],oml:''},rawModelOutput:'{}'};
+        }
+      });
+    `);
+    const git = (...args: string[]) => execFileAsync('git', args, { cwd: root });
+    await git('init', '--quiet'); await git('add', '.');
+    await git('-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid',
+      '-c', 'commit.gpgsign=false', 'commit', '--quiet', '-m', 'fixture');
+    await writeFile(join(nested, 'docs', 'search-capability.md'), 'dirty');
+    const application = await createContextGraphApplication(join(nested, 'context-graph.config.json'));
+    const result = await application.hydrator.hydrate({ ref: 'HEAD', headName: 'default' });
+    expect(result.snapshot.facts.some(fact => fact.provenance.path === 'src/search.ts')).toBe(true);
+    expect(await readFile(join(nested, 'docs', 'search-capability.md'), 'utf8')).toBe('dirty');
+  }, 30_000);
   it('loads and reads committed sources from an independent git repository', async () => {
     const fixture = resolve(import.meta.dirname, '..', 'examples', 'generic-typescript');
     const root = await mkdtemp(join(tmpdir(), 'context-graph-portable-'));

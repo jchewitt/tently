@@ -104,10 +104,38 @@ cycle termination, bounds and coverage/staleness labels. Browser UI automation w
 
 All 79 imported original file hashes were rechecked against the recorded source SHA, and destination
 hashes matched the inventory. Export paths contain no Git metadata, credentials, environment files,
-node_modules, generated graph storage or package archives. This local inventory is available for
-maintainer review; it does not authorize public export.
+node_modules, generated graph storage or package archives. The inventory was reviewed separately from publication authorization; the user subsequently
+authorized the GitHub export documented below.
 
 `scripts/cloud-install.sh` was executed successfully in the managed environment. The installed
-consumer is a fresh-install smoke test; restoration of local-only commits into a fresh cloud task
-is a separate unverified limitation. Live Codex extraction remains blocked as recorded above.
+consumer is a fresh-install smoke test; restoration into a fresh cloud task is a separate check. Live Codex extraction remains blocked as recorded above.
 Windows, macOS, hosted CI and optional formal compiler execution remain untested.
+
+## Secondary review fixes and authorized GitHub export
+
+On 2026-10-20, secondary review identified five issues. Regression coverage now verifies:
+
+- Architecture entry roots retain local transitive dependencies, and unmapped intermediate
+  modules produce extraction gaps instead of a false pass.
+- Nested repository roots use consistent committed reads, deltas, dirty paths and archives.
+  Actual nested hydration succeeds with real TypeScript indexing while prose remains dirty.
+- Consumer-relative, absolute, file-URL and import-only ESM package adapters resolve correctly;
+  the installed-consumer smoke also loads a relative adapter.
+- Draft queries compare captured content digests, distinguish included/excluded/subsequent changes,
+  detect reversion to committed bytes and new in-scope files, and mark legacy freshness unknown.
+- Module import and asynchronous factory initialization share extraction's timeout/cancellation;
+  cancelled initialization neither caches its late result nor starts extraction.
+
+Follow-up review found an additional equivalent-root normalization issue (`./src`, `./`). It was
+fixed and independently rechecked; no blocking findings remained. Scope tests include directory
+prefix boundaries, outside paths, Windows separators and contract globs. These separator tests
+are deterministic checks on Linux, not a Windows environment validation.
+
+The final `pnpm context-graph:publication-check` passed: builds, 114 deterministic tests
+(1 core + 113 toolkit/example), approved architecture rules (10 advisory findings), extraction
+inventory, licenses and a fresh tarball consumer exercising SCIP, RDF/SPARQL/SHACL, visualization
+and MCP. One opt-in Docker/OML integration test remains skipped. All 79 original file hashes were
+rechecked against the recorded source SHA, and the destination history scan found no private-key
+or common credential-token signatures. This bounded scan supplements the reviewed file inventory. The user authorized pushing the reviewed destination commits to
+`https://github.com/jchewitt/tently` for local testing. Package registry releases and visibility
+changes are excluded. Source remains read-only; no source history is included in this repository.

@@ -11,6 +11,8 @@ import { sha256, stableJson } from './util.js';
 import type { ContextGraphConfig } from './config.js';
 import type { GraphSnapshot } from './core.js';
 import { ScipSymbolExtractor, ScipTypeScriptIndexer } from './static.js';
+import { SnapshotImpactQueryService } from './query.js';
+import { SavedEvidenceQueryService } from './saved-evidence.js';
 
 it('replaces code relationships across edits, deletes and renames without advancing committed evidence', async () => {
   const root = await mkdtemp(join(tmpdir(), 'overlay-fixture-'));
@@ -55,6 +57,33 @@ it('replaces code relationships across edits, deletes and renames without advanc
   expect(first.facts.every((fact) => fact.authority === 'draft')).toBe(true);
   expect(first.facts.some((fact) => fact.provenance.path === 'src/input.ts')).toBe(false);
   expect(first.facts.some((fact) => fact.provenance.path === 'src/contract.ts')).toBe(true);
+  const queries = new SavedEvidenceQueryService(new SnapshotImpactQueryService(store, 'default'),
+    repository, sha256(stableJson(config)));
+  const scan = () => queries.scan({ snapshotId: first.manifest.snapshotId });
+  expect((await scan()).evidenceState).toMatchObject({
+    stale: false, overlayFreshness: 'current', excludedWorkingChanges: [],
+    capturedWorkingChanges: ['src/consumer.ts', 'src/contract.ts', 'src/input.ts'],
+  });
+  const capturedConsumer = await readFile(join(root, 'src/consumer.ts'), 'utf8');
+  await writeFile(join(root, 'src/consumer.ts'), capturedConsumer.replace('value: 2', 'value: 3'));
+  expect((await scan()).evidenceState).toMatchObject({
+    stale: true, overlayFreshness: 'stale', excludedWorkingChanges: ['src/consumer.ts'],
+    changedSinceCapture: ['src/consumer.ts'],
+  });
+  // A reversion to the committed bytes also invalidates captured evidence, even if Git reports no change.
+  await writeFile(join(root, 'src/consumer.ts'), await repository.readFileAt(sha, 'src/consumer.ts'));
+  expect((await scan()).evidenceState?.changedSinceCapture).toEqual(['src/consumer.ts']);
+  await writeFile(join(root, 'src/consumer.ts'), capturedConsumer);
+  await writeFile(join(root, 'src/new.ts'), 'export const added = true;\n');
+  expect((await scan()).evidenceState).toMatchObject({
+    stale: true, changedSinceCapture: ['src/new.ts'], excludedWorkingChanges: ['src/new.ts'],
+  });
+  await rm(join(root, 'src/new.ts'));
+  const legacy = { ...first, manifest: { ...first.manifest, snapshotId: 'legacy', overlayCapture: undefined } };
+  await store.write(legacy);
+  expect((await queries.scan({ snapshotId: 'legacy' })).evidenceState).toMatchObject({
+    stale: true, overlayFreshness: 'unknown',
+  });
   const repeated = await buildWorkingOverlay(repository, config, store, storage, sha, 'agent-b');
   expect(repeated.manifest.snapshotId).toBe(first.manifest.snapshotId);
   await rm(join(root, 'src/consumer.ts'));

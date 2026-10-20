@@ -157,8 +157,13 @@ export class MarkdownContextPackRenderer implements ContextPackRenderer {
         ...(pack.exploration.continuation ? [`Continuation: ${pack.exploration.continuation}`] : []),
       ] : []),
       ...(pack.evidenceState ? [
-        `Historical relative to HEAD: ${pack.evidenceState.stale}; configuration matches: ${pack.evidenceState.configurationMatches}`,
+        `Stale relative to checkout: ${pack.evidenceState.stale}; configuration matches: ${pack.evidenceState.configurationMatches}`,
         `Excluded working changes: ${pack.evidenceState.excludedWorkingChanges.join(', ') || '(none)'}`,
+        ...(pack.evidenceState.overlayFreshness ? [
+          `Overlay freshness: ${pack.evidenceState.overlayFreshness}`,
+          `Captured working changes: ${pack.evidenceState.capturedWorkingChanges?.join(', ') || '(none)'}`,
+          `Changed since capture: ${pack.evidenceState.changedSinceCapture?.join(', ') || '(none)'}`,
+        ] : []),
         'Saved evidence does not validate the current working diff.',
       ] : []),
       '',
@@ -378,6 +383,7 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
         scope: snapshot.manifest.scope,
         baseSha: snapshot.manifest.baseSha,
         overlayDigest: snapshot.manifest.overlayDigest,
+        overlayCapture: snapshot.manifest.overlayCapture,
       },
       capabilities,
       facts,

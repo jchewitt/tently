@@ -30,8 +30,8 @@ The source was inspected read-only at the recorded SHA in temporary storage. It 
 environment project checkout or an application dependency. No source installation, build, service
 restart, branch change or remote write occurred.
 
-All destination commits are local and unpushed. Fresh-task restoration of local-only commits is
-not independently verified and is not reliably supported by the environment configuration
-service. Retain this workspace; do not reset or push merely to make restoration appear verified.
+The user authorized pushing reviewed destination commits to `jchewitt/tently` on 2026-10-20.
+A fresh Git clone is the portable route for local testing. Cloud environment publication alone
+does not publish repository commits or prove fresh-task restoration; those are separate checks.
 Saving an environment draft does not apply/publish it. Review and activate it through environment
 settings separately from any repository/package publication decision.

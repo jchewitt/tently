@@ -1,4 +1,5 @@
-import { mkdtemp, writeFile } from 'node:fs/promises';
+// Modified for standalone extraction; see docs/extraction-manifest.json.
+import { mkdir, mkdtemp, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -37,6 +38,19 @@ describe('configured adapter loading', () => {
     await expect(
       loadContextGraphAdapterModule(pathToFileURL(modulePath).href, repository),
     ).resolves.toEqual({ factExtractors: [], invariantEvaluators: [] });
+    for (const specifier of ['./adapter.mjs', modulePath]) {
+      await expect(loadContextGraphAdapterModule(specifier, repository, root))
+        .resolves.toEqual({ factExtractors: [], invariantEvaluators: [] });
+    }
+    const packageRoot = join(root, 'node_modules', '@fixture', 'adapter');
+    await mkdir(packageRoot, { recursive: true });
+    await writeFile(join(packageRoot, 'package.json'), JSON.stringify({
+      name: '@fixture/adapter', type: 'module', exports: { import: './adapter.mjs' },
+    }));
+    await writeFile(join(packageRoot, 'adapter.mjs'),
+      'export function createContextGraphAdapter() { return { factExtractors: [], invariantEvaluators: [] }; }');
+    await expect(loadContextGraphAdapterModule('@fixture/adapter', repository, root))
+      .resolves.toEqual({ factExtractors: [], invariantEvaluators: [] });
   });
 
   it('fails clearly when a configured module does not implement the adapter contract', async () => {

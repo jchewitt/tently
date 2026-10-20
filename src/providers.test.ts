@@ -1,6 +1,7 @@
 import { mkdtemp, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { expect, it } from 'vitest';
 import { assertSemanticOutput, CodexCliSemanticExtractor, SemanticProviderError } from './semantic.js';
 import { runSemanticProcess } from './semantic-process.js';
@@ -24,6 +25,48 @@ it('bounds actual processes, cancels them, and never exposes provider stderr', a
   await expect(pending).rejects.toMatchObject({ code: 'cancelled' });
   await expect(run('process.stderr.write("PRIVATE SECRET"); process.exit(1)')).rejects.toThrow('status 1');
   await expect(run('process.stderr.write("PRIVATE SECRET"); process.exit(1)')).rejects.not.toThrow('PRIVATE');
+});
+
+it('bounds module initialization and async factories without caching a cancelled factory result', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'provider-lifecycle-'));
+  const moduleConfig = { ...config, provider: 'module' as const, providerIdentity: 'fixture:1', timeoutMs: 30 };
+  await writeFile(join(root, 'initializing.mjs'), `
+    await new Promise(resolve => setTimeout(resolve, 120));
+    export const createSemanticExtractor = () => { throw Error('Factory must not run after timeout'); };
+  `);
+  await expect(createSemanticExtractor({ ...moduleConfig, providerModule: './initializing.mjs' }, root)
+    .extract(source, context)).rejects.toMatchObject({ code: 'timeout' });
+  await writeFile(join(root, 'factory.mjs'), `
+    export let factories = 0, extracts = 0;
+    let release, notify;
+    export const nextStart = () => new Promise(resolve => { notify = resolve; });
+    export const finish = () => release();
+    export const createSemanticExtractor = async (_config, options) => {
+      factories++;
+      notify?.();
+      if (!options.signal) throw Error('Factory needs cancellation signal');
+      await new Promise(resolve => { release = resolve; });
+      return { identity:'fixture:1', extract:async()=>{ extracts++; return {parsed:{assertions:[],oml:''},rawModelOutput:'{}'}; } };
+    };
+  `);
+  const fixture = await import(pathToFileURL(join(root, 'factory.mjs')).href);
+  const provider = createSemanticExtractor({ ...moduleConfig, providerModule: './factory.mjs' }, root);
+  await expect(provider.extract(source, context)).rejects.toMatchObject({ code: 'timeout' });
+  fixture.finish();
+  await new Promise(resolve => setImmediate(resolve));
+  expect(fixture.extracts).toBe(0);
+  const controller = new AbortController();
+  const started = fixture.nextStart();
+  const pending = provider.extract(source, context, { signal: controller.signal, timeoutMs: 1000 });
+  await started;
+  controller.abort();
+  await expect(pending).rejects.toMatchObject({ code: 'cancelled' });
+  expect(fixture.factories).toBe(2);
+  fixture.finish();
+  await new Promise(resolve => setImmediate(resolve));
+  expect(fixture.extracts).toBe(0);
+  await expect(provider.extract(source, context, { signal: controller.signal })).rejects.toMatchObject({ code: 'cancelled' });
+  expect(fixture.factories).toBe(2);
 });
 
 it('retries only explicit transient failures and includes reasoning settings in cache identity', async () => {

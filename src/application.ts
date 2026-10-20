@@ -25,6 +25,7 @@ import {
 } from './static.js';
 import { OtlpJsonRuntimeEvidenceProvider } from './telemetry.js';
 import { SnapshotChecks } from './snapshot-checks.js';
+import { resolveConsumerModule } from './module-resolution.js';
 
 const emptyAdapter: ContextGraphAdapter = {
   factExtractors: [],
@@ -34,11 +35,12 @@ const emptyAdapter: ContextGraphAdapter = {
 export async function loadContextGraphAdapterModule(
   moduleSpecifier: string | undefined,
   repository: ContextGraphRepository,
+  repositoryRoot = process.cwd(),
 ): Promise<ContextGraphAdapter> {
   if (!moduleSpecifier) return emptyAdapter;
   let candidate: Partial<ContextGraphAdapterModule>;
   try {
-    candidate = (await import(moduleSpecifier)) as Partial<ContextGraphAdapterModule>;
+    candidate = (await import(resolveConsumerModule(moduleSpecifier, repositoryRoot))) as Partial<ContextGraphAdapterModule>;
   } catch (error) {
     throw new Error(`Unable to load context graph adapter ${moduleSpecifier}`, { cause: error });
   }
@@ -59,7 +61,7 @@ export async function createContextGraphApplication(configPath: string) {
   const { config, repositoryRoot } = loaded;
   const storageRoot = resolveStorageRoot(repositoryRoot, config);
   const repository = new GitRepository(repositoryRoot);
-  const adapter = await loadContextGraphAdapterModule(config.adapter, repository);
+  const adapter = await loadContextGraphAdapterModule(config.adapter, repository, repositoryRoot);
   const snapshotStore = new FileSnapshotStore(storageRoot);
   const artifactStore = new SemanticArtifactStore(storageRoot);
   const semanticExtractor = createSemanticExtractor(config.semantic, repositoryRoot);

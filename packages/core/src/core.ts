@@ -113,6 +113,11 @@ export interface SnapshotManifest {
   readonly commitSha: string;
   readonly baseSha?: string;
   readonly overlayDigest?: string;
+  readonly overlayCapture?: {
+    readonly files: readonly { readonly path: string; readonly digest: string | null }[];
+    readonly sourcePatterns: readonly string[];
+    readonly excludedPaths: readonly string[];
+  };
   readonly snapshotId: string;
   readonly configurationDigest?: string;
   readonly scope?: readonly string[];
@@ -218,10 +223,13 @@ export interface ImpactScanRequest {
 }
 
 export interface ContextPack {
-  readonly snapshot: Pick<SnapshotManifest, 'snapshotId' | 'commitSha' | 'contentDigest' | 'configurationDigest' | 'scope' | 'baseSha' | 'overlayDigest'>;
+  readonly snapshot: Pick<SnapshotManifest, 'snapshotId' | 'commitSha' | 'contentDigest' | 'configurationDigest' | 'scope' | 'baseSha' | 'overlayDigest' | 'overlayCapture'>;
   readonly evidenceState?: {
     readonly currentCommit?: string;
     readonly excludedWorkingChanges: readonly string[];
+    readonly capturedWorkingChanges?: readonly string[];
+    readonly changedSinceCapture?: readonly string[];
+    readonly overlayFreshness?: 'current' | 'stale' | 'unknown';
     readonly stale: boolean;
     readonly configurationMatches: boolean;
     readonly eligibleForCurrentDiffValidation: false;

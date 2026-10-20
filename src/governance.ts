@@ -1,6 +1,6 @@
-import { readFile, mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { readFile, mkdtemp, realpath, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { isAbsolute, join, relative, resolve } from 'node:path';
 import { createRequire } from 'node:module';
 import type { GraphFact, GraphSnapshot } from './core.js';
 import { GitRepository } from './git.js';
@@ -69,15 +69,27 @@ export async function analyzeArchitecture(root: string, policy: ArchitecturePoli
     }, { conditionNames: ['import', 'node', 'types', 'default'], exportsFields: ['exports'] });
     const parsed = JSON.parse(String(result.output));
     modules = parsed.modules;
+    const external = new Set(modules.flatMap((module) => module.dependencies
+      .filter((dependency) => dependency.coreModule || dependency.matchesDoNotFollow)
+      .map((dependency) => dependency.resolved)));
     for (const violation of parsed.summary.violations) {
       const rule = ruleFor(violation.rule.name);
       add(rule?.approved ? 'rule-violation' : 'advisory', violation.rule.name,
         violation.from, violation.to, `Dependency rule violated${violation.cycle ? ': cycle detected' : ''}`);
     }
     for (const module of modules) {
-      if (!policy.roots.some((path) => module.source === path || module.source.startsWith(`${path}/`))) continue;
+      // Roots are entry points, not a filter on the transitive dependency closure.
+      if (external.has(module.source) || /(?:^|\/)node_modules(?:\/|$)/.test(module.source)) continue;
       let content: string;
-      try { content = await readFile(resolve(root, module.source), 'utf8'); }
+      try {
+        const path = await realpath(resolve(root, module.source));
+        const within = relative(await realpath(root), path);
+        if (within === '..' || /^\.\.[\\/]/.test(within) || isAbsolute(within)) {
+          add('extraction-gap', 'external-source', module.source, '', 'Required dependency is outside the repository boundary');
+          continue;
+        }
+        content = await readFile(path, 'utf8');
+      }
       catch { add('extraction-gap', 'unreadable-source', module.source, '', 'Required source could not be read'); continue; }
       inputs[module.source] = sha256(content);
       const membership = policy.modules.filter((m) => new RegExp(m.path).test(module.source));
@@ -142,7 +154,7 @@ export async function analyzeArchitecture(root: string, policy: ArchitecturePoli
   }
   if (!Object.keys(inputs).length) add('extraction-gap', 'source-coverage', '', '', 'No source files were analyzed');
   const contentDigest = sha256(stableJson({ inputs, policyDigest, commitSha, dirtyPaths: [...dirtyPaths].sort(),
-    tools: { dependencyCruiser: '18.7.0', eslint: '10.13.0', jscpd: '5.4.1', analyzer: '1' } }));
+    tools: { dependencyCruiser: '18.7.0', eslint: '10.13.0', jscpd: '5.4.1', analyzer: '2' } }));
   const snapshotId = `architecture-${contentDigest}`;
   const snapshot: GraphSnapshot = {
     manifest: {

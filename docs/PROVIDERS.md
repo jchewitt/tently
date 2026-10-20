@@ -34,7 +34,11 @@ snapshot. Progress shows phase and counts on stderr, with no document text or pa
 
 For a trusted local provider module, set `provider: "module"`, `providerModule` to a local path
 (relative to the repository root) or installed package, and `providerIdentity` to its exact
-declared version. Export `createSemanticExtractor(config)`. All semantic configuration contributes
+declared version. Packages resolve from the consumer repository using ESM import conditions.
+Export `createSemanticExtractor(config, {signal, timeoutMs})`; the optional second argument passes
+cancellation through asynchronous initialization. One deadline covers module import, factory
+initialization and extraction. Cancelled initialization cannot populate the extractor cache or
+start extraction later. All semantic configuration contributes
 to this adapter's cache identity. Loading happens only during extraction, so a missing module does
 not disable queries. Implement cancellation and cleanup when the supplied signal aborts; the
 wrapper limits waiting but cannot forcibly terminate arbitrary in-process code. Use subprocesses

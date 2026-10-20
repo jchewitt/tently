@@ -518,10 +518,13 @@ export function renderContextPackHtml(pack: ContextPack, sourceUrlTemplate?: str
     <strong>${pack.snapshot.overlayDigest ? 'DRAFT overlay' : pack.evidenceState?.stale ? 'HISTORICAL evidence' : pack.evidenceState ? 'Saved evidence at current commit' : 'Saved evidence — current checkout not assessed'}</strong>
     <p>Configuration: ${escapeXml(pack.snapshot.configurationDigest ?? 'unknown')}; ${pack.evidenceState ? (pack.evidenceState.configurationMatches ? 'matches current configuration' : 'configuration mismatch') : 'configuration match unknown'}.
     Scope: ${escapeXml(pack.snapshot.scope?.join(', ') ?? 'unknown')}.
-    Excluded working paths: ${pack.evidenceState?.excludedWorkingChanges.length ?? 'unknown'}. This view does not validate the current diff.</p>
+    Excluded working paths: ${pack.evidenceState?.excludedWorkingChanges.length ?? 'unknown'}.
+    ${pack.snapshot.overlayDigest ? `Overlay freshness: ${escapeXml(pack.evidenceState?.overlayFreshness ?? 'unknown')}.` : ''}
+    This view does not validate the current diff.</p>
     <p>${pack.exploration ? `${pack.exploration.returned}/${pack.exploration.reachableFacts} reachable facts on this page; max depth ${pack.exploration.maxDepth}; ${pack.exploration.truncated ? 'TRUNCATED' : 'not truncated within this scope'}${pack.exploration.depthLimitReached ? '; depth limit reached — rerun with greater --max-depth' : ''}` : 'Query completeness metadata unavailable.'}</p>
     ${pack.exploration?.continuation ? `<details><summary>Continue agent/CLI query with this token</summary><code>${escapeXml(pack.exploration.continuation)}</code></details>` : ''}
     ${pack.evidenceState?.excludedWorkingChanges.length ? `<details><summary>Excluded working changes</summary>${detailList(pack.evidenceState.excludedWorkingChanges, '')}</details>` : ''}
+    ${pack.evidenceState?.changedSinceCapture?.length ? `<details><summary>Changed since capture</summary>${detailList(pack.evidenceState.changedSinceCapture, '')}</details>` : ''}
   </section>
   <main>
     <section class="panel canvas" aria-label="Context graph">${svg}</section>

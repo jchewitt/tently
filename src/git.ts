@@ -1,6 +1,7 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import { posix } from 'node:path';
 
 import type { ExtractionContext, SemanticSource } from './core.js';
 import { sha256, slug } from './util.js';
@@ -40,17 +41,18 @@ export class GitRepository {
   }
 
   async workingChanges(): Promise<readonly string[]> {
+    const prefix = await this.run(['rev-parse', '--show-prefix']);
     const output = await this.execute(['status', '--porcelain=v1', '-z', '--untracked-files=all'], false);
     const records = output.split('\0');
     const paths = new Set<string>();
     for (let index = 0; index < records.length; index++) {
       const record = records[index];
       if (!record) continue;
-      const path = record.slice(3);
+      const path = posix.relative(prefix || '.', record.slice(3));
       if (!path.startsWith('.context-graph/')) paths.add(path);
       if (/[RC]/.test(record.slice(0, 2))) {
         const prior = records[++index];
-        if (prior) paths.add(prior);
+        if (prior) paths.add(posix.relative(prefix || '.', prior));
       }
     }
     return [...paths].sort();
@@ -90,7 +92,8 @@ export class GitRepository {
   }
 
   readFileAt(commitSha: string, path: string): Promise<string> {
-    return this.execute(['show', `${commitSha}:${path}`], false);
+    // Git object paths are top-level-relative unless explicitly prefixed with ./.
+    return this.execute(['show', `${commitSha}:./${path}`], false);
   }
 
   async findTextAt(
@@ -138,6 +141,7 @@ export class GitRepository {
     }
     const output = await this.run([
       'diff',
+      '--relative',
       '--name-status',
       '--find-renames=50%',
       baseSha,

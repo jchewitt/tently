@@ -45,6 +45,27 @@ it('checks positive/negative architecture, transitive inference and scoped debt 
   expect(violation).toMatchObject({category:'rule-violation',disposition:'new',
     from:'src/domain/service.ts',to:'src/ui/view.ts'});
   expect(bad.passed).toBe(false);
+  policy.roots = ['src/domain', 'src/ui'];
+  await savePolicy();
+  const throughExcludedEntryPoint = await analyzeArchitecture(root, policy);
+  expect(throughExcludedEntryPoint.passed).toBe(false);
+  expect(throughExcludedEntryPoint.findings).toContainEqual(expect.objectContaining({
+    ruleId: 'domain-no-ui', category: 'rule-violation',
+    from: 'src/domain/service.ts', to: 'src/ui/view.ts',
+  }));
+  expect(throughExcludedEntryPoint.snapshot.facts).toContainEqual(expect.objectContaining({
+    subject: expect.objectContaining({ id: 'component:file:src/adapters/queue.ts' }),
+    object: expect.objectContaining({ id: 'component:file:src/ui/view.ts' }),
+    predicate: 'consumes',
+  }));
+  policy.modules = policy.modules.filter((module) => module.id !== 'adapters');
+  await savePolicy();
+  expect((await analyzeArchitecture(root, policy)).findings).toContainEqual(expect.objectContaining({
+    category: 'extraction-gap', ruleId: 'module-mapping', from: 'src/adapters/queue.ts',
+  }));
+  policy.modules.push({id:'adapters',path:'^src/adapters/',domain:'orders',layer:'adapters',adapter:true});
+  policy.roots = ['src'];
+  await savePolicy();
   const graph = new RdfEvidenceGraph(bad.snapshot);
   const closure = await graph.select(`SELECT ?target WHERE {
     <${nodeIri('component:file:src/domain/service.ts')}> <${CG}consumes>+ ?target

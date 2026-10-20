@@ -5,7 +5,7 @@ Destination: `jchewitt/tently`. Read-only source:
 
 | Milestone | Delivered and checked | Remaining limits |
 | --- | --- | --- |
-| 1. Standalone | Explicit committed inventory, core/toolkit boundary, public examples, build/tests, packed independent consumer and real TypeScript indexing | No public publication or registry-name approval |
+| 1. Standalone | Explicit committed inventory, core/toolkit boundary, public examples, build/tests, packed independent consumer and real TypeScript indexing | GitHub push authorized; registry ownership/release remains unapproved |
 | 2a. Saved evidence | Read/refresh separation, commit/config/scope metadata, dirty querying, isolated archives, atomic snapshots, failed-refresh preservation | Archives reject symlinks/submodules and sizes above 128 MiB |
 | 2b. Draft overlays | Base/content identity, reindexed replacement, delete/rename handling, separate checkout/agent heads | Full implementation reindex; changed prose invalidated pending re-extraction |
 | 3. Unified graph | RDF/SPARQL, SHACL, lossless projection, bounded continuation, six-stage async cross-source fixture, negative extraction/linkage cases | Local SELECT only; 100,000-fact projection bound; no universal language support |
@@ -19,5 +19,6 @@ interaction/accessibility tests; benchmark larger RDF graphs; evaluate a second 
 Figma and source-application reintegration are future adapter work.
 
 Validation evidence and decisions are in `VALIDATION.md` and the ADR files. Source approval and
-model assertion review are distinct. No package publication, public push, visibility change or
-TradePilot reintegration is authorized.
+model assertion review are distinct. On 2026-10-20 the user authorized pushing the reviewed
+destination to `jchewitt/tently` for local testing. Package registry publication, visibility changes
+and TradePilot reintegration remain outside that authorization.

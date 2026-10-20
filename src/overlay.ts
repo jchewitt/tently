@@ -1,6 +1,6 @@
 import { execFile } from 'node:child_process';
-import { lstat, mkdir, readFile, realpath, rm, writeFile } from 'node:fs/promises';
-import { dirname, join, resolve, relative, isAbsolute } from 'node:path';
+import { mkdir, rm, writeFile } from 'node:fs/promises';
+import { dirname, join, resolve } from 'node:path';
 import { promisify } from 'node:util';
 import type { ContextGraphConfig } from './config.js';
 import type { ExtractionContext, GraphSnapshot } from './core.js';
@@ -10,6 +10,7 @@ import { FileSnapshotStore } from './storage.js';
 import { RepositoryContractExtractor, RepositoryFileExtractor, ScipSymbolExtractor, ScipTypeScriptIndexer } from './static.js';
 import { sha256, stableJson } from './util.js';
 import { contextPackEvidenceAuthority } from './query.js';
+import { inWorkingScope, readWorkingContent } from './working-content.js';
 
 const execute = promisify(execFile);
 const implementationExtractors = new Set([
@@ -36,35 +37,21 @@ export async function buildWorkingOverlay(
   if (changed.length > 500) throw new Error('Overlay exceeds the 500 changed-path bound');
   const captured: { path: string; content: Buffer | null }[] = [];
   const roots = [...config.codeRoots, ...config.semanticSources, ...config.evidenceRoots,
-    ...config.contractPatterns.filter((path) => !/[*?]/.test(path))];
+    ...config.contractPatterns];
   const excluded: string[] = [];
   for (const path of changed) {
-    if (!roots.some((root) => path === root || path.startsWith(`${root.replace(/\/$/, '')}/`))) {
+    if (!inWorkingScope(path, roots)) {
       excluded.push(path);
       continue;
     }
-    const absolute = resolve(repository.root, path);
-    const fromRoot = relative(repository.root, absolute);
-    if (fromRoot.startsWith('..') || isAbsolute(fromRoot) || /(?:^|\/)\.env(?:\.|$)/.test(path)) {
-      throw new Error(`Unsafe overlay path: ${path}`);
-    }
-    let content: Buffer | null;
-    try {
-      const info = await lstat(absolute);
-      const realRelative = relative(await realpath(repository.root), await realpath(absolute));
-      if (realRelative.startsWith('..') || isAbsolute(realRelative)) throw new Error('Overlay path escapes checkout');
-      if (!info.isFile() || info.isSymbolicLink()) throw new Error(`Overlay requires a regular file: ${path}`);
-      if (info.size > 1024 * 1024) throw new Error(`Overlay source exceeds 1 MiB: ${path}`);
-      content = await readFile(absolute);
-    } catch (error) {
-      if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
-      content = null;
-    }
+    const content = await readWorkingContent(repository.root, path);
     captured.push({ path, content });
   }
-  const overlayDigest = sha256(stableJson({ excluded, captured: captured.map(({ path, content }) => ({
-    path, digest: content === null ? null : sha256(content),
-  })) }));
+  const overlayCapture = {
+    files: captured.map(({ path, content }) => ({ path, digest: content === null ? null : sha256(content) })),
+    sourcePatterns: roots, excludedPaths: excluded,
+  };
+  const overlayDigest = sha256(stableJson({ version: 2, ...overlayCapture }));
   const snapshotId = `${head}-overlay-${sha256(base.manifest.contentDigest + overlayDigest).slice(0, 32)}`;
   const affected = new Set(captured.map((file) => file.path));
   const facts = await withCommittedTree(repository.root, head, async (root) => {
@@ -115,7 +102,7 @@ export async function buildWorkingOverlay(
   const overlay: GraphSnapshot = {
     ...base,
     manifest: {
-      ...base.manifest, snapshotId, baseSha: head, overlayDigest,
+      ...base.manifest, snapshotId, baseSha: head, overlayDigest, overlayCapture,
       generatedAt: new Date().toISOString(), contentDigest: sha256(stableJson(allFacts)),
     },
     facts: allFacts,

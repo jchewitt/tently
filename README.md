@@ -13,6 +13,8 @@ Development is tested on Node.js 24 and pnpm 10.18.2. The runtime declares Node.
 other supported runtime versions have not been exercised here.
 
 ```sh
+git clone https://github.com/jchewitt/tently.git
+cd tently
 pnpm install --frozen-lockfile
 pnpm build
 pnpm test
@@ -49,7 +51,9 @@ commit, configuration, source scope and excluded working changes. Use `hydrate` 
 refresh evidence; `--snapshot` selects historical evidence. Working-change overlays are a separate
 operation. `context-graph overlay --base-snapshot <id> --agent <name>` captures a bounded draft
 implementation overlay; query its returned ID with `--snapshot`. Changed prose is invalidated
-pending re-extraction. Historical or draft evidence cannot validate a current diff.
+pending re-extraction. Queries compare captured file digests with current working bytes and
+report subsequent edits separately from captured and excluded changes. Older overlays without
+capture metadata have unknown freshness. Historical or draft evidence cannot validate a current diff.
 
 ## Evidence limits
 
@@ -65,8 +69,9 @@ See `examples/pipeline` for a six-stage asynchronous flow and `docs/ADR-004-rdf-
 for query bounds and authority configuration.
 
 Never submit credentials, account data or private runtime payloads as semantic sources.
-Live provider tests are separate from deterministic CI. Public publication, registry naming
-and the final export inventory require explicit maintainer authorization.
+Live provider tests are separate from deterministic CI. The reviewed GitHub export is authorized
+for local testing; package registry publication and repository visibility changes require
+separate maintainer authorization.
 
 See [provider contract](docs/PROVIDERS.md) for bounded extraction and adapters, and
 [architecture policy](docs/architecture-policy.md) for deterministic governance.

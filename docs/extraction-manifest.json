@@ -3,7 +3,7 @@
   "sourceRepository": "https://github.com/launchecho/tradepilot",
   "sourceCommit": "fda97e0146099543aeaa6b338ef2b0e9fab0d1d6",
   "destinationRepository": "https://github.com/jchewitt/tently",
-  "publicationAuthorized": false,
+  "publicationAuthorized": true,
   "imports": [
     {
       "sourcePath": "tools/context-graph/LICENSE",
@@ -24,7 +24,7 @@
       "destinationPath": "THIRD_PARTY_NOTICES.md",
       "sourceSha256": "c98c42f3c3c74f4c4f38f45b785ea15de439ad6471d82040d13100b36616b01e",
       "modified": true,
-      "destinationSha256": "2ed413ba5e906080df96c93cd726059837721ac196d158bd3527292f868759b1"
+      "destinationSha256": "0bf2953f64c14daae2dfc06a795141fd154cf081da69e09e76d0efe48db25d88"
     },
     {
       "sourcePath": "tools/context-graph/action/action.yml",
@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "12d13eaa7073af933c9f6fff361f1cfbeac8b82ef6ff60e65ffdb28c0eb5ee29"
+      "destinationSha256": "c791e23cb73c8787d55d17519b18e8516ff5e7b9cbff2aed86cd93e2a3472edc"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -150,7 +150,7 @@
       "destinationPath": "packages/core/src/core.ts",
       "sourceSha256": "cb3f4eb7bfe9f458494607406664445a276aad37235930a043d400ea9211ed16",
       "modified": true,
-      "destinationSha256": "c9b98c0ba6a2a2927bc7afc675c9fee9a5c01d58e3736c90deb518ff7f215664"
+      "destinationSha256": "64a30913c01ff2f3e112a6bcafbc142cb91fc5482f01b2aa90fae9382252dbfa"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/index.ts",
@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "676497cab2c30c1b96143800f4b38b2fee864a25ce3bd2af7da7525b22405a83"
+      "destinationSha256": "57e1838ab7a133090ddecc9d88f9ccdaafe3c49a54ee95ddef6f4709e949dc93"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -219,15 +219,15 @@
       "sourcePath": "tools/context-graph/src/application.test.ts",
       "destinationPath": "src/application.test.ts",
       "sourceSha256": "bd4dd2f797a38ed1e5e6d0f820494ea51aa8a7193c3446fbf645c66d063a613b",
-      "modified": false,
-      "destinationSha256": "bd4dd2f797a38ed1e5e6d0f820494ea51aa8a7193c3446fbf645c66d063a613b"
+      "modified": true,
+      "destinationSha256": "72820fc67f392dada78336bac2a957c8ec36f915470b8e78085573129bd942a0"
     },
     {
       "sourcePath": "tools/context-graph/src/application.ts",
       "destinationPath": "src/application.ts",
       "sourceSha256": "22e0fa1312c652f3e5ab2078d8c7e03d3b0235231e220df3349eb60622f78469",
       "modified": true,
-      "destinationSha256": "c5b06b17b3589a4fa28eb23cc3a4b5bd38d21732c4812b457a6d42d2bb67c5b2"
+      "destinationSha256": "d8414905bf1803d014af3e0653391c61d523c6a21b9796784abb21f832c08855"
     },
     {
       "sourcePath": "tools/context-graph/src/cache.ts",
@@ -289,15 +289,15 @@
       "sourcePath": "tools/context-graph/src/git.test.ts",
       "destinationPath": "src/git.test.ts",
       "sourceSha256": "ab00e7a88a68a503a4a0ab580fbaf5aa631a8fd0268adc137606a9cefe36196a",
-      "modified": false,
-      "destinationSha256": "ab00e7a88a68a503a4a0ab580fbaf5aa631a8fd0268adc137606a9cefe36196a"
+      "modified": true,
+      "destinationSha256": "34d00d659e18f40608ebce80c2bf96937e2490cb9ce5b3e21c1294ce50f32196"
     },
     {
       "sourcePath": "tools/context-graph/src/git.ts",
       "destinationPath": "src/git.ts",
       "sourceSha256": "484d3986633bb32ccc3b665f2144007a213c303df51b375c1d653729921d6d2c",
       "modified": true,
-      "destinationSha256": "86ee18b144d8fd4513fb89e3a7ab1ce157abf5e3f0f7452e58cf3891bfed4973"
+      "destinationSha256": "11254d4200ca443ce73aa5e771b01ba67920425ffe85337a7ea6a8767809aa0c"
     },
     {
       "sourcePath": "tools/context-graph/src/glob.ts",
@@ -374,7 +374,7 @@
       "destinationPath": "src/portable-fixture.test.ts",
       "sourceSha256": "82de68e48008136238f09666e7b33213a7e46817cd4f11ed753420e11faf9558",
       "modified": true,
-      "destinationSha256": "6672fcfe02799aae2e63be90c181f08acd10979aeeb9c6fccea0734b660e4a7e"
+      "destinationSha256": "27c57669f3e0b4677ee22df4c5563ed2501df5497fda3c880c2777693be892ec"
     },
     {
       "sourcePath": "tools/context-graph/src/process.ts",
@@ -395,7 +395,7 @@
       "destinationPath": "src/query.ts",
       "sourceSha256": "4d67f87ca660cefe9686fb5b775f86a997a25d539819ea81d321c8bd1e0aaa39",
       "modified": true,
-      "destinationSha256": "8d0ad86c3c384842ceadc928aa11efb8103fa9f98df9798a257258ac332adc16"
+      "destinationSha256": "339b3c9909ef7156ba2bc36eb87588f8d93c5410cabb04871ac15d48ea2563ab"
     },
     {
       "sourcePath": "tools/context-graph/src/request.test.ts",
@@ -521,7 +521,7 @@
       "destinationPath": "src/visualization.ts",
       "sourceSha256": "4839a5cfbd0a97bf3d338e59eca752a9b96812b464c0369da93a55d209120ab7",
       "modified": true,
-      "destinationSha256": "039eb7edaa9c55bb9a566b3ac33d1006d8edd48e178cbbade51422764f1ff1ae"
+      "destinationSha256": "746264b0e12950e5a62b939a28bab43043d66831de2e9aea615a358b971cc8f5"
     },
     {
       "sourcePath": "tools/context-graph/templates/context-graph-development/SKILL.md",
@@ -640,6 +640,7 @@
     "src/doctor.ts",
     "src/governance.test.ts",
     "src/governance.ts",
+    "src/module-resolution.ts",
     "src/overlay.test.ts",
     "src/overlay.ts",
     "src/providers.test.ts",
@@ -650,6 +651,14 @@
     "src/saved-evidence.ts",
     "src/semantic-process.ts",
     "src/snapshot-lifecycle.test.ts",
-    "src/viewer-interaction.ts"
-  ]
+    "src/viewer-interaction.ts",
+    "src/working-content.test.ts",
+    "src/working-content.ts"
+  ],
+  "publicationAuthorization": {
+    "date": "2026-10-20",
+    "scope": "Push reviewed destination commits to https://github.com/jchewitt/tently for local checkout and testing",
+    "packageRegistryRelease": false,
+    "repositoryVisibilityChange": false
+  }
 }

@@ -34,6 +34,8 @@ Minimal destination equivalents replace root automation; no monorepo lockfile is
 
 ## Export status
 
-This is a local export inventory for review. No external release has occurred or been authorized.
-Package names are retained for compatibility and attribution; registry ownership has not been
-verified. Release naming and the final export inventory require review before publication.
+On 2026-10-20 the user authorized pushing the reviewed destination to `jchewitt/tently` after
+fixing the secondary review findings, so it can be cloned and tested locally. This authorization
+covers the destination Git repository only. Package names retain compatibility and attribution;
+registry ownership and release naming remain unverified. No package registry release or repository
+visibility change is authorized. `extraction-manifest.json` records the scoped authorization.

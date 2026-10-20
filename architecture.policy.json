@@ -3,7 +3,8 @@
   "roots": ["src", "packages/core/src"],
   "modules": [
     {"id":"core","path":"^packages/core/","domain":"graph","layer":"contracts"},
-    {"id":"toolkit","path":"^src/","domain":"graph","layer":"application"}
+    {"id":"toolkit","path":"^src/","domain":"graph","layer":"application"},
+    {"id":"examples","path":"^examples/","domain":"examples","layer":"validation"}
   ],
   "contracts": [{"path":"packages/core/src/core.ts","owner":"core"}],
   "rules": [

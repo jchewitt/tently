@@ -240,6 +240,9 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
   const config = JSON.parse(await readFile(
     join(installedRoot, 'examples/generic-typescript/context-graph.config.json'), 'utf8',
   ));
+  config.adapter = './adapter.mjs';
+  await writeFile(join(consumer, 'adapter.mjs'),
+    'export function createContextGraphAdapter() { return { factExtractors: [], invariantEvaluators: [] }; }\n');
   await writeFile(join(consumer, 'context-graph.config.json'), JSON.stringify(config));
   const transport = new StdioClientTransport({
     command: process.execPath,
