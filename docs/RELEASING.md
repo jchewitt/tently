@@ -11,15 +11,16 @@ published by this extraction. Licenses and LaunchEcho attribution are preserved.
 
 ## Current status
 
-The maintainer published `@launch-echo/tently-core@0.1.0` from WSL. npm first accepted it while
-public registry reads still returned 404; a later read confirmed its integrity matches the
-prepared core archive. `@launch-echo/tently@0.1.0` remains unpublished at this validation point.
-Core's public `latest` tag is now `0.1.0`, its license is Apache-2.0, and public installation
-and ESM import passed. An earlier npm page showed a temporary `0.0.0-stage` holding version
-while review was pending; this was not our operational release.
-This cloud session has no configured npm identity. Authentication must be configured through
-a trusted npm login or secure CI settings, never by putting credentials in repository files
-or chat.
+Both `@launch-echo/tently-core@0.1.0` and `@launch-echo/tently@0.1.0` were published by the
+maintainer from WSL. Public `latest` tags resolve to `0.1.0`; downloaded archives match the
+prepared hashes recorded at commit `02fb65c987154d925fc523c91ccedbdca96fff9d`. Fresh public
+npm exec runs passed `init --yes`, `config validate` and `config show` in an independent
+project, resolving core transitively. Both licenses are Apache-2.0.
+
+npm temporarily displayed `0.0.0-stage` holding versions while reviewing the uploads. Those
+placeholders were not operational releases. This cloud has no publishing identity; verification
+used public reads and installation only. Subsequent source changes require a new version before
+another npm release; published `0.1.0` archives are immutable.
 
 ## Prepare and review
 

@@ -687,14 +687,20 @@
       "@launch-echo/tently-core"
     ],
     "authenticationVerified": false,
-    "published": false,
+    "published": true,
     "publishedPackages": [
       {
         "name": "@launch-echo/tently-core",
         "version": "0.1.0",
-        "integrity": "sha512-OXMxUWVKxchUTvEex0f1ZhFKWejWSS36FN74QDCLQ4H4Uf0QIH6abM4xPqXXS6pZlhofEzbDorXUspwd4xQdOg==",
-        "verification": "Public registry metadata, downloaded bytes and fresh consumer installation verified; maintainer published from WSL."
+        "integrity": "sha512-OXMxUWVKxchUTvEex0f1ZhFKWejWSS36FN74QDCLQ4H4Uf0QIH6abM4xPqXXS6pZlhofEzbDorXUspwd4xQdOg=="
+      },
+      {
+        "name": "@launch-echo/tently",
+        "version": "0.1.0",
+        "integrity": "sha512-y52owf64mxRhdSOT6gDI1J9Jmb57l8xLmBhKpjk7rC+zPCmn0lE49Ux82KqxmST602rt6EoNraRrWjCJtrFSkA=="
       }
-    ]
+    ],
+    "verification": "Public registry tags, downloaded bytes and fresh npm exec setup/config verified; maintainer published from WSL.",
+    "authenticationVerificationScope": "Cloud environment; operator publication recorded separately."
   }
 }

@@ -306,3 +306,14 @@ with one optional Docker/OML test skipped and the same 11 advisory architecture 
 Inventory, licenses and packed-consumer checks passed. The subsequent preparation step
 exposed npm's refusal to dry-run an already published version. Preparation now compares
 existing registry integrity instead, while retaining dry runs for unpublished versions.
+
+## Public npm release 0.1.0
+
+Both packages published by the maintainer from WSL are now visible at `latest: 0.1.0`, with
+Apache-2.0 metadata. Public tarball downloads match both SHA-512 hashes in the release manifest
+prepared at `02fb65c987154d925fc523c91ccedbdca96fff9d`. The toolkit, like core, initially appeared
+as a `0.0.0-stage` holding version while npm processed it; subsequent checks confirmed the
+operational release. An independent temporary project ran `npm exec -- @launch-echo/tently@0.1.0`
+with `init --yes`, `config validate` and `config show`, using public npm and resolving core
+transitively. Generated configuration identified that project and did not approve intent sources
+automatically. No model requests or cloud-side npm uploads were made.

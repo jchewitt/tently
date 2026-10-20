@@ -5,7 +5,7 @@ Destination: `jchewitt/tently`. Read-only source:
 
 | Milestone | Delivered and checked | Remaining limits |
 | --- | --- | --- |
-| 1. Standalone | Explicit committed inventory, core/toolkit boundary, public examples, build/tests, packed independent consumer and real TypeScript indexing | GitHub exported; npm release requested under @launch-echo, pending registry authentication |
+| 1. Standalone | Explicit committed inventory, core/toolkit boundary, public examples, build/tests, packed independent consumer and real TypeScript indexing | GitHub exported; both @launch-echo packages published at 0.1.0 and public installation verified |
 | 2a. Saved evidence | Read/refresh separation, commit/config/scope metadata, dirty querying, isolated archives, atomic snapshots validated on Linux/WSL, failed-refresh preservation | Native Windows archive LF conversion and concurrent head-rename EPERM need fixes; archives reject symlinks/submodules and sizes above 128 MiB |
 | 2b. Draft overlays | Base/content identity, reindexed replacement, delete/rename handling, separate checkout/agent heads | Full implementation reindex; changed prose invalidated pending re-extraction |
 | 3. Unified graph | RDF/SPARQL, SHACL, lossless projection, bounded continuation, six-stage async cross-source fixture, negative extraction/linkage cases | Local SELECT only; 100,000-fact projection bound; no universal language support |
@@ -28,5 +28,5 @@ Figma and source-application reintegration are future adapter work.
 Validation evidence and decisions are in `VALIDATION.md` and the ADR files. Source approval and
 model assertion review are distinct. On 2026-10-20 the user authorized pushing the reviewed
 destination to `jchewitt/tently` for local testing. The subsequent npm request authorizes release
-preparation/publication under `@launch-echo`; authentication is pending. Visibility changes and
+preparation/publication under `@launch-echo`; the maintainer completed the 0.1.0 release from WSL. Visibility changes and
 TradePilot reintegration remain outside the authorized scope. See [release instructions](RELEASING.md).
