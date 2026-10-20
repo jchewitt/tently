@@ -1,32 +1,168 @@
 {
   "schemaVersion": 1,
-  "roots": ["src", "packages/core/src"],
-  "modules": [
-    {"id":"core","path":"^packages/core/","domain":"graph","layer":"contracts"},
-    {"id":"toolkit","path":"^src/","domain":"graph","layer":"application"},
-    {"id":"examples","path":"^examples/","domain":"examples","layer":"validation"},
-    {"id":"runtime-check","path":"^runtime-check\\.(mjs|d\\.mts)$","domain":"graph","layer":"bootstrap"},
-    {"id":"development-scripts","path":"^scripts/","domain":"tooling","layer":"validation"}
+  "roots": [
+    "src",
+    "packages/core/src"
   ],
-  "contracts": [{"path":"packages/core/src/core.ts","owner":"core"}],
+  "modules": [
+    {
+      "id": "core",
+      "path": "^packages/core/",
+      "domain": "graph",
+      "layer": "contracts"
+    },
+    {
+      "id": "examples",
+      "path": "^examples/",
+      "domain": "examples",
+      "layer": "validation"
+    },
+    {
+      "id": "runtime-check",
+      "path": "^runtime-check\\.(mjs|d\\.mts)$",
+      "domain": "graph",
+      "layer": "bootstrap"
+    },
+    {
+      "id": "development-scripts",
+      "path": "^scripts/",
+      "domain": "tooling",
+      "layer": "validation"
+    },
+    {
+      "id": "configuration",
+      "path": "^src/configuration/",
+      "domain": "graph",
+      "layer": "configuration"
+    },
+    {
+      "id": "repository",
+      "path": "^src/repository/",
+      "domain": "graph",
+      "layer": "inputs"
+    },
+    {
+      "id": "infrastructure",
+      "path": "^src/infrastructure/",
+      "domain": "graph",
+      "layer": "infrastructure"
+    },
+    {
+      "id": "storage",
+      "path": "^src/storage/",
+      "domain": "graph",
+      "layer": "persistence"
+    },
+    {
+      "id": "extraction",
+      "path": "^src/extraction/",
+      "domain": "graph",
+      "layer": "evidence"
+    },
+    {
+      "id": "graph",
+      "path": "^src/graph/",
+      "domain": "graph",
+      "layer": "queries"
+    },
+    {
+      "id": "application",
+      "path": "^src/application/",
+      "domain": "graph",
+      "layer": "orchestration"
+    },
+    {
+      "id": "interfaces",
+      "path": "^src/interfaces/",
+      "domain": "graph",
+      "layer": "entrypoints"
+    },
+    {
+      "id": "governance",
+      "path": "^src/governance/",
+      "domain": "graph",
+      "layer": "validation"
+    },
+    {
+      "id": "visualization",
+      "path": "^src/visualization/",
+      "domain": "graph",
+      "layer": "presentation"
+    },
+    {
+      "id": "public-entrypoints",
+      "path": "^src/(index|core|telemetry|cli|mcp)\\.ts$",
+      "domain": "graph",
+      "layer": "public-api"
+    }
+  ],
+  "contracts": [
+    {
+      "path": "packages/core/src/core.ts",
+      "owner": "core"
+    }
+  ],
   "rules": [
     {
-      "id":"neutral-core-boundary",
-      "kind":"forbidden-import",
-      "from":"^packages/core/",
-      "to":"^src/",
-      "approved":true,
-      "approvalRef":"docs/architecture-policy.md#neutral-core"
+      "id": "neutral-core-boundary",
+      "kind": "forbidden-import",
+      "from": "^packages/core/",
+      "to": "^src/",
+      "approved": true,
+      "approvalRef": "docs/architecture-policy.md#neutral-core"
     },
     {
-      "id":"canonical-contract-owner",
-      "kind":"contract-owner",
-      "approved":true,
-      "approvalRef":"docs/architecture-policy.md#neutral-core"
+      "id": "canonical-contract-owner",
+      "kind": "contract-owner",
+      "approved": true,
+      "approvalRef": "docs/architecture-policy.md#neutral-core"
     },
-    {"id":"dependency-cycles","kind":"no-cycles","approved":false}
+    {
+      "id": "dependency-cycles",
+      "kind": "no-cycles",
+      "approved": false
+    },
+    {
+      "id": "evidence-no-orchestration",
+      "kind": "forbidden-import",
+      "from": "^src/(configuration|repository|infrastructure|storage|extraction|graph)/(?!.*\\.test\\.ts$)",
+      "to": "^src/(application|interfaces|visualization|governance)/",
+      "approved": false
+    },
+    {
+      "id": "graph-no-extraction-or-persistence",
+      "kind": "forbidden-import",
+      "from": "^src/graph/(?!.*\\.test\\.ts$)",
+      "to": "^src/(extraction|storage|repository|configuration)/",
+      "approved": false
+    },
+    {
+      "id": "storage-no-higher-modules",
+      "kind": "forbidden-import",
+      "from": "^src/storage/(?!.*\\.test\\.ts$)",
+      "to": "^src/(configuration|repository|extraction|graph)/",
+      "approved": false
+    },
+    {
+      "id": "repository-no-evidence-modules",
+      "kind": "forbidden-import",
+      "from": "^src/repository/(?!.*\\.test\\.ts$)",
+      "to": "^src/(configuration|storage|extraction|graph)/",
+      "approved": false
+    },
+    {
+      "id": "implementation-no-entrypoints",
+      "kind": "forbidden-import",
+      "from": "^src/(?!interfaces/|(?:index|core|telemetry|cli|mcp)\\.ts$)(?!.*\\.test\\.ts$)",
+      "to": "^src/(interfaces/|(?:index|core|telemetry|cli|mcp)\\.ts$)",
+      "approved": false
+    }
   ],
-  "advisory":{"maxLines":500,"maxComplexity":20,"duplicateMinTokens":80},
-  "baseline":[],
-  "exceptions":[]
+  "advisory": {
+    "maxLines": 500,
+    "maxComplexity": 20,
+    "duplicateMinTokens": 80
+  },
+  "baseline": [],
+  "exceptions": []
 }

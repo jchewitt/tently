@@ -56,6 +56,10 @@ archive-byte and concurrent snapshot replacement issues; see the [validation rec
 
 ## Development
 
+The development source is organized by responsibility; see
+[toolkit modules and boundaries](docs/ADR-007-toolkit-modules.md). The two npm packages and
+their public entry points are unchanged. The module refactor is not part of published 0.1.0.
+
 The toolkit requires Node.js 24 or newer; Node 24 is the validated runtime.
 Use pnpm 10.18.2 for development. The neutral core package has no toolkit runtime dependencies
 and retains its separate Node.js 20.11+ declaration.

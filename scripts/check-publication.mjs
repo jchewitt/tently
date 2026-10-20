@@ -79,6 +79,7 @@ try {
     if (expectedName === '@launch-echo/tently') {
       for (const asset of [
         'dist/cli.js', 'dist/mcp.js',
+        'dist/interfaces/cli.js', 'dist/interfaces/mcp.js', 'dist/extraction/static.js',
         'runtime-check.mjs', 'runtime-check.d.mts',
         'examples/generic-typescript/context-graph.config.json',
         'examples/generic-typescript/ontology/build.gradle',
@@ -213,7 +214,7 @@ try {
   ]);
   runPnpm(['install', '--prefer-offline', '--ignore-scripts', '--no-frozen-lockfile'], consumer);
   const staticModule = pathToFileURL(
-    join(consumer, 'node_modules', '@launch-echo', 'tently', 'dist', 'static.js'),
+    join(consumer, 'node_modules', '@launch-echo', 'tently', 'dist', 'extraction', 'static.js'),
   ).href;
   const toolkitModule = pathToFileURL(
     join(consumer, 'node_modules', '@launch-echo', 'tently', 'dist', 'index.js'),

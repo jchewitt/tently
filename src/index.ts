@@ -1,12 +1,12 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
-import '../runtime-check.mjs';
-export * from './core.js';
-export * from './git.js';
-export * from './hydrator.js';
-export * from './query.js';
-export * from './semantic.js';
-export * from './telemetry.js';
-export * from './visualization.js';
-export * from './overlay.js';
-export * from './rdf.js';
-export * from './providers.js';
+import "../runtime-check.mjs";
+export * from "@launch-echo/tently-core";
+export * from "./repository/git.js";
+export * from "./application/hydrator.js";
+export * from "./graph/query.js";
+export * from "./extraction/semantic.js";
+export * from "./extraction/telemetry.js";
+export * from "./visualization/visualization.js";
+export * from "./application/overlay.js";
+export * from "./graph/rdf.js";
+export * from "./extraction/providers.js";

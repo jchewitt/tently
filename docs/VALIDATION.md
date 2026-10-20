@@ -317,3 +317,32 @@ operational release. An independent temporary project ran `npm exec -- @launch-e
 with `init --yes`, `config validate` and `config show`, using public npm and resolving core
 transitively. Generated configuration identified that project and did not approve intent sources
 automatically. No model requests or cloud-side npm uploads were made.
+
+## Post-release module organization
+
+The development tree now groups implementation by responsibility while preserving the five
+root public entry points. Tests were relocated without dropping existing cases; cross-module
+and startup checks live in `tests/`, and release-helper tests live beside their scripts.
+The 79 extraction source paths and source hashes are unchanged; destination paths and required
+modification notices follow the moved files. Historical validation paths above refer to their
+recorded commits and have not been rewritten to imply newer environment results.
+
+Linux, Node 24.19.0, standalone pnpm 10.18.2: the full publication gate passed **135 deterministic
+tests** (1 core + 134 toolkit/example/script), one optional Docker/OML test skipped, build,
+inventory, licenses and fresh packed-consumer installation. The installed consumer passed
+npm exec setup/config, real TypeScript/SCIP indexing, RDF/SPARQL/SHACL, visualization output and
+MCP. All three original cold/stale/error MCP startup cases passed at their new test location.
+
+The canonical policy maps internal modules separately. A public-safe fixture uses the actual
+policy and analysis tools to verify allowed imports and detect all five proposed forbidden
+directions. Actual toolkit analysis reports no violations of those rules, no infrastructure
+failures or extraction gaps, and the same 11 heuristic advisories. Internal restrictions remain
+advisory pending explicit owner approval; existing approved core rules remain hard gates.
+Historical debt and approval records were not advanced or waived because of the moves.
+
+Before/after checks found identical runtime export names for the library (35), core (3) and
+telemetry (2) entry points. A source comparison confirmed all 38 moved runtime files differ
+only in import/export module paths and required attribution notices. Clean builds remove
+obsolete compiled modules. Public package names, CLI commands, configuration, graph behavior
+and snapshot formats are unchanged. This is an unreleased source refactor, not a replacement
+for published 0.1.0. Native Windows, macOS and hosted CI were not rerun for this change.

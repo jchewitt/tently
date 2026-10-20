@@ -13,6 +13,13 @@ Cycle, file-size, complexity and duplication findings are advisory until an owne
 specific policy. Size does not prove modularity; textual clones do not prove equivalent logic.
 The tools provide candidates for semantic review.
 
+Toolkit responsibilities and public entry points are described in
+[ADR 007](ADR-007-toolkit-modules.md). The policy maps the internal directories separately;
+the proposed internal import restrictions are executable advisory checks, not newly approved
+CI gates. They check production import directions while allowing tests to assemble modules.
+Directory moves change finding fingerprints; the historical baseline is retained unchanged
+and no new finding is automatically waived.
+
 Baseline entries must name an exact finding fingerprint, a reason and an approval reference.
 Scoped exceptions additionally require rule/from/to and an expiry. The analyzer never writes or
 advances baselines. New rule violations remain new even when other debt is baselined.

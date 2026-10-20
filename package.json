@@ -39,7 +39,7 @@
     }
   },
   "scripts": {
-    "build": "node runtime-check.mjs && pnpm --filter @launch-echo/tently-core build && tsc -p tsconfig.json",
+    "build": "node runtime-check.mjs && node scripts/clean-build.mjs && pnpm --filter @launch-echo/tently-core build && tsc -p tsconfig.json",
     "context-graph": "tsx src/cli.ts",
     "hydrate": "tsx src/cli.ts hydrate --ref HEAD",
     "mcp": "tsx src/mcp.ts",

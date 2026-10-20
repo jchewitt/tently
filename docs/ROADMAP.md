@@ -18,6 +18,11 @@ HDesk results for `6710e9391a6a01345dab5f5be4ae0656e1c9d1ae` are recorded in
 WSL passed 114 deterministic tests and all three original MCP startup tests; the native Windows
 subset still has two failures and three fixture exclusions.
 
+The post-release module-organization increment is described in
+[ADR 007](ADR-007-toolkit-modules.md): internal responsibilities have separate directories,
+public entry points remain stable, and proposed internal dependency restrictions are advisory
+pending explicit owner approval. It does not publish a replacement for npm 0.1.0.
+
 Next work should be separate, reviewed increments: fix native Windows exact-byte archive handling,
 concurrent atomic snapshot-head replacement, CRLF integrity checks and symlink fixtures;
 run bounded semantic-quality evaluations; exercise macOS and hosted CI; validate fresh-cloud
