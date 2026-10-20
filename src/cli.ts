@@ -9,6 +9,8 @@ import type { ImpactScanRequest } from './core.js';
 import { compileOntologyAtExactCheckout } from './ontology.js';
 import { visualizeContextPack } from './visualization.js';
 import { buildWorkingOverlay } from './overlay.js';
+import { RdfEvidenceGraph } from './rdf.js';
+import { readFile } from 'node:fs/promises';
 
 function valueAfter(args: readonly string[], name: string): string | undefined {
   const index = args.indexOf(name);
@@ -38,6 +40,8 @@ export function impactRequestFromArgs(args: readonly string[]): ImpactScanReques
     symbols: valuesAfter(args, '--symbol'),
     capabilities: valuesAfter(args, '--capability'),
     maxFacts: valueAfter(args, '--max-facts') ? Number(valueAfter(args, '--max-facts')) : undefined,
+    maxDepth: valueAfter(args, '--max-depth') ? Number(valueAfter(args, '--max-depth')) : undefined,
+    continuation: valueAfter(args, '--continuation'),
   };
 }
 
@@ -46,6 +50,23 @@ async function main(): Promise<void> {
   const configPath = valueAfter(args, '--config') ?? defaultConfigPath();
   const application = await createContextGraphApplication(configPath);
   const [command, subcommand] = args;
+  if (command === 'sparql' || command === 'validate') {
+    const id = valueAfter(args, '--snapshot');
+    const snapshot = id ? await application.snapshotStore.read(id) :
+      await application.snapshotStore.readHead(application.headName);
+    if (!snapshot) throw new Error('No graph snapshot is available');
+    const graph = new RdfEvidenceGraph(snapshot);
+    if (command === 'validate') {
+      const report = await graph.validate();
+      process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
+      if (!report.conforms) process.exitCode = 1;
+    } else {
+      const query = valueAfter(args, '--query-file');
+      if (!query) throw new Error('sparql requires --query-file <local SELECT query>');
+      process.stdout.write(`${JSON.stringify(await graph.select(await readFile(query, 'utf8')), null, 2)}\n`);
+    }
+    return;
+  }
   if (command === 'overlay') {
     const base = valueAfter(args, '--base-snapshot');
     if (!base) throw new Error('overlay requires --base-snapshot <committed snapshot ID>');

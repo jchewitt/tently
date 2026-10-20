@@ -16,6 +16,8 @@ import type { ScipIndexResult, StaticIndexer } from './static.js';
 import { sha256, stableJson } from './util.js';
 import { linkSemanticDocuments } from './document.js';
 import { runtimeEvidenceFacts } from './runtime-evidence.js';
+import { matchesRepositoryGlob } from './glob.js';
+import { RdfEvidenceGraph } from './rdf.js';
 
 export interface HydrationOptions {
   readonly ref: string;
@@ -189,6 +191,8 @@ export class ContextGraphHydrator {
           commitSha,
         },
         snapshotId,
+        authority: (config.approvedIntentSources?.some((pattern) =>
+          matchesRepositoryGlob(source.path, pattern)) ? 'declared' : 'inferred') as 'declared' | 'inferred',
       })),
     );
     const scip = await this.dependencies.staticIndexer.index(context);
@@ -277,6 +281,10 @@ export class ContextGraphHydrator {
       unresolved,
       diagnostics,
     };
+    const validation = await new RdfEvidenceGraph(snapshot).validate();
+    if (!validation.conforms) {
+      throw new Error(`Graph extraction failed SHACL validation: ${JSON.stringify(validation.issues)}`);
+    }
     await snapshotStore.write(snapshot);
     await snapshotStore.updateHead(options.headName, snapshotId);
     return { snapshot, semanticExtracted, semanticReused };

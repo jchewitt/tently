@@ -209,6 +209,8 @@ describe('impact scan facade', () => {
       object,
       provenance: { path, startLine: 1, endLine: 1, digest: id, commitSha: sha },
       extractor: { id: path.startsWith('docs/') ? 'codex-cli:fixture' : 'fixture', version: '1' },
+      authority: path.startsWith('docs/validation/') ? 'validated' :
+        path.startsWith('docs/') ? 'declared' : 'implemented',
       confidence: 1,
       snapshotId: sha,
     });
@@ -320,6 +322,7 @@ describe('impact scan facade', () => {
       object,
       provenance: { path, startLine: 1, endLine: 1, digest: id, commitSha: sha },
       extractor: { id: extractor, version: '1' },
+      authority: extractor.startsWith('codex-cli:') ? 'declared' : 'implemented',
       confidence: 1,
       snapshotId: sha,
     });
@@ -419,6 +422,7 @@ describe('impact scan facade', () => {
             commitSha: sha,
           },
           extractor: { id: 'codex-cli:test', version: '1' },
+          authority: 'declared',
           confidence: 1,
           snapshotId: sha,
         },
@@ -467,6 +471,7 @@ describe('impact scan facade', () => {
             commitSha: sha,
           },
           extractor: { id: 'codex-cli:test', version: '1' },
+          authority: 'declared',
           confidence: 1,
           snapshotId: sha,
         },

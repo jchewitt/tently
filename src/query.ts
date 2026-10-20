@@ -1,3 +1,6 @@
+import { contextPackEvidenceAuthority } from './authority.js';
+import { RdfEvidenceGraph } from './rdf.js';
+import { sha256, stableJson } from './util.js';
 import type {
   ContextPack,
   ContextPackLane,
@@ -31,8 +34,8 @@ function isValidationFact(fact: GraphFact): boolean {
 }
 
 function isDeclaredFact(fact: GraphFact): boolean {
-  if (fact.authority) return fact.authority === 'declared';
-  return fact.extractor.id.startsWith('codex-cli:') && !isValidationFact(fact);
+  if (fact.authority) return fact.authority === 'declared' && !isValidationFact(fact);
+  return false;
 }
 
 export function contextPackLaneForFact(fact: GraphFact): ContextPackLane | undefined {
@@ -61,15 +64,7 @@ export function contextPackLaneForFact(fact: GraphFact): ContextPackLane | undef
   return 'implementationAndConsumers';
 }
 
-export function contextPackEvidenceAuthority(
-  fact: GraphFact,
-): 'declared' | 'implemented' | 'observed' | 'validated' | 'inferred' | 'draft' {
-  if (fact.authority) return fact.authority;
-  if (fact.extractor.id === 'otlp-runtime-evidence') return 'observed';
-  if (isValidationFact(fact)) return 'validated';
-  if (isDeclaredFact(fact)) return 'declared';
-  return 'implemented';
-}
+export { contextPackEvidenceAuthority } from './authority.js';
 
 function selectBalancedFacts(
   ranked: readonly GraphFact[],
@@ -156,6 +151,10 @@ export class MarkdownContextPackRenderer implements ContextPackRenderer {
       '',
       `Snapshot: \`${pack.snapshot.snapshotId}\` (${pack.snapshot.commitSha})`,
       `Configuration: ${pack.snapshot.configurationDigest ?? 'legacy/unknown'}; scope: ${pack.snapshot.scope?.join(', ') ?? 'legacy/unknown'}`,
+      ...(pack.exploration ? [
+        `Relationships returned: ${pack.exploration.returned}/${pack.exploration.reachableFacts}; truncated: ${pack.exploration.truncated}; depth limit reached: ${pack.exploration.depthLimitReached}`,
+        ...(pack.exploration.continuation ? [`Continuation: ${pack.exploration.continuation}`] : []),
+      ] : []),
       ...(pack.evidenceState ? [
         `Historical relative to HEAD: ${pack.evidenceState.stale}; configuration matches: ${pack.evidenceState.configurationMatches}`,
         `Excluded working changes: ${pack.evidenceState.excludedWorkingChanges.join(', ') || '(none)'}`,
@@ -217,11 +216,16 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
 
   async scan(request: ImpactScanRequest): Promise<ContextPack> {
     const maxFacts = boundedFactLimit(request.maxFacts);
-    const snapshot = request.snapshotId
+    const saved = request.snapshotId
       ? await this.store.read(request.snapshotId)
       : await this.store.readHead(this.headName);
-    if (!snapshot)
+    if (!saved)
       throw new Error('No graph snapshot is available; run context-graph hydrate first');
+    const snapshot = { ...saved, facts: await new RdfEvidenceGraph(saved).facts() };
+    const maxDepth = request.maxDepth ?? 32;
+    if (!Number.isInteger(maxDepth) || maxDepth < 1 || maxDepth > 128) {
+      throw new Error('maxDepth must be an integer between 1 and 128');
+    }
     const anchorTerms = [
       request.ownerDocument,
       ...(request.changedFiles ?? []),
@@ -247,7 +251,7 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
       ),
     );
     const visitedNodes = new Set(frontier);
-    for (let depth = 0; depth < 3 && frontier.size > 0; depth += 1) {
+    for (let depth = 0; depth < maxDepth && frontier.size > 0; depth += 1) {
       const next = new Set<string>();
       for (const fact of snapshot.facts) {
         if (!frontier.has(fact.subject.id) && !frontier.has(fact.object.id)) continue;
@@ -272,8 +276,30 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
         left.id.localeCompare(right.id)
       );
     });
-    const balanced = selectBalancedFacts(ordered, maxFacts);
-    const facts = balanced.facts;
+    const allBalanced = [
+      ...selectBalancedFacts(ordered, ordered.length).facts,
+      ...ordered.filter((fact) => contextPackLaneForFact(fact) === undefined),
+    ];
+    const { continuation: _continuation, snapshotId: _snapshotId, ...query } = request;
+    const queryDigest = sha256(stableJson(query));
+    let offset = 0;
+    if (request.continuation) {
+      if (request.continuation.length > 2048) throw new Error('Invalid continuation');
+      const token = JSON.parse(Buffer.from(request.continuation, 'base64url').toString('utf8'));
+      if (token.snapshot !== snapshot.manifest.snapshotId ||
+          token.digest !== snapshot.manifest.contentDigest || token.query !== queryDigest ||
+          !Number.isInteger(token.offset) || token.offset < 0 || token.offset > allBalanced.length) {
+        throw new Error('Continuation does not match this snapshot and query');
+      }
+      offset = token.offset;
+    }
+    const facts = allBalanced.slice(offset, offset + maxFacts);
+    const balanced = selectBalancedFacts(facts, facts.length);
+    const nextOffset = offset + facts.length;
+    const continuation = nextOffset < allBalanced.length ? Buffer.from(JSON.stringify({
+      snapshot: snapshot.manifest.snapshotId, digest: snapshot.manifest.contentDigest,
+      query: queryDigest, offset: nextOffset,
+    })).toString('base64url') : undefined;
     const capabilities = [
       ...new Map(
         facts
@@ -366,6 +392,11 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
           .map((lane) => `No ${lane} evidence matched this request.`),
       },
       diagnostics: selectDiagnostics(snapshot, request, facts, focus, queryDiagnostics),
+      exploration: {
+        returned: facts.length, reachableFacts: allBalanced.length, maxDepth,
+        depthLimitReached: frontier.size > 0, truncated: Boolean(continuation) || frontier.size > 0,
+        continuation,
+      },
     };
     return { ...plain, markdown: this.renderer.render(plain) };
   }

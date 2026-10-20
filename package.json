@@ -12,7 +12,9 @@
     "THIRD_PARTY_NOTICES.md",
     "examples/generic-typescript",
     "templates/context-graph-development",
-    "third-party-tools.json"
+    "third-party-tools.json",
+    "examples/pipeline",
+    "docs"
   ],
   "bin": {
     "context-graph": "dist/cli.js",
@@ -59,13 +61,16 @@
     "url": "git+https://github.com/jchewitt/tently.git"
   },
   "dependencies": {
+    "@comunica/query-sparql": "5.4.1",
     "@launchecho/context-graph-core": "workspace:^",
     "@modelcontextprotocol/sdk": "1.30.0",
     "@opentelemetry/api": "1.9.0",
     "@opentelemetry/resources": "2.2.0",
     "@opentelemetry/sdk-trace-base": "2.2.0",
     "@sourcegraph/scip-typescript": "0.4.0",
-    "n3": "2.7.2"
+    "n3": "2.7.2",
+    "rdf-validate-shacl": "0.6.5",
+    "sparqljs": "3.7.4"
   },
   "devDependencies": {
     "@types/n3": "1.26.1",

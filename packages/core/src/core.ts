@@ -209,6 +209,8 @@ export interface ImpactScanRequest {
   readonly symbols?: readonly string[];
   readonly capabilities?: readonly string[];
   readonly maxFacts?: number;
+  readonly maxDepth?: number;
+  readonly continuation?: string;
 }
 
 export interface ContextPack {
@@ -228,6 +230,14 @@ export interface ContextPack {
   readonly coverage: ContextPackCoverage;
   readonly diagnostics: DiagnosticReport;
   readonly markdown: string;
+  readonly exploration?: {
+    readonly returned: number;
+    readonly reachableFacts: number;
+    readonly maxDepth: number;
+    readonly depthLimitReached: boolean;
+    readonly truncated: boolean;
+    readonly continuation?: string;
+  };
 }
 
 export type ContextPackLane =

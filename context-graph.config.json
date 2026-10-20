@@ -41,5 +41,8 @@
   },
   "runtimeEvidence": [],
   "storagePath": ".context-graph",
-  "x-extraction-modifications": "Portable example model profile; runtime evidence is opt-in."
+  "x-extraction-modifications": "Portable example model profile; runtime evidence is opt-in.",
+  "approvedIntentSources": [
+    "docs/search-capability.md"
+  ]
 }

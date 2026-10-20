@@ -9,6 +9,8 @@ const allowedFields = new Set([
   'symbols',
   'capabilities',
   'maxFacts',
+  'maxDepth',
+  'continuation',
 ]);
 
 function optionalString(value: unknown, field: string): string | undefined {
@@ -39,6 +41,10 @@ export function parseImpactScanRequest(value: unknown): ImpactScanRequest {
   if (unexpected.length > 0)
     throw new Error(`Unknown impact.scan fields: ${unexpected.join(', ')}`);
   const maxFacts = record.maxFacts;
+  const maxDepth = record.maxDepth;
+  if (maxDepth !== undefined && (!Number.isInteger(maxDepth) || Number(maxDepth) < 1 || Number(maxDepth) > 128)) {
+    throw new Error('maxDepth must be an integer between 1 and 128');
+  }
   if (
     maxFacts !== undefined &&
     (!Number.isInteger(maxFacts) || Number(maxFacts) < 1 || Number(maxFacts) > 200)
@@ -54,5 +60,7 @@ export function parseImpactScanRequest(value: unknown): ImpactScanRequest {
     symbols: optionalStringArray(record.symbols, 'symbols'),
     capabilities: optionalStringArray(record.capabilities, 'capabilities'),
     maxFacts: maxFacts as number | undefined,
+    maxDepth: maxDepth as number | undefined,
+    continuation: optionalString(record.continuation, 'continuation'),
   };
 }

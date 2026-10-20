@@ -44,6 +44,8 @@ async function main(): Promise<void> {
             symbols: { type: 'array', items: { type: 'string' } },
             capabilities: { type: 'array', items: { type: 'string' } },
             maxFacts: { type: 'integer', minimum: 1, maximum: 200 },
+            maxDepth: { type: 'integer', minimum: 1, maximum: 128 },
+            continuation: { type: 'string', maxLength: 2048 },
           },
         },
         annotations: {

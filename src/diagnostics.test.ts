@@ -16,6 +16,7 @@ const fact: GraphFact = {
   object: { id: 'contract:totals', kind: 'Contract', label: 'Totals contract' },
   provenance: span,
   extractor: { id: 'codex-cli:test', version: '1' },
+          authority: 'declared',
   confidence: 1,
   snapshotId: 'snap',
 };

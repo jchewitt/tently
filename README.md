@@ -55,9 +55,11 @@ Approved owner documents govern intent. Code describes implementation; tests des
 was checked; traces describe observed behavior for their deployment. Model assertions require
 valid citations and remain derived evidence. Missing coverage is not a pass.
 
-The current implementation supports TypeScript SCIP indexing, JSON snapshots, bounded
-`impact.scan` traversal and HTML/DOT/SVG output. SPARQL, SHACL, active OWL reasoning and a complete
-interactive explorer are later milestones.
+The current implementation supports TypeScript SCIP indexing, immutable JSON snapshot envelopes,
+a lossless RDF/SPARQL query path, SHACL integrity checks, paginated `impact.scan` traversal and
+HTML/DOT/SVG output. Active OWL reasoning and a complete interactive explorer are not claimed.
+See `examples/pipeline` for a six-stage asynchronous flow and `docs/ADR-004-rdf-query-path.md`
+for query bounds and authority configuration.
 
 Never submit credentials, account data or private runtime payloads as semantic sources.
 Live provider tests are separate from deterministic CI. Public publication, registry naming

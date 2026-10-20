@@ -9,6 +9,8 @@ export interface ContextGraphConfig {
   readonly namespace: string;
   readonly adapter?: string;
   readonly semanticSources: readonly string[];
+  /** Explicit owner-approved source paths/globs; other model-derived prose remains inferred. */
+  readonly approvedIntentSources?: readonly string[];
   readonly codeRoots: readonly string[];
   readonly contractPatterns: readonly string[];
   readonly contractConsumerRoots?: readonly string[];
@@ -108,6 +110,9 @@ function validateConfig(value: unknown, absolutePath: string): asserts value is 
       'adapter must be a non-empty string when provided',
       absolutePath,
     );
+  }
+  if (value.approvedIntentSources !== undefined) {
+    requireConfig(isStringArray(value.approvedIntentSources), 'approvedIntentSources must be an array of strings', absolutePath);
   }
   for (const field of [
     'semanticSources',

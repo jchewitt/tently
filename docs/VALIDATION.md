@@ -46,3 +46,17 @@ Committed HEAD and the default snapshot remain unchanged. No live model or runti
 A first repeatability check caught synthetic-commit timestamps leaking into fact identities.
 Overlay IDs now derive from normalized draft facts and captured bytes; the repeated real-index
 test passes.
+
+## Milestone 3: RDF, SHACL and cross-source queries
+
+Passed real pipeline execution, real SCIP indexing, deterministic prose-provider hydration,
+RDF/traversal field equivalence, six declared asynchronous routes, downstream implementation/test
+retrieval, pagination without duplicate facts, missing-query gaps, identity-kind conflict and
+invalid-citation/confidence SHACL negatives, and remote SPARQL rejection.
+Installed-consumer smoke passes with the new RDF runtime dependencies.
+
+The larger suite exposed a suggested-file ordering regression; preserving explicit RDF ordinals
+fixed it, and the affected static/RDF tests passed. Live model comprehension is a separate check.
+License inventories include exact-version reviewed notices for three newly encountered expressions.
+
+Milestone 3 final rerun: 102 deterministic tests passed (1 core + 101 toolkit/example); one optional OML integration test skipped.

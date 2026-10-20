@@ -6,3 +6,4 @@ export * from './semantic.js';
 export * from './telemetry.js';
 export * from './visualization.js';
 export * from './overlay.js';
+export * from './rdf.js';
