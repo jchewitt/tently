@@ -516,3 +516,15 @@ passed again: 155 deterministic tests (one optional Docker/OML test skipped), bu
 with 12 advisory findings, inventory, licenses and fresh packed-consumer smoke. No runtime code
 changed from 4cdc4e5. GitHub's About description was blank; an attempted metadata update returned
 HTTP 403, so no GitHub description change is claimed. No npm upload was made by the agent.
+
+
+## First trusted-release preparation attempt — 2026-10-21
+
+[Run 39660995763](https://github.com/jchewitt/weftlet/actions/runs/39660995763) on d82ebee
+passed the full release gate but stopped before uploading any package. npm 11.21.1 returns
+`publish --dry-run --json` results keyed by package name; the release script expected the
+flat record returned by npm 11.9.0. The preparation check now supports both observed formats
+and verifies name, version and archive integrity. Ambiguous/multiple records and mismatches
+remain errors. Two npm-command tests pass, including negative response-shape/identity/integrity
+cases, and both package archives pass real dry runs with npm 11.9.0 and 11.21.1. No live npm
+publication was attempted by this failed run.

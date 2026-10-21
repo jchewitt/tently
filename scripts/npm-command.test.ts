@@ -3,6 +3,28 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { expect, it } from 'vitest';
+import { validatePublishInspection } from './npm-command.mjs';
+
+it('validates flat and package-keyed npm dry-run output against the exact prepared archive', () => {
+  const expected = { name: '@weftlet/core', version: '0.1.1', integrity: 'sha512-fixture' };
+  const inspection = { ...expected, files: [], entryCount: 0 };
+  for (const output of [inspection, { [expected.name]: inspection }]) {
+    expect(() => validatePublishInspection(JSON.stringify(output), expected)).not.toThrow();
+  }
+  for (const record of [
+    { ...inspection, name: '@someone/other' }, { ...inspection, version: '0.1.0' },
+    { ...inspection, integrity: 'sha512-different' }, { name: expected.name, version: expected.version },
+  ]) {
+    for (const output of [record, { [expected.name]: record }]) {
+      expect(() => validatePublishInspection(JSON.stringify(output), expected)).toThrow('identity or integrity');
+    }
+  }
+  for (const output of [null, [], [inspection], {}, { other: inspection },
+    { [expected.name]: inspection, other: inspection }]) {
+    expect(() => validatePublishInspection(JSON.stringify(output), expected)).toThrow('identity or integrity');
+  }
+  expect(() => validatePublishInspection('invalid JSON', expected)).toThrow();
+});
 
 it('streams publication prompts while retaining captured JSON for dry runs and registry reads', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'tently npm command '));

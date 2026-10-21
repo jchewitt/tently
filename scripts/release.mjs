@@ -6,7 +6,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { pnpmInvocation } from './package-manager.mjs';
 import { npmAuthOptions, releaseAuthentication } from './npm-auth.mjs';
-import { runNpm } from './npm-command.mjs';
+import { runNpm, validatePublishInspection } from './npm-command.mjs';
 import { publishAndVerify } from './registry-publication.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -91,8 +91,7 @@ async function main() {
         if (existing !== pkg.integrity) throw new Error(`${name}@${pkg.version} already exists with different bytes`);
         console.log(`Prepared archive matches existing release: ${name}@${pkg.version}`);
       } else {
-        const inspection = JSON.parse(npm('publish', archive, '--dry-run', '--json', '--provenance=false'));
-        if (inspection.name !== name || inspection.version !== manifest.version) throw new Error('Tarball identity mismatch');
+        validatePublishInspection(npm('publish', archive, '--dry-run', '--json', '--provenance=false'), pkg);
       }
       packages.push(pkg);
     }
