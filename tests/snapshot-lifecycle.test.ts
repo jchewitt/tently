@@ -1,8 +1,9 @@
 import { execFile } from 'node:child_process';
-import { mkdtemp, readFile, writeFile } from 'node:fs/promises';
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
+import { setTimeout as delay } from 'node:timers/promises';
 import { describe, expect, it } from 'vitest';
 import type { GraphSnapshot } from "@weftlet/core";
 import { FileSnapshotStore } from "../src/storage/storage.js";
@@ -27,6 +28,48 @@ function snapshot(id = 'saved', digest = 'digest'): GraphSnapshot {
 }
 
 describe('saved evidence lifecycle', () => {
+  it('keeps a complete head readable while independent processes replace it', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'graph-head-contention-'));
+    try {
+      const store = new FileSnapshotStore(root);
+      const snapshots = [1, 2, 3].map((index) => snapshot(`writer-${index}`, `digest-${index}`));
+      await Promise.all(snapshots.map((value) => store.write(value)));
+      await store.updateHead('shared', snapshots[0]!.manifest.snapshotId);
+      const module = new URL('../src/storage/storage.ts', import.meta.url).href;
+      let finished = false;
+      let reads = 0;
+      const publishers = Promise.allSettled(snapshots.map((value) => execute(process.execPath,
+        ['--import', 'tsx', '--input-type=module', '--eval', `
+          import { FileSnapshotStore } from ${JSON.stringify(module)};
+          const store = new FileSnapshotStore(${JSON.stringify(root)});
+          for (let i = 0; i < 20; i++) {
+            await store.updateHead('shared', ${JSON.stringify(value.manifest.snapshotId)});
+          }
+        `], { cwd: process.cwd(), timeout: 25_000, windowsHide: true })))
+        .then((results) => {
+          for (const result of results) {
+            if (result.status === 'rejected') throw result.reason;
+          }
+        })
+        .finally(() => { finished = true; });
+      const reader = (async () => {
+        do {
+          expect(snapshots).toContainEqual(await store.readHead('shared'));
+          reads++;
+          await delay(1);
+        } while (!finished);
+      })();
+      const results = await Promise.allSettled([publishers, reader]);
+      for (const result of results) {
+        if (result.status === 'rejected') throw result.reason;
+      }
+      expect(reads).toBeGreaterThan(1);
+      expect(snapshots).toContainEqual(await store.readHead('shared'));
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  });
+
   it('publishes concurrent immutable snapshots atomically, including in one process', async () => {
     const root = await mkdtemp(join(tmpdir(), 'graph-store-'));
     const store = new FileSnapshotStore(root);

@@ -290,7 +290,7 @@
       "destinationPath": "src/repository/git.test.ts",
       "sourceSha256": "ab00e7a88a68a503a4a0ab580fbaf5aa631a8fd0268adc137606a9cefe36196a",
       "modified": true,
-      "destinationSha256": "9e1750bce973fe809de2099981f6353d218b53b9d57542273d22e25f6859b075"
+      "destinationSha256": "12c813c4af1ec41e64a38ba156b1cd7d481bbc008352181e378b3667c611f165"
     },
     {
       "sourcePath": "tools/context-graph/src/git.ts",
@@ -339,7 +339,7 @@
       "destinationPath": "tests/mcp-startup.test.ts",
       "sourceSha256": "0793f213a0a6a8b4a4c68d12f6333127738f47f3e2c53b1882e9b45f45d1695f",
       "modified": true,
-      "destinationSha256": "8d1b7a9f375caa35a51d03ac9b12cc073beaa4690bb961b59f0948e4719a8b04"
+      "destinationSha256": "269381bcaa689f0574f802c14a6b4432c1734bf684953596185f60765dbed207"
     },
     {
       "sourcePath": "tools/context-graph/src/mcp.ts",
@@ -486,7 +486,7 @@
       "destinationPath": "src/storage/storage.ts",
       "sourceSha256": "9e38af8e34dc84ccaed5322b37b485e60706c68542271926228fb6d4af3d1f71",
       "modified": true,
-      "destinationSha256": "1153c32fd2621043d4b632937b14a869d0b614058386753b698ab74af3ae0940"
+      "destinationSha256": "1104a909c280209862b9615129487d4aeb647377b726819fcd1b8846ca19a3b7"
     },
     {
       "sourcePath": "tools/context-graph/src/telemetry.test.ts",
@@ -676,6 +676,8 @@
     "src/repository/committed-tree.ts",
     "src/repository/working-content.test.ts",
     "src/repository/working-content.ts",
+    "src/storage/atomic-rename.test.ts",
+    "src/storage/atomic-rename.ts",
     "src/telemetry.ts",
     "src/visualization/viewer-interaction.ts",
     "tests/architecture.test.ts",

@@ -22,7 +22,8 @@ export async function withCommittedTree<T>(
     if (/^(120000|160000) /m.test(tree)) {
       throw new Error('Committed hydration does not yet support symlinks or submodules');
     }
-    const { stdout } = await execute('git', ['archive', '--format=tar', commitSha], {
+    // Override checkout conversion for this command without changing the user's Git config.
+    const { stdout } = await execute('git', ['-c', 'core.autocrlf=false', 'archive', '--format=tar', commitSha], {
       cwd: repositoryRoot, encoding: 'buffer', maxBuffer: 128 * 1024 * 1024,
     });
     const archive = join(temporary, 'source.tar');

@@ -44,11 +44,14 @@ async function unbuiltCheckout() {
       if (entry === '@weftlet' || entry === '.bin') continue;
       const dependency = join(source, 'node_modules', entry);
       const directory = (await stat(dependency)).isDirectory();
-      await symlink(
-        dependency,
-        join(target, 'node_modules', entry),
-        directory ? (process.platform === 'win32' ? 'junction' : 'dir') : 'file',
-      );
+      const destination = join(target, 'node_modules', entry);
+      if (directory) {
+        await symlink(dependency, destination, process.platform === 'win32' ? 'junction' : 'dir');
+      } else {
+        // File symlinks require elevated privileges or Developer Mode on Windows.
+        // Package-manager metadata can be copied; dependencies remain shared directories.
+        await cp(dependency, destination);
+      }
     }
     await mkdir(join(target, 'node_modules', '@weftlet'), { recursive: true });
     for (const name of ['core']) {

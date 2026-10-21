@@ -451,3 +451,40 @@ claimed. Both new 0.1.0 package versions returned public-registry 404 during thi
 
 Use `weftlet` as the npm trusted-publisher Repository field. Archives prepared before this rename
 contain the previous repository URL; prepare from the updated commit before initial publication.
+
+
+## Native Windows release-preparation fixes — 2026-10-21
+
+The maintainer reported five failures during native Windows release preparation: three MCP
+startup fixtures failed creating a file symlink for pnpm metadata, concurrent snapshot-head
+replacement failed with EPERM, and isolated archive content used CRLF instead of committed LF.
+The supplied output was still running, so no final native-suite totals are inferred.
+
+Changes:
+- MCP fixtures copy dependency metadata files and retain directory junctions on Windows. All
+  three original startup tests remain enabled, including protocol-stdout isolation on compiler errors.
+- Committed materialization runs `git -c core.autocrlf=false archive`. This command-local override
+  preserves the user's repository configuration. The regression enables `core.autocrlf=true`
+  even on Linux: it reproduced the reported CRLF failure before the fix and passes afterward.
+- Snapshot-head replacement retries only Windows EPERM/EACCES/EBUSY errors, with 50 retries and
+  4.55 seconds of total backoff. Each attempt remains an atomic rename; the destination is never
+  unlinked or truncated. Persistent failures propagate, preserve the prior head and clean up the
+  unpublished temporary file. Immutable snapshot publication still uses exclusive hard links.
+- A real multiprocess test publishes three valid snapshots, replaces a shared head 60 times and
+  checks concurrent reads always return a complete known snapshot. Existing conflicting immutable
+  snapshot tests remain enabled. Fault injection covers transient and persistent Windows errors,
+  nonretryable errors, previous-head availability and temporary-file cleanup.
+
+Linux, Node 24.19.0, pnpm 10.18.2: the full publication check passed **155 deterministic tests**
+(1 core + 154 toolkit/example/script); one optional Docker/OML test was skipped. Build, architecture
+(12 advisory findings), extraction inventory, licenses and fresh packed-consumer smoke passed.
+The smoke includes setup/config, transitive core installation, real TypeScript SCIP indexing,
+RDF/SPARQL/SHACL, HTML/DOT/SVG output and MCP. After improving child-process cleanup in the
+contention test, its three-test lifecycle suite passed again.
+
+A separate `windows-latest` CI job now builds and runs the storage, Git and original MCP startup
+regressions. Actionlint 1.7.7 passed for both workflows (shellcheck integration disabled).
+The Windows job does not replace the full Linux release gate. Native Windows execution of these
+fixes remains pending; simulated Windows errors on Linux are not a native pass. CRLF checkout
+inventory checking and npm Codex executable discovery remain separate follow-ups. No live model
+call or npm publication was performed. Use WSL for the validated full release-preparation route.

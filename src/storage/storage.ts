@@ -1,9 +1,10 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
-import { mkdir, readFile, rename, writeFile, link, rm } from 'node:fs/promises';
+import { mkdir, readFile, writeFile, link, rm } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 
 import type { GraphSnapshot, SemanticArtifact, SnapshotStore } from "@weftlet/core";
+import { atomicRename } from './atomic-rename.js';
 
 async function readJson<T>(path: string): Promise<T | undefined> {
   try {
@@ -19,7 +20,7 @@ async function atomicJson(path: string, value: unknown): Promise<void> {
   const temporary = `${path}.${randomUUID()}.tmp`;
   try {
     await writeFile(temporary, `${JSON.stringify(value, null, 2)}\n`, { encoding: 'utf8', flag: 'wx' });
-    await rename(temporary, path);
+    await atomicRename(temporary, path);
   } finally {
     await rm(temporary, { force: true });
   }

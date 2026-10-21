@@ -6,7 +6,7 @@ Destination: `jchewitt/weftlet`. Read-only source:
 | Milestone | Delivered and checked | Remaining limits |
 | --- | --- | --- |
 | 1. Standalone | Explicit committed inventory, core/toolkit boundary, public examples, build/tests, packed independent consumer and real TypeScript indexing | GitHub exported; both @launch-echo packages published at 0.1.0 and public installation verified |
-| 2a. Saved evidence | Read/refresh separation, commit/config/scope metadata, dirty querying, isolated archives, atomic snapshots validated on Linux/WSL, failed-refresh preservation | Native Windows archive LF conversion and concurrent head-rename EPERM need fixes; archives reject symlinks/submodules and sizes above 128 MiB |
+| 2a. Saved evidence | Read/refresh separation, commit/config/scope metadata, dirty querying, isolated archives, atomic snapshots validated on Linux/WSL, failed-refresh preservation | Archive LF conversion and bounded atomic head-replacement fixes pass Linux regressions; native Windows confirmation pending; archives reject symlinks/submodules and sizes above 128 MiB |
 | 2b. Draft overlays | Base/content identity, reindexed replacement, delete/rename handling, separate checkout/agent heads | Full implementation reindex; changed prose invalidated pending re-extraction |
 | 3. Unified graph | RDF/SPARQL, SHACL, lossless projection, bounded continuation, six-stage async cross-source fixture, negative extraction/linkage cases | Local SELECT only; 100,000-fact projection bound; no universal language support |
 | 4. Governance | Canonical approved rules, dependency-cruiser/ESLint/jscpd, scoped debt/expiry, transitive inference, optional OML ADR/parity | No active OWL reasoner; live formal compilation unverified; heuristics remain advisory |
@@ -29,8 +29,9 @@ tentative and explicitly non-blocking for release. The maintainer plans follow-u
 and adoption into Banditrade; API-key testing remains optional. No new live model results are claimed.
 See [provider configuration](PROVIDERS.md#codex-authentication) and the validation record.
 
-Next work should be separate, reviewed increments: fix native Windows exact-byte archive handling,
-concurrent atomic snapshot-head replacement, CRLF integrity checks and symlink fixtures;
+Native Windows archive conversion, concurrent head-replacement and MCP file-symlink fixes are
+implemented with regression tests; a focused Windows CI job and HDesk rerun must confirm them.
+Next work should be separate, reviewed increments: improve CRLF checkout integrity checks;
 run bounded semantic-quality evaluations; retain the passing hosted Ubuntu CI gate; validate fresh-cloud
 restoration; resolve the cloud-specific live provider block; add browser
 interaction/accessibility tests; benchmark larger RDF graphs; evaluate a second real provider.

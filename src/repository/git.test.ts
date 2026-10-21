@@ -20,6 +20,8 @@ describe('GitRepository', () => {
     await mkdir(nested, { recursive: true });
     const git = (...args: string[]) => execFileAsync('git', args, { cwd: root });
     await git('init', '--quiet');
+    // Reproduce the normal Windows setting on every test platform.
+    await git('config', 'core.autocrlf', 'true');
     await writeFile(join(root, 'outside.txt'), 'outside');
     await writeFile(join(nested, 'source.md'), '# Public intent\n');
     await git('add', '.');
@@ -44,6 +46,7 @@ describe('GitRepository', () => {
       expect(await readFile(join(isolated, 'renamed.md'), 'utf8')).toBe('# Public intent\n');
       await expect(readFile(join(isolated, 'outside.txt'))).rejects.toThrow();
     });
+    expect((await git('config', 'core.autocrlf')).stdout.trim()).toBe('true');
   });
   it('reads the exact committed bytes used for semantic provenance digests', async () => {
     const root = await mkdtemp(join(tmpdir(), 'context-graph-git-'));

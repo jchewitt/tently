@@ -58,8 +58,9 @@ For a project-local dependency, install `npm install --save-dev @weftlet/toolkit
 `npx --yes --package @weftlet/toolkit weftlet-mcp` with `CONTEXT_GRAPH_CONFIG` set to
 the project's absolute configuration path. Pin a reviewed version for reproducible agent setup.
 
-Linux/WSL is the validated full-suite path. Native Windows has a live Codex pass but still has
-archive-byte and concurrent snapshot replacement issues; see the [validation record](docs/VALIDATION.md).
+Linux/WSL is the validated full-suite path. Native Windows has a recorded live Codex pass;
+archive-byte, snapshot replacement and MCP fixture fixes await native confirmation.
+See the [validation record](docs/VALIDATION.md).
 
 ## Development
 
