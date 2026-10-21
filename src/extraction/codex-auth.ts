@@ -1,6 +1,7 @@
 // Environment allowlist adapted from the extracted semantic.ts; see docs/extraction-manifest.json.
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import { resolveCodexInvocation } from './codex-command.js';
 import type { ContextGraphConfig } from '../configuration/config.js';
 import { SemanticProviderError, type SemanticRunOptions } from './semantic-process.js';
 
@@ -47,8 +48,13 @@ export type CodexLoginProbe = (
 /** Read-only status check. Never expose output: API login status may contain key fragments. */
 export const readCodexLoginMode: CodexLoginProbe = async (command, environment, options = {}) => {
   try {
-    const result = await promisify(execFile)(command, ['login', 'status'], {
-      env: environment, timeout: Math.min(options.timeoutMs ?? 5000, 5000),
+    const started = performance.now();
+    const timeoutMs = Math.min(options.timeoutMs ?? 5000, 5000);
+    const invocation = await resolveCodexInvocation(command, environment, process.platform, { ...options, timeoutMs });
+    const remaining = Math.ceil(timeoutMs - (performance.now() - started));
+    if (remaining <= 0) return 'unavailable';
+    const result = await promisify(execFile)(invocation.command, [...invocation.prefixArgs, 'login', 'status'], {
+      env: environment, timeout: remaining,
       signal: options.signal, maxBuffer: 8192, windowsHide: true,
     });
     const output = `${result.stdout}\n${result.stderr}`;

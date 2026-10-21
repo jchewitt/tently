@@ -17,6 +17,11 @@ passed at `4cdc4e5bc8b53bde3b23ce0be550146ac6ae817c`: the full Ubuntu job and a 
 Windows job covering storage contention, committed archive bytes and all original MCP startup
 cases. This Windows subset does not establish full Windows release-preparation readiness.
 
+The Windows reliability increment passed [run 39676848049](https://github.com/jchewitt/weftlet/actions/runs/39676848049):
+34 native Windows tests plus repository inventory and license checks, and the full Ubuntu
+publication gate with 178 deterministic tests. The npm launchers use a synthetic CLI fixture;
+this does not claim live Codex authentication or a full Windows publication gate.
+
 ## Fresh cloud: requires a new task
 
 Before publishing the current environment snapshot:

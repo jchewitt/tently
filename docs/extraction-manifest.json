@@ -199,7 +199,7 @@
       "destinationPath": "scripts/generate-third-party-notices.mjs",
       "sourceSha256": "42cd4996ecab49b008634958e47b0a9eadf9ea775678b8daaeeafea59eaabadf",
       "modified": true,
-      "destinationSha256": "5caf7a08a42e6c482a5c46d87e71413a6776a5af34685dbe98a16ba7035f5c0c"
+      "destinationSha256": "6e9ddb9a0985e2c39d8386168871efeb2589f6bc1bf8c24684cf6c546eced1b2"
     },
     {
       "sourcePath": "tools/context-graph/src/agent-context.test.ts",
@@ -451,7 +451,7 @@
       "destinationPath": "src/extraction/semantic.ts",
       "sourceSha256": "1a41fb3fc5a9508c76be59d1c50b74d70ec96411fcbb7f63b0e098c1813d8473",
       "modified": true,
-      "destinationSha256": "64b4e55294ab37bc84a1c2ad0a8a563003d8ad2329e224ef0c6822965b14d257"
+      "destinationSha256": "9872f2b8ac3bd14f33194d76082fecf0fd34325a6e74b2397f538898aa8fe21e"
     },
     {
       "sourcePath": "tools/context-graph/src/snapshot-checks.test.ts",
@@ -580,6 +580,7 @@
     ".changeset/README.md",
     ".changeset/config.json",
     ".changeset/release-plan.json",
+    ".changeset/windows-consumer-reliability.md",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
     ".github/workflows/version.yml",
@@ -653,6 +654,8 @@
     "scripts/check-restoration.mjs",
     "scripts/clean-build.mjs",
     "scripts/cloud-install.sh",
+    "scripts/git-content.mjs",
+    "scripts/inventory.test.ts",
     "scripts/npm-auth.mjs",
     "scripts/npm-auth.test.ts",
     "scripts/npm-command.mjs",
@@ -678,8 +681,11 @@
     "src/cli.ts",
     "src/extraction/codex-auth.test.ts",
     "src/extraction/codex-auth.ts",
+    "src/extraction/codex-command.test.ts",
+    "src/extraction/codex-command.ts",
     "src/extraction/providers.test.ts",
     "src/extraction/providers.ts",
+    "src/extraction/semantic-process.test.ts",
     "src/extraction/semantic-process.ts",
     "src/governance/governance.test.ts",
     "src/governance/governance.ts",
