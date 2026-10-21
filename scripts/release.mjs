@@ -8,6 +8,7 @@ import { pnpmInvocation } from './package-manager.mjs';
 import { npmAuthOptions, releaseAuthentication } from './npm-auth.mjs';
 import { runNpm, validatePublishInspection } from './npm-command.mjs';
 import { publishAndVerify } from './registry-publication.mjs';
+import { checkReleasePlan } from './release-plan.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const destination = join(root, '.release');
@@ -67,6 +68,7 @@ async function main() {
     throw new Error('Commit the reviewed source and documentation before preparing or publishing a release');
   }
   const commit = git('rev-parse', 'HEAD');
+  const releasePlan = await checkReleasePlan(root);
   const npmCli = await npmCliPath();
   const npm = (...args) => runNpm(npmCli, [...args, `--registry=${registry}`, ...authentication.args], root);
   if (mode === '--prepare') {
@@ -108,7 +110,8 @@ async function main() {
   // Validate every archive before any external write.
   for (const [index, pkg] of manifest.packages.entries()) {
     const filename = `${pkg.name.replace(/^@/, '').replaceAll('/', '-')}-${pkg.version}.tgz`;
-    if (pkg.name !== entries[index][0] || pkg.filename !== filename || filename.includes('..') ||
+    if (pkg.name !== entries[index][0] || pkg.version !== releasePlan.packages[index].version ||
+        pkg.filename !== filename || filename.includes('..') ||
         pkg.integrity !== `sha512-${digest(await readFile(join(destination, filename)))}`) {
       throw new Error('Release archive identity or integrity mismatch');
     }

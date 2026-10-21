@@ -528,3 +528,31 @@ and verifies name, version and archive integrity. Ambiguous/multiple records and
 remain errors. Two npm-command tests pass, including negative response-shape/identity/integrity
 cases, and both package archives pass real dry runs with npm 11.9.0 and 11.21.1. No live npm
 publication was attempted by this failed run.
+
+## Trusted 0.1.1 publication and release automation — 2026-10-21
+
+[Release run 39661957651](https://github.com/jchewitt/weftlet/actions/runs/39661957651) succeeded
+at `720a5f964fe3cb6c438be6d22b4aa8b4ad44de17`: credential-free preparation, both npm OIDC
+uploads, registry visibility and archive integrity checks. Public metadata confirms both packages
+at 0.1.1 with provenance. A fresh public installation passed CLI init and config validation.
+No npm token was supplied. The `npm-release` GitHub environment exists without reviewer/branch
+rules; the workflow main-branch guard remains active. Saving trust alone was not counted as a pass.
+
+Package-specific 0.1.1 Git tags and GitHub Releases were subsequently added at that exact commit,
+after rechecking both registry hashes against the original run's archive manifest. No 0.1.0 tag
+was guessed. npm versions or artifacts were not changed by this record backfill.
+
+For the Changesets automation increment, Linux Node 24.19.0 / pnpm 10.18.2 frozen install and the
+full publication gate passed: **165 deterministic tests** (1 core + 164 toolkit/example/script),
+with one optional Docker/OML test skipped. Build, architecture (12 advisory findings), extraction
+inventory, licenses and fresh packed-consumer smoke passed. The smoke covered setup/config,
+transitive core installation, runtime assets, real TypeScript SCIP, RDF/SPARQL/SHACL, HTML/DOT/SVG
+and MCP. Actionlint 1.7.7 passed all three workflows with shellcheck integration disabled.
+
+New deterministic tests run the actual Changesets CLI in disposable root/core workspaces, verify
+patch/minor fixed-group bumps, changelogs, plan/lockfile/inventory updates and consumed changesets,
+and reject stale or non-advancing plans. Release-record tests reject missing/mismatched registry
+archives and conflicting tags, and resume interrupted creation without duplicates. Recovery-state
+tests select earlier attempts and reject expired or ambiguous artifacts. No paid model call or
+new npm version was published by these tests. Hosted version-PR operation is checked separately;
+a future merged release remains the integration test of automatic publish and record creation.

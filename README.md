@@ -11,7 +11,7 @@ supported capabilities and limitations.
 ## Set up a project
 
 Weftlet uses `@weftlet/toolkit`; its neutral `@weftlet/core` dependency is installed
-automatically. Both packages are available on npm at `0.1.0`; source now prepares `0.1.1`.
+automatically. Both packages are available on npm at `0.1.1`.
 See [release status](docs/RELEASING.md). Existing Tently users should follow
 the [migration guide](docs/MIGRATING-TO-WEFTLET.md).
 
@@ -149,8 +149,9 @@ Live provider tests are separate from deterministic CI. The maintainer authorize
 export and migration from the published `@launch-echo` names to `@weftlet`. Registry publication requires
 an authorized npm identity. Repository visibility changes require separate authorization.
 
-See [npm release instructions](docs/RELEASING.md) for prepared archives, integrity checks and
-the core-before-toolkit publication sequence.
+For changes that should ship, run `pnpm changeset` and commit the generated release note.
+The bot prepares a version PR; merging it publishes those committed versions and records release
+tags. See [npm release instructions](docs/RELEASING.md) for checks, trust settings and recovery.
 
 See [provider contract](docs/PROVIDERS.md) for bounded extraction and adapters, and
 [architecture policy](docs/architecture-policy.md) for deterministic governance.

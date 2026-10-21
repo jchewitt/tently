@@ -1,6 +1,9 @@
 name: Weftlet release
 
 on:
+  push:
+    branches: [main]
+    paths: ['.changeset/release-plan.json']
   workflow_dispatch:
     inputs:
       publish:
@@ -20,6 +23,8 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    outputs:
+      artifact-name: ${{ steps.inventory.outputs.artifact-name }}
     steps:
       - name: Require main branch
         shell: bash
@@ -36,17 +41,21 @@ jobs:
       - name: Use a reviewed npm version with OIDC support
         run: npm install --global npm@11.21.1 --ignore-scripts --no-audit --no-fund
       - run: pnpm install --frozen-lockfile
+      - name: Require committed release versions
+        run: node scripts/check-release-plan.mjs
       - name: Validate and prepare both packages without publishing credentials
         run: pnpm release:prepare
       - name: Record archive inventory for review
+        id: inventory
         shell: bash
         run: |
           printf '### Weftlet release inventory\n\n```json\n' >> "$GITHUB_STEP_SUMMARY"
           cat .release/manifest.json >> "$GITHUB_STEP_SUMMARY"
           printf '\n```\n' >> "$GITHUB_STEP_SUMMARY"
+          printf 'artifact-name=weftlet-release-%s\n' "$GITHUB_RUN_ATTEMPT" >> "$GITHUB_OUTPUT"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: weftlet-release
+          name: ${{ steps.inventory.outputs.artifact-name }}
           path: |
             .release/manifest.json
             .release/*.tgz
@@ -54,14 +63,37 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+  records:
+    needs: [prepare, publish]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24'
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: ${{ needs.prepare.outputs.artifact-name }}
+          path: .release
+      - name: Record verified npm releases without changing main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/record-release.mjs
+
   publish:
-    if: inputs.publish
+    if: github.event_name == 'push' || inputs.publish
     needs: prepare
     runs-on: ubuntu-latest
     timeout-minutes: 20
     environment: npm-release
     permissions:
       contents: read
+      actions: read
       id-token: write
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -74,7 +106,17 @@ jobs:
         run: npm install --global npm@11.21.1 --ignore-scripts --no-audit --no-fund
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
-          name: weftlet-release
+          name: ${{ needs.prepare.outputs.artifact-name }}
+          path: .release
+      - name: Find acceptance receipts from earlier attempts of this run
+        id: recovery
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/restore-publication-state.mjs
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        if: steps.recovery.outputs.name != ''
+        with:
+          name: ${{ steps.recovery.outputs.name }}
           path: .release
       - name: Publish exact prepared archives using npm trusted publishing
         run: node scripts/release.mjs --publish --auth=oidc
@@ -82,7 +124,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: weftlet-publication-state
+          name: weftlet-publication-state-${{ github.run_attempt }}
           path: .release/
           include-hidden-files: true
           if-no-files-found: ignore
