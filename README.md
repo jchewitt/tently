@@ -11,7 +11,7 @@ supported capabilities and limitations.
 ## Set up a project
 
 Weftlet uses `@weftlet/toolkit`; its neutral `@weftlet/core` dependency is installed
-automatically. Both packages are available on npm at `0.1.1`.
+automatically. Both packages are available on npm at `0.1.2`.
 See [release status](docs/RELEASING.md). Existing Tently users should follow
 the [migration guide](docs/MIGRATING-TO-WEFTLET.md).
 

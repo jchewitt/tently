@@ -143,7 +143,7 @@ for (const target of packageTargets) {
   const expected = markdown(target, dependencyRows(report), externalTools);
   if (checkOnly) {
     const current = await readFile(target.path, 'utf8').catch(() => '');
-    if (current !== expected) {
+    if (current.replace(/\r\n/g, '\n') !== expected) {
       console.error(`${target.path} is stale; run pnpm context-graph:licenses`);
       failed = true;
     }

@@ -1,6 +1,8 @@
 # Weftlet npm releases
 
-`@weftlet/core@0.1.1` and `@weftlet/toolkit@0.1.1` are published. Their first trusted
+`@weftlet/core@0.1.2` and `@weftlet/toolkit@0.1.2` are published. The first automatic
+release completed in [run 39672652013](https://github.com/jchewitt/weftlet/actions/runs/39672652013),
+including package tags and GitHub Releases at commit `3d8d1f38a9e70b38178921cdabf5e8714c417c1c`. Their first trusted
 publication passed in [run 39661957651](https://github.com/jchewitt/weftlet/actions/runs/39661957651)
 from commit `720a5f964fe3cb6c438be6d22b4aa8b4ad44de17`, with matching registry archive integrity,
 npm provenance and a fresh public CLI installation. Earlier Weftlet and `@launch-echo` releases

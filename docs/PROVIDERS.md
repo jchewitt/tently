@@ -114,8 +114,30 @@ HDesk subsequently reported a live end-to-end pass at commit
 `gpt-6-astra`/`medium`, using the unchanged adapter and public example. Citation/schema
 validation, real SCIP, RDF/SHACL, snapshot publication/querying and repeat artifact reuse passed.
 See [validation](VALIDATION.md#hdesk-validation-of-6710e9391a6a01345dab5f5be4ae0656e1c9d1ae)
-for counts and scope. Native Windows npm Codex executable discovery still needs improvement;
-this public-example pass does not establish broader semantic quality.
+for counts and scope. The public-example pass does not establish broader semantic quality. Windows launcher coverage
+is recorded separately below.
 
 Provider-dependent tests must remain opt-in, use tiny public fixtures, avoid credentials in
 untrusted CI, and record model/version/date separately from deterministic test results.
+
+## Windows launchers
+
+Diagnostics, login checks and extraction share Codex discovery. On Windows, each nonempty PATH
+directory is searched in order for `codex.exe`, then a standard npm `codex.cmd` launcher. Supported
+npm layouts are a global prefix with `node_modules/@openai/codex` and a project-local
+`node_modules/.bin`. The resolver verifies the package name, JavaScript bin entry and npm shim
+reference, then runs that entry with the current Node executable. It never invokes cmd.exe or
+PowerShell, so spaces and shell metacharacters stay literal. Arbitrary wrappers and alternative
+package-manager layouts are not advertised as supported. An unsupported earlier launcher fails
+instead of silently selecting a different installation later on PATH.
+
+Discovery is bounded to five seconds (or the shorter requested timeout) and honors cancellation.
+Extraction cancellation/timeout terminates the launcher process tree with Windows taskkill;
+on POSIX the existing process-group termination remains in use. Authentication selection, secret
+filtering, source isolation and semantic cache identities are unchanged. Saved-evidence queries
+still do not discover or start Codex.
+
+Deterministic tests install a public synthetic CLI with npm locally and globally, then exercise
+doctor, login probing and isolated extraction without contacting a model or using real credentials.
+These prove launcher plumbing, not live Codex authentication or semantic quality. Browser and live
+authentication follow-up remain deferred at the maintainer's request.

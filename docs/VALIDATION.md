@@ -556,3 +556,32 @@ archives and conflicting tags, and resume interrupted creation without duplicate
 tests select earlier attempts and reject expired or ambiguous artifacts. No paid model call or
 new npm version was published by these tests. Hosted version-PR operation is checked separately;
 a future merged release remains the integration test of automatic publish and record creation.
+
+## Automatic 0.1.2 release and Windows reliability — 2026-10-21
+
+[Release run 39672652013](https://github.com/jchewitt/weftlet/actions/runs/39672652013) completed
+preparation, npm trusted publication and release records at
+`3d8d1f38a9e70b38178921cdabf5e8714c417c1c`. Both registry `latest` tags now identify 0.1.2.
+Both package-specific Git tags resolve to that exact commit, and GitHub Releases were created.
+Versions were committed on main before publication. This validates the first merged Changesets
+release through the automatic push trigger; no post-publication version commit was required.
+
+The next Windows reliability increment adds common discovery for native Codex executables and
+standard global/project-local npm launchers. Tests use actual npm-created launchers with a
+synthetic public CLI to exercise diagnostics, login status and source-isolated extraction. They
+also cover PATH precedence, spaces/metacharacters, rejected/broken shims, secret filtering,
+discovery timeout/cancellation, and termination of a launcher with an active child. They make no
+live Codex request and do not validate real account authentication or model quality.
+
+Inventory tests use actual Git checkouts with core.autocrlf=true and explicit eol=crlf attributes.
+They check unchanged source hashes, checkout bytes, Git configuration and index; genuine edits
+still fail. Binary and -text imports retain exact bytes. Custom filters are rejected without
+execution. License checks accept CRLF formatting while still comparing complete notice text.
+All 79 original source paths/hashes remain unchanged.
+
+The full local publication gate passed on Linux, Node 24.19.0 / pnpm 10.18.2: **177 deterministic
+tests** (1 core + 176 toolkit/example/script), one optional OML test skipped, build, architecture
+(12 advisory findings), inventory, licenses and fresh packed-consumer smoke. Actionlint passed
+with shellcheck integration disabled. The Windows CI job now runs the added launcher, process,
+inventory and license checks; its native result is recorded separately after execution. Browser
+interaction and live authentication testing remain explicitly deferred by the maintainer.

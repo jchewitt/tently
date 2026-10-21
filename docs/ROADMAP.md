@@ -10,7 +10,7 @@ Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
 | 2b. Draft overlays | Base/content identity, reindexed replacement, delete/rename handling, separate checkout/agent heads | Full implementation reindex; changed prose invalidated pending re-extraction |
 | 3. Unified graph | RDF/SPARQL, SHACL, lossless projection, bounded continuation, six-stage async cross-source fixture, negative extraction/linkage cases | Local SELECT only; 100,000-fact projection bound; no universal language support |
 | 4. Governance | Canonical approved rules, dependency-cruiser/ESLint/jscpd, scoped debt/expiry, transitive inference, optional OML ADR/parity | No active OWL reasoner; live formal compilation unverified; heuristics remain advisory |
-| 5. Providers/DX | Codex adapter, HDesk live Windows public-example pass and cache reuse, CLI init/config and npx setup, tested module contract, validation/budgets/timeouts/cancellation/retries/cache identity, diagnostics/progress | Cloud live run remains filesystem-blocked; native Windows npm executable discovery needs improvement; other real providers planned |
+| 5. Providers/DX | Codex adapter, HDesk live Windows public-example pass and cache reuse, CLI init/config and npx setup, tested module contract, validation/budgets/timeouts/cancellation/retries/cache identity, diagnostics/progress | Cloud live run remains filesystem-blocked; npm launcher discovery and CRLF inventory fixes implemented with deterministic fixtures; native CI validation recorded separately; other real providers planned |
 | 6. Viewer | Same facts as agents, clustering, drill-down, bounded path highlighting, optional commit source links, authority/coverage/staleness | No real-browser automation; bounded pages, not a complete interactive explorer |
 
 HDesk results for `6710e9391a6a01345dab5f5be4ae0656e1c9d1ae` are recorded in
@@ -32,7 +32,8 @@ See [provider configuration](PROVIDERS.md#codex-authentication) and the validati
 Native Windows archive conversion, concurrent head-replacement and MCP file-symlink fixes are
 implemented with regression tests and pass focused hosted Windows CI. HDesk confirmation and
 full native Windows release preparation remain separate checks.
-Next work should be separate, reviewed increments: improve CRLF checkout integrity checks;
+The Windows reliability increment adds native/npm Codex discovery, process-tree cancellation
+and Git-aware CRLF inventory checks. Next work should be separate, reviewed increments:
 run bounded semantic-quality evaluations; retain the passing hosted Ubuntu CI gate; validate fresh-cloud
 restoration; resolve the cloud-specific live provider block; add browser
 interaction/accessibility tests; benchmark larger RDF graphs; evaluate a second real provider.
@@ -49,7 +50,7 @@ preparation/publication under `@launch-echo`; the maintainer completed the 0.1.0
 source-application reintegration remain outside the authorized scope. See [release instructions](RELEASING.md).
 
 The maintainer authorized the Weftlet migration on 2026-10-21. Both `@weftlet/core` and
-`@weftlet/toolkit` are published at 0.1.1 through GitHub OIDC, with provenance and a fresh public
+`@weftlet/toolkit` are published at 0.1.2 through GitHub OIDC, with provenance and a fresh public
 installation verified. Changesets now prepares reviewed version PRs for the fixed package group;
 merging a release plan triggers publication and package-specific tags/GitHub Releases.
 See [ADR 009](ADR-009-release-automation.md) and [release instructions](RELEASING.md).

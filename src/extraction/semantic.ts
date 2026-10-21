@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { prepareCodexAuthentication, readCodexLoginMode, type CodexLoginProbe, type SemanticCommandEnvironment } from './codex-auth.js';
 export { semanticCommandEnvironment } from './codex-auth.js';
 export type { SemanticCommandEnvironment } from './codex-auth.js';
+import { resolveCodexInvocation } from './codex-command.js';
 import { runSemanticProcess, SemanticProviderError, type SemanticRunOptions } from "./semantic-process.js";
 export { SemanticProviderError } from "./semantic-process.js";
 export type { SemanticRunOptions } from "./semantic-process.js";
@@ -140,7 +141,12 @@ export interface SemanticCommandRunner {
   ): Promise<void>;
 }
 
-const spawnSemanticCommand: SemanticCommandRunner = { run: runSemanticProcess };
+const spawnSemanticCommand: SemanticCommandRunner = {
+  async run(command, args, cwd, prompt, environment, options) {
+    const invocation = await resolveCodexInvocation(command, environment, process.platform, options);
+    return runSemanticProcess(invocation.command, [...invocation.prefixArgs, ...args], cwd, prompt, environment, options);
+  },
+};
 
 const kinds: readonly GraphNodeKind[] = [
   'Project',
@@ -280,7 +286,7 @@ export class CodexCliSemanticExtractor implements SemanticExtractor {
     if (Buffer.byteLength(source.content) > (this.config.maxSourceBytes ?? 65_536)) {
       throw new SemanticProviderError('invalid-output', 'Semantic source exceeds configured byte budget');
     }
-    const command = process.platform === 'win32' ? 'codex.exe' : 'codex';
+    const command = 'codex';
     const environment = await prepareCodexAuthentication(this.config.auth, process.env, command, options, this.loginProbe);
     const runRoot = await mkdtemp(join(tmpdir(), 'context-graph-codex-'));
     const schemaPath = join(runRoot, 'schema.json');

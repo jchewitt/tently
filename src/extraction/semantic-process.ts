@@ -1,4 +1,5 @@
-import { spawn } from 'node:child_process';
+import { execFile, spawn } from 'node:child_process';
+import { join } from 'node:path';
 
 export interface SemanticRunOptions {
   readonly signal?: AbortSignal;
@@ -30,15 +31,27 @@ export function runSemanticProcess(
     const kill = (signal: NodeJS.Signals) => {
       try {
         if (process.platform !== 'win32' && child.pid) process.kill(-child.pid, signal);
-        else child.kill(signal);
+        else if (child.pid) {
+          // npm's Windows launcher starts a native child. Terminate its tree, not just the Node wrapper.
+          const systemRoot = process.env.SystemRoot ?? process.env.SYSTEMROOT;
+          const taskkill = systemRoot ? join(systemRoot, 'System32', 'taskkill.exe') : 'taskkill.exe';
+          execFile(taskkill, ['/PID', String(child.pid), '/T', '/F'], { windowsHide: true, timeout: 5000 }, error => {
+            if (error && child.exitCode === null && child.signalCode === null) {
+              failure = new SemanticProviderError('unavailable', 'Could not terminate the semantic provider process tree');
+              child.kill('SIGKILL');
+            }
+          });
+        }
       } catch { /* The process may have already exited. */ }
     };
     const stop = (code: 'timeout' | 'cancelled') => {
       if (failure) return;
       failure = new SemanticProviderError(code, `Semantic extraction ${code}`);
       kill('SIGTERM');
-      killTimer = setTimeout(() => kill('SIGKILL'), 1000);
-      killTimer.unref();
+      if (process.platform !== 'win32') {
+        killTimer = setTimeout(() => kill('SIGKILL'), 1000);
+        killTimer.unref();
+      }
     };
     const cancel = () => stop('cancelled');
     options.signal?.addEventListener('abort', cancel, { once: true });

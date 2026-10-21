@@ -46,3 +46,13 @@ On 2026-10-21 the maintainer selected and created the `@weftlet` scope and autho
 to `@weftlet/core` and `@weftlet/toolkit`. This changes destination package names only; the original
 source SHA, imported-path inventory, copyright and attribution remain intact. The maintainer subsequently renamed GitHub to
 `jchewitt/weftlet` on the same date; the checkout remains `/workspace/tently`. See [migration](MIGRATING-TO-WEFTLET.md) and [release status](RELEASING.md).
+
+## Checkout line endings
+
+Destination inventory hashes use Git's CRLF-to-LF conversion only when Git would apply it to that
+path. Checks use `hash-object` without writing objects or staging; they do not change the index,
+Git configuration or checkout bytes. Binary and `-text` files retain their exact bytes. Real
+content edits still invalidate the inventory. Original imported source hashes are never normalized
+or recalculated. Custom clean filters/working-tree encodings on CRLF inputs are rejected instead
+of executed by the checker. Updates preserve CRLF in existing checkout files and the manifest.
+Generated license-notice checks also tolerate CRLF formatting while comparing the complete text.

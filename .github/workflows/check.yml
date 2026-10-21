@@ -21,5 +21,9 @@ jobs:
           node-version: 24
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
-      - name: Native Windows storage, committed bytes and MCP startup
-        run: pnpm exec vitest run src/storage/atomic-rename.test.ts src/repository/git.test.ts tests/snapshot-lifecycle.test.ts tests/mcp-startup.test.ts
+      - name: Native Windows storage, launchers, integrity and MCP startup
+        run: pnpm exec vitest run src/storage/atomic-rename.test.ts src/repository/git.test.ts tests/snapshot-lifecycle.test.ts tests/mcp-startup.test.ts src/extraction/codex-command.test.ts src/extraction/codex-auth.test.ts src/extraction/semantic-process.test.ts scripts/inventory.test.ts
+      - name: Check repository extraction inventory on Windows
+        run: pnpm inventory:check
+      - name: Check generated license notices on Windows
+        run: pnpm context-graph:licenses:check
