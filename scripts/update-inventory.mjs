@@ -36,8 +36,10 @@ for (const entry of manifest.imports) {
   entry.destinationSha256 = digest(content);
 }
 const imported = new Set(manifest.imports.map((entry) => entry.destinationPath));
+const deleted = new Set(execFileSync('git', ['ls-files', '--deleted', '-z'],
+  { cwd: root, encoding: 'utf8' }).split('\0').filter(Boolean));
 manifest.authoredPaths = [...new Set(execFileSync('git', ['ls-files', '--cached', '--others', '--exclude-standard', '-z'],
-  { cwd: root, encoding: 'utf8' }).split('\0').filter(Boolean))].filter((path) => !imported.has(path)).sort();
+  { cwd: root, encoding: 'utf8' }).split('\0').filter(Boolean))].filter((path) => !imported.has(path) && !deleted.has(path)).sort();
 const expected = JSON.stringify(manifest, null, 2) + '\n';
 if (check && expected !== existing) throw new Error('Extraction manifest is stale; run pnpm inventory:update');
 if (!check) await writeFile(path, expected);

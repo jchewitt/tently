@@ -39,9 +39,9 @@ export function releaseAuthentication(mode, npmVersion, environment = process.en
   }
   if (environment.GITHUB_ACTIONS !== 'true' || environment.RUNNER_ENVIRONMENT !== 'github-hosted' ||
       environment.GITHUB_REPOSITORY !== 'jchewitt/weftlet' || environment.GITHUB_REF !== 'refs/heads/main' ||
-      environment.GITHUB_EVENT_NAME !== 'workflow_dispatch' ||
+      !['workflow_dispatch', 'push'].includes(environment.GITHUB_EVENT_NAME) ||
       !environment.ACTIONS_ID_TOKEN_REQUEST_URL || !environment.ACTIONS_ID_TOKEN_REQUEST_TOKEN) {
-    throw new Error('OIDC publication requires the manually dispatched GitHub-hosted main-branch release workflow with id-token: write');
+    throw new Error('OIDC publication requires the GitHub-hosted main-branch release workflow on push or manual dispatch with id-token: write');
   }
   if (Object.entries(environment).some(([key, value]) => value &&
       (['WEFTLET_NPM_TOKEN', 'TENTLY_NPM_TOKEN', 'NODE_AUTH_TOKEN', 'NPM_TOKEN'].includes(key.toUpperCase()) ||

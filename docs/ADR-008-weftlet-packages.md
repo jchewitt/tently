@@ -1,6 +1,7 @@
 # ADR 008: Weftlet package identity and publishing
 
-Status: accepted by the maintainer, 2026-10-21. Publication and trusted-publisher validation are pending.
+Status: accepted by the maintainer, 2026-10-21. Both packages are published; trusted publishing passed for 0.1.1.
+Release initiation/versioning is superseded by [ADR 009](ADR-009-release-automation.md).
 
 Use `@weftlet/core` for neutral contracts and `@weftlet/toolkit` for the implementation, CLI and
 MCP server. Both new package names start at 0.1.0; npm versions belong to each package name, so

@@ -1,146 +1,156 @@
 # Weftlet npm releases
 
-The maintainer published `@weftlet/core@0.1.0` and `@weftlet/toolkit@0.1.0`; both versions
-and their archive integrity are verified against the public registry. Current source prepares
-`0.1.1` for both packages, with independent-project descriptions and updated documentation.
-The earlier `@launch-echo/tently-core@0.1.0` and `@launch-echo/tently@0.1.0`
-releases remain available and undeprecated; their public installation evidence is in
-[validation](VALIDATION.md). GitHub is now `jchewitt/weftlet`; npm and GitHub owner names need not match.
+`@weftlet/core@0.1.1` and `@weftlet/toolkit@0.1.1` are published. Their first trusted
+publication passed in [run 39661957651](https://github.com/jchewitt/weftlet/actions/runs/39661957651)
+from commit `720a5f964fe3cb6c438be6d22b4aa8b4ad44de17`, with matching registry archive integrity,
+npm provenance and a fresh public CLI installation. Earlier Weftlet and `@launch-echo` releases
+remain available and undeprecated. GitHub and npm owner names need not match.
 
-Live Codex authentication validation is tentative and non-blocking for release, as accepted by
-the maintainer. Deterministic release checks still apply. Native Windows limitations remain
-recorded; use Linux or WSL for the full release gate. See [consumer migration](MIGRATING-TO-WEFTLET.md).
+Live Codex authentication follow-up remains tentative and non-blocking, as accepted by the
+maintainer. Deterministic release checks still apply. Linux/WSL is the validated full release
+preparation route; native Windows has focused CI coverage. See [validation](VALIDATION.md).
 
-## Trusted-publisher setup
+## Normal development and release
 
-The initial manual publication is complete. Sign in to npm with package administration permission
-and configure **both** [core](https://www.npmjs.com/package/@weftlet/core) and
-[toolkit](https://www.npmjs.com/package/@weftlet/toolkit): Settings → Trusted Publisher →
-GitHub Actions, using the following identity:
+1. For a change that should ship, run `pnpm changeset`, choose patch/minor/major and write a short
+   user-facing description. Commit the generated Markdown with the change. The bump type is a
+   contributor decision, not inferred from commit messages. Documentation-only work that does not
+   need an npm release can omit a changeset.
+2. On main pushes, **Release version PR** opens or updates a bot PR. Core and toolkit are a fixed
+   release group: a release of either advances both to the same version. The PR contains package
+   versions, dependency/lockfile updates, changelogs, a generated `.changeset/release-plan.json`,
+   and an updated extraction inventory. Original source hashes remain unchanged.
+3. Review the version PR and its checks, then merge it. This commits the versions to `main`
+   **before** npm publication. Do not manually bump manifests or edit the generated plan.
+4. The plan change triggers **Weftlet release**. It validates and prepares both archives, publishes
+   core followed by toolkit using npm trusted publishing, then verifies registry integrity.
+5. After both versions are verified, a separate job creates tags such as `@weftlet/core@0.1.2`
+   and `@weftlet/toolkit@0.1.2`, plus corresponding GitHub Releases, at that exact source commit.
+   Existing tags are never moved. The publication job does not commit back to main.
+
+The bot uses GitHub's built-in token, not a personal access token. GitHub may require Settings →
+Actions → General → Workflow permissions → **Allow GitHub Actions to create and approve pull
+requests**. The workflow grants its own explicit permissions; the repository default need not
+be changed to write. The bot creates PRs; it does not approve or merge them. Since commits made
+with `GITHUB_TOKEN` do not trigger ordinary PR workflows, it explicitly dispatches `check.yml`
+on the release PR branch. Inspect the checks for the current PR commit before merging.
+
+Versioning is automatic once changesets are supplied; publication remains dependent on passing
+checks and configured environment rules. A failed publish can temporarily leave main ahead of
+npm. Retry that release at the same commit/version instead of generating another bump.
+
+## npm trust and GitHub environment
+
+Trust is configured separately for both [core](https://www.npmjs.com/package/@weftlet/core) and
+[toolkit](https://www.npmjs.com/package/@weftlet/toolkit), with these settings:
 
 | npm setting | Value |
 | --- | --- |
 | Organization or user | `jchewitt` |
 | Repository | `weftlet` |
-| Workflow filename | `publish.yml` (filename only) |
+| Workflow filename | `publish.yml` |
 | Environment name | `npm-release` |
-| Allowed action | Enable direct `npm publish` |
+| Allowed action | Direct `npm publish` enabled |
 
-On GitHub, create repository Settings → Environments → `npm-release`. Restrict deployment branches
-to `main` and configure a required reviewer. A sole maintainer must be allowed to approve their own
-release: leave **Prevent self-review** unchecked when approving your own runs. Do not rely on the YAML environment
-name alone: an automatically created environment has
-no review protection until you configure it. No npm token secret is required for OIDC publication.
-Keep npm account 2FA enabled. The package's repository metadata already identifies `jchewitt/weftlet`.
+The automation retains this identity, so existing npm trust needs no change. Keep npm account
+2FA enabled. No npm token secret is required. If configuring a new trust relationship, consult
+[npm's current requirements](https://docs.npmjs.com/trusted-publishers/), including its initial-use deadline.
 
-npm trusted-publisher setup is not validated merely by saving these settings. Test with a later,
-intentional versioned publication. Current npm documentation says a new trust configuration must
-be used within two days or it expires; configure it close to the intended release, and reconfirm
-that behavior in [npm's documentation](https://docs.npmjs.com/trusted-publishers/).
+`npm-release` is a GitHub deployment environment, not a machine or npm account. Its existing
+configuration has no required reviewer or branch rules. The workflow itself requires main.
+To add an approval pause, configure a required reviewer and main-only deployment branches under
+Settings → Environments → npm-release. A sole maintainer approving their own releases must leave
+**Prevent self-review** unchecked. The workflow honors those rules if configured; its YAML name
+alone does not create review protection.
 
-## Prepare reviewed archives
+## Validation and manual preparation
 
-Use Node 24 and pnpm 10.18.2 in a clean, committed checkout. The new namespace starts at 0.1.0;
-subsequent content changes require a new version for the affected packages. Update the lockfile
-when changing workspace dependency versions. Never overwrite or republish an existing version.
+Use Node 24 and pnpm 10.18.2. The full gate can run during ordinary development without a release plan:
 
 ```sh
-nvm install
-nvm use
 pnpm install --frozen-lockfile
-pnpm release:prepare
+pnpm context-graph:publication-check
 ```
 
-This runs build, deterministic tests, architecture checks, extraction inventory, license checks
-and a fresh packed-consumer smoke. The smoke uses a disposable registry for the two local packages,
-exercises npx inference and automatic core installation, and checks SCIP, RDF/SHACL, visualization
-and MCP. No live model or public npm upload is invoked.
+It runs build, deterministic tests, architecture, inventory, licenses and a fresh packed-consumer
+smoke. The smoke exercises setup/config, automatic core installation, real TypeScript SCIP,
+RDF/SHACL, visualization and MCP. No live model or public npm upload is invoked.
 
-Preparation packs with pnpm, resolves workspace dependency ranges and records commit, names,
-versions and SHA-512 integrity in `.release/manifest.json`. Review it, the tarball file lists and
-`docs/extraction-manifest.json`. Existing versions must match the prepared archive exactly;
-unpublished versions receive an npm dry run. A dry run does not establish OIDC authorization.
+After the generated release PR is committed, `pnpm release:prepare` also packs both packages,
+resolves workspace ranges, dry-runs unpublished versions and records source commit, versions and
+SHA-512 integrity in `.release/manifest.json`. Review the manifest, tarball file lists and extraction
+inventory. Preparation refuses pending changesets and stale release plans. It requires a clean
+checkout. An existing npm version must match exactly; different bytes stop the release.
 
-Both JavaScript pnpm and standalone `@pnpm/exe` are supported. The publisher must find npm's
-JavaScript entry point beside Node. The workflow pins npm 11.21.1; trusted publishing requires
-at least npm 11.5.1. Use the workflow's pinned tools when reproducing CI release preparation.
+Actions → **Weftlet release** → **Run workflow** remains available on main. Leave **publish**
+unchecked for preparation only, or select it for an intentional release of the committed plan.
+The preparation job has read-only repository permissions and no OIDC permission. Its uploaded
+`weftlet-release-N` artifact (`N` is the run attempt) is the exact publication input. The publish
+job installs no project dependencies and performs no build. It alone has `id-token: write`;
+the separate release-record job has `contents: write` and no npm publishing permission.
 
-## Initial or local publication with npm login
+Actions and npm are pinned; npm 11.21.1 is used for OIDC. OIDC preconditions require the expected
+repository, main, a push/manual trigger, hosted runner and OIDC request variables. Ambient npm
+tokens are rejected and npm configuration is isolated. `npm whoami` is skipped because it cannot
+validate trusted publishing. npm verifies the identity and creates provenance. There is no token
+fallback. JavaScript pnpm and standalone `@pnpm/exe` are supported for local tooling.
 
-From the same clean checkout and reviewed archives, in an interactive terminal:
+## Delayed visibility and failed releases
+
+Publication is sequential, not atomic across packages. Registry visibility and integrity of core
+are checked before toolkit is uploaded. An identical existing release is skipped. Only HTTP 404
+is treated as pending; authentication, network and integrity failures stop publication.
+
+After npm accepts an upload, the publisher writes a package/integrity-specific `.accepted.json`
+receipt and polls public metadata up to 21 times, 15 seconds apart. It never intentionally uploads
+an accepted version again. A process interruption between acceptance and receipt writing still
+requires inspection of npm state.
+
+For a failed GitHub run, use **Re-run failed jobs** on the original run. Each attempt saves
+`weftlet-publication-state-N` with exact archives and receipts, even on failure. The next attempt
+restores the latest earlier receipt artifact from that same run before publishing. Artifact lookup
+errors, expired latest receipts or ambiguous state fail instead of silently discarding evidence.
+Artifacts are retained for 30 days. Release-record creation is also idempotent: a retry completes
+missing records without moving tags or duplicating releases.
+
+Do not start a new workflow run while an accepted package is still processing: different runs do
+not share receipts. If artifacts expired, inspect npm and recover the original archives/receipts
+before proceeding. Do not bump versions to hide a partially published release. Once both versions
+are visible, exact integrity checks make retries safe. A newly prepared archive that differs from
+the original is an error, even if its package version is the same.
+
+For authorized local recovery, restore the original `.release/` at its manifest's commit, then:
 
 ```sh
 npm login --registry=https://registry.npmjs.org
-npm whoami --registry=https://registry.npmjs.org
 pnpm release:publish
 ```
 
-Complete npm's browser/2FA challenge when requested. Do not pipe or redirect the publication
-command: npm needs terminal input and output for the interactive flow. The default `login` mode
-retains npm's normal credentials and uses `whoami`; it does not silently select OIDC.
+Use an interactive terminal for npm browser/2FA challenges. Local publication uses normal login
+and disables CI provenance. `WEFTLET_NPM_TOKEN` (legacy `TENTLY_NPM_TOKEN`) remains available for
+an explicitly authorized token environment; never commit tokens or pass them to the OIDC workflow.
+Local publication does not create GitHub tags/releases automatically; the verified workflow's
+record job is the normal route.
 
-For an authorized token environment, `WEFTLET_NPM_TOKEN` is supported through a temporary,
-restricted-permission npm configuration containing only the literal variable reference. Legacy
-`TENTLY_NPM_TOKEN` remains accepted if the new variable is absent. Never paste tokens in chat,
-commit them, or provide either token to the trusted-publishing workflow. No cloud secret is needed
-when publication happens from the maintainer's authenticated WSL session.
+## Inspecting and consuming releases
 
-## GitHub trusted publication
+Package-specific tags identify the exact published source, for example:
 
-The workflow `.github/workflows/publish.yml` is manually dispatched, main-branch only, and serialized.
-It does not run on pushes or pull requests. From GitHub Actions → **Weftlet release** → **Run workflow**:
+```sh
+git fetch --tags
+git switch --detach '@weftlet/toolkit@0.1.2'
+```
 
-1. Select `main`. Leave **publish** unchecked for preparation only. Review the uploaded
-   `weftlet-release` artifact and manifest in the run summary.
-2. For an intentional release, select **publish**. The preparation job runs again on that exact
-   commit, without publishing credentials. Inspect that run's artifact before approving its
-   `npm-release` deployment; a different run's archive is not the approval target.
-3. After configured environment approval, the publish job checks out the same source, downloads
-   those artifacts and runs `node scripts/release.mjs --publish --auth=oidc`. It does not install
-   project dependencies or rebuild the packages. Only this job has `id-token: write`.
+Tags support inspection and reproduction, not mutation of npm history. To roll a consumer back,
+install an earlier published version; fixes to a release need a new changeset/version.
 
-Actions are pinned to commits. Neither job restores a dependency cache. OIDC mode requires a
-GitHub-hosted runner, the expected repository/ref/manual trigger and OIDC request variables;
-it rejects ambient npm token variables and isolates user/global npm configuration. npm performs
-actual identity validation against each package's trust settings. `npm whoami` is deliberately
-skipped in OIDC mode because it is not a trusted-publisher authorization check. Unsupported npm,
-missing trust or rejected identity must fail; there is no token fallback configured by this workflow.
-
-npm creates provenance for public packages published from this public repository through OIDC.
-Local publication explicitly disables CI provenance. Prepared artifacts and synthetic OIDC tests
-do not prove that a live trusted publish or provenance verification has succeeded.
-
-## Ordering, delayed visibility and recovery
-
-Before any upload, the publisher validates every archive hash and its source commit. It publishes
-core first, waits for registry visibility and verifies integrity, then publishes the toolkit. An
-existing identical release is skipped; different bytes at the same version stop publication.
-Publication across packages is not atomic.
-
-After npm accepts an upload it may remain invisible while processing. The publisher saves a
-package/integrity-specific `.accepted.json` receipt under `.release/` and retries only public
-metadata reads, up to 21 checks, 15 seconds apart. Only 404 is treated as pending. Never repeatedly
-upload an accepted version. Keep `.release/` and retry `release:publish` later to resume verification.
-A receipt cannot cover a process interruption before it is written; inspect registry state before
-recovery. Authentication, network and integrity errors are not treated as missing packages.
-
-The workflow uploads `weftlet-publication-state`, including receipts, even when publication fails.
-For a processing timeout, recover those exact archives and receipts into `.release/` at the
-manifest's source commit before an authorized local retry. Do not blindly rerun the whole workflow
-while an accepted upload is still processing: a new run starts without the old receipt. Once a
-release is visible, the normal integrity check safely skips its already published packages.
-
-## Verify public installation before retiring old names
-
-After successful publication, use a fresh disposable project:
+Verify a new public release in a fresh disposable project, substituting its version:
 
 ```sh
 npm init -y
-npx --yes @weftlet/toolkit@0.1.0 init --yes
-npx --yes @weftlet/toolkit@0.1.0 config validate
+npx --yes @weftlet/toolkit@0.1.1 init --yes
+npx --yes @weftlet/toolkit@0.1.1 config validate
 ```
 
-Use the actual release version for later releases. Verify registry versions and hashes, core's
-transitive resolution, CLI/MCP operation and provenance when applicable. Update release status
-only after those public checks pass. Deprecating the old `@launch-echo` names is a separate registry
-action after replacement verification; never unpublish the old releases.
+Check registry hashes, transitive core resolution and provenance. Deprecating the previous
+`@launch-echo` names is a separate action after replacement verification; never unpublish them.

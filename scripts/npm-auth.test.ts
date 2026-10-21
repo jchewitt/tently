@@ -43,6 +43,8 @@ it('isolates OIDC from user and global npm credentials and cleans both files', a
 
 it('keeps manual authentication and explicitly selects OIDC without a whoami probe', () => {
   expect(releaseAuthentication('login', '11.9.0', {})).toEqual({ requiresWhoami: true, isolate: false });
+  expect(releaseAuthentication('oidc', '11.21.1', { ...oidcEnvironment, GITHUB_EVENT_NAME: 'push' }))
+    .toEqual({ requiresWhoami: false, isolate: true });
   for (const version of ['11.5.1', '11.21.1', '12.0.0']) {
     expect(releaseAuthentication('oidc', version, oidcEnvironment)).toEqual({ requiresWhoami: false, isolate: true });
   }
@@ -58,10 +60,10 @@ it('rejects OIDC outside the intended runner, repository, ref, trigger or token 
     ACTIONS_ID_TOKEN_REQUEST_URL: '', ACTIONS_ID_TOKEN_REQUEST_TOKEN: '',
   })) {
     expect(() => releaseAuthentication('oidc', '11.21.1', { ...oidcEnvironment, [key]: value }))
-      .toThrow('manually dispatched');
+      .toThrow('main-branch release workflow');
   }
   expect(() => releaseAuthentication('oidc', '11.21.1', { ...oidcEnvironment, GITHUB_REPOSITORY: 'jchewitt/tently' }))
-    .toThrow('manually dispatched');
+    .toThrow('main-branch release workflow');
   expect(() => releaseAuthentication('auto', '11.21.1', oidcEnvironment)).toThrow('login or oidc');
 });
 

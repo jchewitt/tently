@@ -48,8 +48,9 @@ destination to `jchewitt/tently` for local testing. The subsequent npm request a
 preparation/publication under `@launch-echo`; the maintainer completed the 0.1.0 release from WSL. Visibility changes and
 source-application reintegration remain outside the authorized scope. See [release instructions](RELEASING.md).
 
-The maintainer authorized the Weftlet migration on 2026-10-21. Current source targets
-`@weftlet/core` and `@weftlet/toolkit`, with a `weftlet` CLI and a manually dispatched trusted
-publishing workflow. Both Weftlet packages are published at 0.1.0; source prepares 0.1.1.
-npm trust configuration and a live OIDC publish remain external steps; the earlier Tently
-packages remain available and undeprecated.
+The maintainer authorized the Weftlet migration on 2026-10-21. Both `@weftlet/core` and
+`@weftlet/toolkit` are published at 0.1.1 through GitHub OIDC, with provenance and a fresh public
+installation verified. Changesets now prepares reviewed version PRs for the fixed package group;
+merging a release plan triggers publication and package-specific tags/GitHub Releases.
+See [ADR 009](ADR-009-release-automation.md) and [release instructions](RELEASING.md).
+Earlier Tently packages remain available and undeprecated.
