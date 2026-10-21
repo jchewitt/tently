@@ -10,7 +10,7 @@ Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
 | 2b. Draft overlays | Base/content identity, reindexed replacement, delete/rename handling, separate checkout/agent heads | Full implementation reindex; changed prose invalidated pending re-extraction |
 | 3. Unified graph | RDF/SPARQL, SHACL, lossless projection, bounded continuation, six-stage async cross-source fixture, negative extraction/linkage cases | Local SELECT only; 100,000-fact projection bound; no universal language support |
 | 4. Governance | Canonical approved rules, dependency-cruiser/ESLint/jscpd, scoped debt/expiry, transitive inference, optional OML ADR/parity | No active OWL reasoner; live formal compilation unverified; heuristics remain advisory |
-| 5. Providers/DX | Codex adapter, HDesk live Windows public-example pass and cache reuse, CLI init/config and npx setup, tested module contract, validation/budgets/timeouts/cancellation/retries/cache identity, diagnostics/progress | Cloud live run remains filesystem-blocked; npm launcher discovery and CRLF inventory fixes implemented with deterministic fixtures; native CI validation recorded separately; other real providers planned |
+| 5. Providers/DX | Codex adapter, HDesk live Windows public-example pass and cache reuse, CLI init/config and npx setup, tested module contract, validation/budgets/timeouts/cancellation/retries/cache identity, diagnostics/progress | Cloud live run remains filesystem-blocked; native npm launcher discovery and CRLF integrity validated in hosted Windows; live auth follow-up and other real providers remain |
 | 6. Viewer | Same facts as agents, clustering, drill-down, bounded path highlighting, optional commit source links, authority/coverage/staleness | No real-browser automation; bounded pages, not a complete interactive explorer |
 
 HDesk results for `6710e9391a6a01345dab5f5be4ae0656e1c9d1ae` are recorded in
@@ -33,7 +33,9 @@ Native Windows archive conversion, concurrent head-replacement and MCP file-syml
 implemented with regression tests and pass focused hosted Windows CI. HDesk confirmation and
 full native Windows release preparation remain separate checks.
 The Windows reliability increment adds native/npm Codex discovery, process-tree cancellation
-and Git-aware CRLF inventory checks. Next work should be separate, reviewed increments:
+and Git-aware CRLF inventory/license checks. Hosted Windows passed 34 selected tests plus
+repository inventory and licenses; hosted Ubuntu passed the full 178-test publication gate.
+Browser and live authentication checks remain deferred. Next work should be separate, reviewed increments:
 run bounded semantic-quality evaluations; retain the passing hosted Ubuntu CI gate; validate fresh-cloud
 restoration; resolve the cloud-specific live provider block; add browser
 interaction/accessibility tests; benchmark larger RDF graphs; evaluate a second real provider.

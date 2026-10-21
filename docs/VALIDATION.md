@@ -593,3 +593,13 @@ license check caught CRLF conversion of a pinned reviewed notice. That check now
 Git-aware content reader; the reviewed notice and its approved SHA-256 remain unchanged.
 Discovery time is included in existing probe/extraction timeout budgets. Updated hosted checks
 are required before merging this increment.
+
+
+PASS: [hosted run 39676848049](https://github.com/jchewitt/weftlet/actions/runs/39676848049)
+at `ef2f8e31cbcae402ca08979e90aff4f00fb91c77`. Ubuntu passed the full publication gate with **178 deterministic tests**
+(1 core + 177 toolkit/example/script), one optional OML test skipped, 12 advisory architecture
+findings, build, inventory, licenses and packed-consumer smoke. Native Windows passed **34**
+selected tests, including global/local npm launcher installation, discovery, login/extraction
+plumbing, process-tree cancellation, CRLF inventories, storage/Git and all original MCP startup
+cases. The repository inventory and complete license checks also passed natively. This is focused
+Windows coverage, not a full native Windows publication gate or a live Codex account/model test.
