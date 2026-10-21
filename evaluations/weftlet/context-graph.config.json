@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "repositoryRoot": "../..",
+  "repositoryId": "jchewitt/weftlet",
+  "namespace": "https://weftlet.dev/evaluation/",
+  "semanticSources": [
+    "docs/ADR-002-saved-evidence.md",
+    "docs/ADR-003-draft-overlays.md",
+    "docs/ADR-004-rdf-query-path.md",
+    "docs/ADR-006-provider-boundaries.md",
+    "docs/PROVIDERS.md",
+    "docs/VIEWER.md"
+  ],
+  "approvedIntentSources": [],
+  "codeRoots": ["src", "packages/core/src"],
+  "contractPatterns": [],
+  "evidenceRoots": ["tests", "src", "packages/core/src"],
+  "semantic": {
+    "provider": "module",
+    "providerModule": "./evaluations/weftlet/document-only.mjs",
+    "providerIdentity": "weftlet-document-only-v1",
+    "model": "none-document-links-only",
+    "reasoningEffort": "none",
+    "promptVersion": "document-control-v1",
+    "extractorVersion": "1.1.0",
+    "adapterVersion": "1.1.0",
+    "ontologyVersion": "1.1.0",
+    "minimumConfidence": 0.7,
+    "failOnUnresolved": true,
+    "concurrency": 1,
+    "maxDocuments": 6,
+    "maxSourceBytes": 65536,
+    "timeoutMs": 120000,
+    "retries": 0
+  },
+  "scip": {
+    "version": "0.4.0",
+    "command": "bundled-scip-typescript",
+    "args": ["index", "--no-global-caches", "--infer-tsconfig"]
+  },
+  "ontology": { "backend": "rdf", "toolVersion": "rdf-record-v1" },
+  "runtimeEvidence": [],
+  "storagePath": ".context-graph/evaluation/weftlet"
+}

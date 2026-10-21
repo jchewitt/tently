@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "status": "Maintainer-reviewable evaluation hypotheses, not approved product intent or CI policy",
+  "budget": { "maxFacts": 60, "maxDepth": 32, "maxPages": 3 },
+  "cases": [
+    {
+      "id": "atomic-publication",
+      "task": "Change atomic snapshot-head replacement while preserving concurrent publication and saved-evidence availability.",
+      "changedFiles": ["src/storage/atomic-rename.ts"],
+      "expected": [
+        { "path": "src/storage/storage.ts", "category": "implementation", "reason": "Snapshot heads use atomicRename through atomicJson." },
+        { "path": "src/application/hydrator.ts", "category": "implementation", "reason": "Hydration publishes a snapshot before advancing its head." },
+        { "path": "src/application/overlay.ts", "category": "implementation", "reason": "Draft publication also depends on snapshot/head storage." },
+        { "path": "tests/snapshot-lifecycle.test.ts", "category": "test", "reason": "Exercises concurrent immutable publication and saved evidence." },
+        { "path": "src/storage/atomic-rename.test.ts", "category": "test", "reason": "Checks transient Windows rename failures and retry behavior." },
+        { "path": "docs/ADR-002-saved-evidence.md", "category": "intent-document", "reason": "Explains atomic publication and last-valid saved evidence." }
+      ],
+      "distractions": ["src/extraction/telemetry.ts"]
+    },
+    {
+      "id": "impact-query",
+      "task": "Change impact.scan pagination and evidence coverage while keeping MCP and visualization consistent.",
+      "changedFiles": ["src/graph/query.ts"],
+      "expected": [
+        { "path": "packages/core/src/core.ts", "category": "contract", "reason": "ContextPack and ImpactScanRequest are shared public contracts." },
+        { "path": "src/visualization/visualization.ts", "category": "implementation", "reason": "Renders the queried ContextPack and its truncation/coverage metadata." },
+        { "path": "src/interfaces/mcp.ts", "category": "implementation", "reason": "Exposes impact.scan and its context-pack result to agents." },
+        { "path": "src/application/saved-evidence.ts", "category": "implementation", "reason": "Decorates query results with checkout freshness and excluded changes." },
+        { "path": "src/graph/query.test.ts", "category": "test", "reason": "Exercises query evidence, authority and bounded selection." },
+        { "path": "docs/ADR-004-rdf-query-path.md", "category": "intent-document", "reason": "Specifies shared RDF facts, continuation and authority separation." }
+      ],
+      "distractions": ["src/extraction/codex-command.ts"]
+    },
+    {
+      "id": "codex-launcher",
+      "task": "Change Codex executable discovery while preserving authentication diagnostics and semantic extraction on Windows.",
+      "changedFiles": ["src/extraction/codex-command.ts"],
+      "expected": [
+        { "path": "src/extraction/semantic.ts", "category": "implementation", "reason": "The real semantic runner resolves the executable and deducts discovery time." },
+        { "path": "src/extraction/codex-auth.ts", "category": "implementation", "reason": "Login probing shares executable discovery." },
+        { "path": "src/interfaces/doctor.ts", "category": "implementation", "reason": "Setup diagnostics must discover the same installed executable." },
+        { "path": "src/extraction/codex-command.test.ts", "category": "test", "reason": "Exercises real npm-style launchers without a live model." },
+        { "path": "docs/PROVIDERS.md", "category": "intent-document", "reason": "Documents supported launchers, authentication, timeouts and cancellation." },
+        { "path": "docs/ADR-006-provider-boundaries.md", "category": "intent-document", "reason": "Defines lazy provider loading so unavailable providers do not block queries." }
+      ],
+      "distractions": ["src/visualization/viewer-interaction.ts"]
+    },
+    {
+      "id": "working-content",
+      "task": "Change how working file bytes are captured while preserving overlay freshness and historical-evidence limits.",
+      "changedFiles": ["src/repository/working-content.ts"],
+      "expected": [
+        { "path": "src/application/overlay.ts", "category": "implementation", "reason": "Captures draft bytes and content identities." },
+        { "path": "src/application/saved-evidence.ts", "category": "implementation", "reason": "Compares the current bytes with captured overlay evidence." },
+        { "path": "src/application/snapshot-checks.ts", "category": "implementation", "reason": "Gates must continue rejecting draft or stale evidence for current-diff validation." },
+        { "path": "src/application/overlay.test.ts", "category": "test", "reason": "Exercises edit/delete/rename replacement and freshness." },
+        { "path": "src/repository/working-content.test.ts", "category": "test", "reason": "Checks bounded working-file reads and scope handling." },
+        { "path": "docs/ADR-003-draft-overlays.md", "category": "intent-document", "reason": "Explains draft identity, replacement, isolation and non-eligibility for gates." }
+      ],
+      "distractions": ["src/extraction/codex-command.ts"]
+    }
+  ]
+}

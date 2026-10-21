@@ -58,6 +58,7 @@
     "release:prepare": "pnpm context-graph:publication-check && node scripts/release.mjs --prepare",
     "release:publish": "node scripts/release.mjs --publish",
     "govern": "tsx src/cli.ts govern --policy architecture.policy.json --output .context-graph/architecture-report.json",
+    "evaluate:impact": "tsx scripts/evaluation/run.ts",
     "weftlet": "tsx src/cli.ts",
     "changeset": "changeset",
     "release:version": "node scripts/version-packages.mjs"

@@ -35,8 +35,13 @@ full native Windows release preparation remain separate checks.
 The Windows reliability increment adds native/npm Codex discovery, process-tree cancellation
 and Git-aware CRLF inventory/license checks. Hosted Windows passed 34 selected tests plus
 repository inventory and licenses; hosted Ubuntu passed the full 178-test publication gate.
-Browser and live authentication checks remain deferred. Next work should be separate, reviewed increments:
-run bounded semantic-quality evaluations; retain the passing hosted Ubuntu CI gate; validate fresh-cloud
+Browser and live authentication checks remain deferred. An advisory [self-repository impact
+evaluation](IMPACT-EVALUATION.md) now measures four realistic changes with real SCIP/RDF/SHACL
+and zero model assertions: 13/24 expected candidate files on the first page, 16/24 within
+three pages. Test/workspace indexing, prose linkage and broad query reachability remain gaps;
+live semantic quality is not established by this control. Next work should be separate, reviewed increments:
+improve test/workspace evidence and repeat the fixed cases; run a bounded live semantic comparison;
+retain the passing hosted Ubuntu CI gate; validate fresh-cloud
 restoration; resolve the cloud-specific live provider block; add browser
 interaction/accessibility tests; benchmark larger RDF graphs; evaluate a second real provider.
 Figma and source-application reintegration are future adapter work.
