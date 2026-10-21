@@ -1,6 +1,6 @@
 # Delivery roadmap
 
-Destination: `jchewitt/tently`. Read-only source:
+Destination: `jchewitt/weftlet`. Read-only source:
 `launchecho/tradepilot@fda97e0146099543aeaa6b338ef2b0e9fab0d1d6`.
 
 | Milestone | Delivered and checked | Remaining limits |

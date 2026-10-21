@@ -19,7 +19,7 @@ it('scopes npm authentication to its registry using only a temporary variable re
 });
 
 const oidcEnvironment = {
-  GITHUB_ACTIONS: 'true', RUNNER_ENVIRONMENT: 'github-hosted', GITHUB_REPOSITORY: 'jchewitt/tently',
+  GITHUB_ACTIONS: 'true', RUNNER_ENVIRONMENT: 'github-hosted', GITHUB_REPOSITORY: 'jchewitt/weftlet',
   GITHUB_REF: 'refs/heads/main', GITHUB_EVENT_NAME: 'workflow_dispatch',
   ACTIONS_ID_TOKEN_REQUEST_URL: 'https://example.invalid/oidc', ACTIONS_ID_TOKEN_REQUEST_TOKEN: 'fixture-only',
 };
@@ -60,6 +60,8 @@ it('rejects OIDC outside the intended runner, repository, ref, trigger or token 
     expect(() => releaseAuthentication('oidc', '11.21.1', { ...oidcEnvironment, [key]: value }))
       .toThrow('manually dispatched');
   }
+  expect(() => releaseAuthentication('oidc', '11.21.1', { ...oidcEnvironment, GITHUB_REPOSITORY: 'jchewitt/tently' }))
+    .toThrow('manually dispatched');
   expect(() => releaseAuthentication('auto', '11.21.1', oidcEnvironment)).toThrow('login or oidc');
 });
 

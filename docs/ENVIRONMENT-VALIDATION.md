@@ -5,7 +5,7 @@ separately; a live model provider is not a prerequisite for deterministic develo
 
 ## Hosted CI: verified
 
-GitHub-hosted Ubuntu run [39492039168](https://github.com/jchewitt/tently/actions/runs/39492039168)
+GitHub-hosted Ubuntu run [39492039168](https://github.com/jchewitt/weftlet/actions/runs/39492039168)
 completed successfully at `92ae118ccb22f59aaa150b1c8f3a009bdacc788a`. Its `deterministic` job
 ran checkout and the repository's composite action. That action selects Node 24 / pnpm
 10.18.2, installs the frozen lockfile and runs the complete publication gate, including the

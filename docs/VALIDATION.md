@@ -350,7 +350,7 @@ subsequently verified as recorded below.
 
 ## Hosted CI and restoration preparation
 
-GitHub-hosted Ubuntu [run 39492039168](https://github.com/jchewitt/tently/actions/runs/39492039168)
+GitHub-hosted Ubuntu [run 39492039168](https://github.com/jchewitt/weftlet/actions/runs/39492039168)
 completed successfully at `92ae118ccb22f59aaa150b1c8f3a009bdacc788a`. The Actions API reports
 the deterministic job and repository composite action succeeded. The workflow selects Node 24
 and pnpm 10.18.2, installs the frozen lockfile and runs the full deterministic publication gate.
@@ -432,3 +432,22 @@ fresh public-registry installation remain external validation steps. The new rel
 has not yet been run on GitHub; a successful local gate or actionlint run is not evidence of OIDC
 permissions. Native Windows fixes, fresh-task restoration and actual browser interaction remain
 separate work. See [release instructions](RELEASING.md) for the maintainer's exact setup steps.
+
+
+## GitHub repository rename — 2026-10-21
+
+The maintainer renamed the destination to `jchewitt/weftlet`. The origin, both npm repository
+URLs, current instructions and OIDC repository guard now use that identity. Historical export
+records remain unchanged. The architecture config retains its stable graph repository ID;
+this remote rename does not rewrite existing evidence. The cloud mount remains `/workspace/tently`.
+
+Seven focused npm-auth tests passed, including acceptance of the new repository and rejection
+of the previous identity. Fresh packed-consumer validation passed: npm exec setup/config,
+transitive core installation, runtime assets, real TypeScript indexing, SCIP, RDF/SPARQL/SHACL,
+HTML/DOT/SVG and MCP. Extraction inventory and diff checks passed. The full deterministic suite
+was not repeated for these metadata/documentation and release-guard changes; its prior result
+remains recorded above. No npm publication, live OIDC release or fresh-task restoration is
+claimed. Both new 0.1.0 package versions returned public-registry 404 during this check.
+
+Use `weftlet` as the npm trusted-publisher Repository field. Archives prepared before this rename
+contain the previous repository URL; prepare from the updated commit before initial publication.

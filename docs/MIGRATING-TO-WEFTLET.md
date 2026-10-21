@@ -1,7 +1,7 @@
 # Migrating from Tently to Weftlet
 
 The project is now Weftlet. LaunchEcho remains the maintainer; the GitHub repository remains
-[jchewitt/tently](https://github.com/jchewitt/tently). Check [release status](RELEASING.md) before
+[jchewitt/weftlet](https://github.com/jchewitt/weftlet). Check [release status](RELEASING.md) before
 installing the new names: source preparation is not proof of public npm availability.
 
 | Previous package / command | Replacement |

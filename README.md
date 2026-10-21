@@ -73,8 +73,8 @@ Use pnpm 10.18.2 for development. The neutral core package has no toolkit runtim
 and retains its separate Node.js 20.11+ declaration.
 
 ```sh
-git clone https://github.com/jchewitt/tently.git
-cd tently
+git clone https://github.com/jchewitt/weftlet.git
+cd weftlet
 nvm install
 nvm use
 pnpm install --frozen-lockfile

@@ -44,5 +44,5 @@ unchanged. Registry authentication is still pending. No repository visibility ch
 
 On 2026-10-21 the maintainer selected and created the `@weftlet` scope and authorized migration
 to `@weftlet/core` and `@weftlet/toolkit`. This changes destination package names only; the original
-source SHA, imported-path inventory, copyright and attribution remain intact. GitHub remains
-`jchewitt/tently`. See [migration](MIGRATING-TO-WEFTLET.md) and [release status](RELEASING.md).
+source SHA, imported-path inventory, copyright and attribution remain intact. The maintainer subsequently renamed GitHub to
+`jchewitt/weftlet` on the same date; the checkout remains `/workspace/tently`. See [migration](MIGRATING-TO-WEFTLET.md) and [release status](RELEASING.md).

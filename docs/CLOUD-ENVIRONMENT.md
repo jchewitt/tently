@@ -1,6 +1,7 @@
 # Cloud development environment
 
-Destination: `/workspace/tently`, `github.com/jchewitt/tently`.
+Destination: `/workspace/tently`, `github.com/jchewitt/weftlet`.
+The checkout mount retains its original name; the GitHub repository was renamed on 2026-10-21.
 Tested: Linux, Node 24.19.0 and pnpm 10.18.2. `scripts/cloud-install.sh` installs the pinned
 package manager into a writable workspace tool directory, sets writable caches, installs the
 frozen lockfile and builds the neutral core/toolkit.
@@ -46,7 +47,10 @@ configuration and archive verification. No credential value belongs in this repo
 See [environment validation](ENVIRONMENT-VALIDATION.md) for the hosted CI evidence, fresh-task
 restoration procedure and browser-MCP checklist. These checks do not require live Codex.
 
-Current package identity is Weftlet (`@weftlet/core`, `@weftlet/toolkit`); checkout path and
-GitHub repository remain `tently`. GitHub OIDC publishing is configured separately through
+Current package identity is Weftlet (`@weftlet/core`, `@weftlet/toolkit`). The checkout stays at
+`/workspace/tently`; GitHub is now `jchewitt/weftlet`. GitHub OIDC publishing is configured separately through
 `publish.yml` and the `npm-release` environment; no cloud npm token is required for that path.
 See [releasing](RELEASING.md). Live auth validation remains tentative and non-blocking.
+
+The architecture configuration retains `jchewitt/tently` as its stable graph repository ID.
+This is an evidence identity, not a Git remote; renaming GitHub does not invalidate saved graphs.

@@ -38,7 +38,7 @@ export function releaseAuthentication(mode, npmVersion, environment = process.en
     throw new Error('Trusted publishing requires npm 11.5.1 or newer');
   }
   if (environment.GITHUB_ACTIONS !== 'true' || environment.RUNNER_ENVIRONMENT !== 'github-hosted' ||
-      environment.GITHUB_REPOSITORY !== 'jchewitt/tently' || environment.GITHUB_REF !== 'refs/heads/main' ||
+      environment.GITHUB_REPOSITORY !== 'jchewitt/weftlet' || environment.GITHUB_REF !== 'refs/heads/main' ||
       environment.GITHUB_EVENT_NAME !== 'workflow_dispatch' ||
       !environment.ACTIONS_ID_TOKEN_REQUEST_URL || !environment.ACTIONS_ID_TOKEN_REQUEST_TOKEN) {
     throw new Error('OIDC publication requires the manually dispatched GitHub-hosted main-branch release workflow with id-token: write');

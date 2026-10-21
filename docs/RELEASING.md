@@ -4,7 +4,7 @@ Current source prepares the first `@weftlet/core@0.1.0` and `@weftlet/toolkit@0.
 The maintainer created the `weftlet` npm organization. Neither new package is claimed published
 by this document. The earlier `@launch-echo/tently-core@0.1.0` and `@launch-echo/tently@0.1.0`
 releases remain available and undeprecated; their public installation evidence is in
-[validation](VALIDATION.md). GitHub remains `jchewitt/tently`; npm and GitHub owner names need not match.
+[validation](VALIDATION.md). GitHub is now `jchewitt/weftlet`; npm and GitHub owner names need not match.
 
 Live Codex authentication validation is tentative and non-blocking for release, as accepted by
 the maintainer. Deterministic release checks still apply. Native Windows limitations remain
@@ -20,7 +20,7 @@ package's Settings → Trusted Publisher with the following GitHub Actions ident
 | npm setting | Value |
 | --- | --- |
 | Organization or user | `jchewitt` |
-| Repository | `tently` |
+| Repository | `weftlet` |
 | Workflow filename | `publish.yml` (filename only) |
 | Environment name | `npm-release` |
 | Allowed action | Enable direct `npm publish` |
@@ -29,7 +29,7 @@ On GitHub, create repository Settings → Environments → `npm-release`. Restri
 to `main` and configure a required reviewer. A sole maintainer must be allowed to approve their own
 release. Do not rely on the YAML environment name alone: an automatically created environment has
 no review protection until you configure it. No npm token secret is required for OIDC publication.
-Keep npm account 2FA enabled. The package's repository metadata already identifies `jchewitt/tently`.
+Keep npm account 2FA enabled. The package's repository metadata already identifies `jchewitt/weftlet`.
 
 npm trusted-publisher setup is not validated merely by saving these settings. Test with a later,
 intentional versioned publication. Current npm documentation says a new trust configuration must

@@ -7,7 +7,8 @@ MCP server. Both new package names start at 0.1.0; npm versions belong to each p
 this does not replace or reuse the published Tently archives. The primary executable is `weftlet`.
 Keep `context-graph` and `context-graph-mcp` aliases, configuration paths, graph identities and
 public library exports compatible. Provide `toolkit` as the npm executable-inference alias and
-`weftlet-mcp` as the branded MCP command. The source repository remains `jchewitt/tently`.
+`weftlet-mcp` as the branded MCP command. The maintainer subsequently renamed the destination
+repository to `jchewitt/weftlet` on 2026-10-21; npm trusted publishing must use the new repository name.
 
 New package scope ownership was confirmed by the maintainer. Previous release evidence remains
 recorded under its actual package names and commits. Preserve the extraction inventory, licenses
