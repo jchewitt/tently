@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "97011af2c015e824a085f51c0e752b6ea15a8a2ff2451528a882f5fd10b2557e"
+      "destinationSha256": "017fe298662e434efa27d4f21a0adb0d857fa373a6199ed2d623a6c630c5b451"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -143,7 +143,7 @@
       "destinationPath": "packages/core/package.json",
       "sourceSha256": "2a29066eb8452f22fafcb06bb035a84dda93c5705dba32aba600a1b7e5aaf19c",
       "modified": true,
-      "destinationSha256": "cfa4fb46c486bf3b06a72bb90adc8521fad1afd20b5cded9c5b0d177ffce0438"
+      "destinationSha256": "9dbd393a312bb6a992b53d2624279b62991e64609beb506744186614f9b194cf"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/core.ts",
@@ -578,14 +578,15 @@
   ],
   "authoredPaths": [
     ".changeset/README.md",
-    ".changeset/automated-releases.md",
     ".changeset/config.json",
+    ".changeset/release-plan.json",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
     ".github/workflows/version.yml",
     ".gitignore",
     ".npmrc",
     ".nvmrc",
+    "CHANGELOG.md",
     "CONTRIBUTING.md",
     "README.md",
     "SECURITY.md",
@@ -642,6 +643,7 @@
     "examples/pipeline/test/pipeline.test.ts",
     "examples/pipeline/tsconfig.json",
     "mcp-launcher.mjs",
+    "packages/core/CHANGELOG.md",
     "pnpm-lock.yaml",
     "pnpm-workspace.yaml",
     "reviewed-licenses.json",

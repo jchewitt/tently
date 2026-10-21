@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "packages": [
+    {
+      "name": "@weftlet/core",
+      "version": "0.1.2",
+      "previousVersion": "0.1.1"
+    },
+    {
+      "name": "@weftlet/toolkit",
+      "version": "0.1.2",
+      "previousVersion": "0.1.1"
+    }
+  ],
+  "changesets": [
+    "automated-releases.md"
+  ]
+}
