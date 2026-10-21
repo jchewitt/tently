@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "017fe298662e434efa27d4f21a0adb0d857fa373a6199ed2d623a6c630c5b451"
+      "destinationSha256": "02e7dc9e9fd31e1dfc67a2d3aefc64fb8f684bb60730d286b362ea0de367b7ec"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -579,6 +579,7 @@
   "authoredPaths": [
     ".changeset/README.md",
     ".changeset/config.json",
+    ".changeset/impact-evaluation-baseline.md",
     ".changeset/release-plan.json",
     ".changeset/windows-consumer-reliability.md",
     ".github/workflows/check.yml",
@@ -605,6 +606,7 @@
     "docs/ADR-009-release-automation.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/ENVIRONMENT-VALIDATION.md",
+    "docs/IMPACT-EVALUATION.md",
     "docs/MIGRATING-TO-WEFTLET.md",
     "docs/PROVIDERS.md",
     "docs/RELEASING.md",
@@ -619,6 +621,10 @@
     "docs/licenses/lru-cache-11.5.3-BlueOak.md",
     "docs/licenses/negotiate-1.0.1-BSD.txt",
     "docs/licenses/spark-md5-3.0.2-MIT.txt",
+    "evaluations/weftlet/baseline.json",
+    "evaluations/weftlet/cases.json",
+    "evaluations/weftlet/context-graph.config.json",
+    "evaluations/weftlet/document-only.mjs",
     "examples/generic-typescript/context-graph.oml.config.json",
     "examples/pipeline/context-graph.config.json",
     "examples/pipeline/docs/admission.md",
@@ -654,6 +660,9 @@
     "scripts/check-restoration.mjs",
     "scripts/clean-build.mjs",
     "scripts/cloud-install.sh",
+    "scripts/evaluation/run.ts",
+    "scripts/evaluation/score.test.ts",
+    "scripts/evaluation/score.ts",
     "scripts/git-content.mjs",
     "scripts/inventory.test.ts",
     "scripts/npm-auth.mjs",

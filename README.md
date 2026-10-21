@@ -158,6 +158,10 @@ See [provider contract](docs/PROVIDERS.md) for bounded extraction and adapters, 
 
 See the [bounded viewer guide](docs/VIEWER.md) and [cloud setup](docs/CLOUD-ENVIRONMENT.md).
 
+For development, `pnpm evaluate:impact` measures bounded candidate-file retrieval on Weftlet's
+own committed source without model calls. See the [evaluation protocol and baseline](docs/IMPACT-EVALUATION.md)
+for observed gaps and the distinction between retrieval measurements and live semantic quality.
+
 ## License and provenance
 
 Apache-2.0. See [LICENSE](LICENSE), [NOTICE](NOTICE), and the

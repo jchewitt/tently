@@ -1,0 +1,448 @@
+{
+  "schemaVersion": 1,
+  "status": "advisory-control-not-a-quality-pass",
+  "measuredAt": "2026-10-21T22:40:56.651Z",
+  "evidenceCommit": "eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d",
+  "snapshotId": "eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d-graph-v2-f2ea3640346913de-4f68cb388720",
+  "contentDigest": "5b4003c527b0f797d45814679326c59da995bc677d0706768a9d9b1b21aedb4f",
+  "configurationDigest": "f2ea3640346913ded829ae27b933a9fdd5b46566c99eb7718b6c31b2a3acf092",
+  "suiteDigest": "104a3c4b46955b1bbdde3949e8784eedada271dee5245dcada2eebd578069ef7",
+  "evaluatorSourceDigests": {
+    "scripts/evaluation/run.ts": "2f28a4fb08fefc991a8a7f53a4e6206b88055ba59ada9bed4494680db46d0be2",
+    "scripts/evaluation/score.ts": "cdcce7863471e12fe0398cce94082ff40ea32551f4ab6f2900083a5f340c2e74",
+    "evaluations/weftlet/document-only.mjs": "743ff498cbc7ec308931218ae8bbb01e38c2ffd28933e699d2133c347216c3f2"
+  },
+  "runtime": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "reportDigest": "0c456bb717397f97d0cb4ee70afd5ea23057034ff314e47e6bbf6148a9151c57",
+  "scope": [
+    "docs/ADR-002-saved-evidence.md",
+    "docs/ADR-003-draft-overlays.md",
+    "docs/ADR-004-rdf-query-path.md",
+    "docs/ADR-006-provider-boundaries.md",
+    "docs/PROVIDERS.md",
+    "docs/VIEWER.md"
+  ],
+  "modelCalls": 0,
+  "semanticAssertions": 0,
+  "runtimeReferences": 0,
+  "approvedIntentSources": [],
+  "totalFacts": 1369,
+  "extractorCounts": {
+    "repository-file-extractor": 520,
+    "scip-symbol-extractor": 849
+  },
+  "extractorPathCounts": {
+    "repository-file-extractor": 75,
+    "scip-symbol-extractor": 45
+  },
+  "scipTestPaths": [],
+  "repeatHydration": {
+    "extracted": 0,
+    "reused": 6
+  },
+  "snapshotIdentityAndContentUnchangedOnRepeat": true,
+  "results": [
+    {
+      "id": "atomic-publication",
+      "budget": {
+        "maxFacts": 60,
+        "maxDepth": 32,
+        "maxPages": 3
+      },
+      "recall": {
+        "expected": 6,
+        "firstPage": 3,
+        "examinedPages": 4,
+        "examinedFraction": 0.6666666666666666
+      },
+      "exploration": {
+        "pages": 3,
+        "factsExamined": 180,
+        "reachableFacts": 1368,
+        "depthLimitReached": false,
+        "pageBudgetExhausted": true,
+        "complete": false
+      },
+      "targets": [
+        {
+          "path": "src/storage/storage.ts",
+          "category": "implementation",
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "inSnapshot": true,
+          "outcome": "retrieved",
+          "extractionMethods": [
+            "repository-file-extractor",
+            "scip-symbol-extractor"
+          ]
+        },
+        {
+          "path": "src/application/hydrator.ts",
+          "category": "implementation",
+          "inFirstPage": false,
+          "inExaminedPages": true,
+          "inSnapshot": true,
+          "outcome": "retrieved",
+          "extractionMethods": [
+            "repository-file-extractor",
+            "scip-symbol-extractor"
+          ]
+        },
+        {
+          "path": "src/application/overlay.ts",
+          "category": "implementation",
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "inSnapshot": true,
+          "outcome": "retrieved",
+          "extractionMethods": [
+            "repository-file-extractor",
+            "scip-symbol-extractor"
+          ]
+        },
+        {
+          "path": "tests/snapshot-lifecycle.test.ts",
+          "category": "test",
+          "inFirstPage": false,
+          "inExaminedPages": false,
+          "inSnapshot": false,
+          "outcome": "no-extracted-relationship",
+          "extractionMethods": []
+        },
+        {
+          "path": "src/storage/atomic-rename.test.ts",
+          "category": "test",
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "inSnapshot": true,
+          "outcome": "retrieved",
+          "extractionMethods": [
+            "repository-file-extractor"
+          ]
+        },
+        {
+          "path": "docs/ADR-002-saved-evidence.md",
+          "category": "intent-document",
+          "inFirstPage": false,
+          "inExaminedPages": false,
+          "inSnapshot": false,
+          "outcome": "no-extracted-relationship",
+          "extractionMethods": []
+        }
+      ],
+      "distractions": [
+        {
+          "path": "src/extraction/telemetry.ts",
+          "inSnapshot": true,
+          "inFirstPage": false,
+          "inExaminedPages": true
+        }
+      ]
+    },
+    {
+      "id": "impact-query",
+      "budget": {
+        "maxFacts": 60,
+        "maxDepth": 32,
+        "maxPages": 3
+      },
+      "recall": {
+        "expected": 6,
+        "firstPage": 2,
+        "examinedPages": 3,
+        "examinedFraction": 0.5
+      },
+      "exploration": {
+        "pages": 3,
+        "factsExamined": 180,
+        "reachableFacts": 1368,
+        "depthLimitReached": false,
+        "pageBudgetExhausted": true,
+        "complete": false
+      },
+      "targets": [
+        {
+          "path": "packages/core/src/core.ts",
+          "category": "contract",
+          "inFirstPage": false,
+          "inExaminedPages": false,
+          "inSnapshot": false,
+          "outcome": "no-extracted-relationship",
+          "extractionMethods": []
+        },
+        {
+          "path": "src/visualization/visualization.ts",
+          "category": "implementation",
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "inSnapshot": true,
+          "outcome": "retrieved",
+          "extractionMethods": [
+            "repository-file-extractor",
+            "scip-symbol-extractor"
+          ]
+        },
+        {
+          "path": "src/interfaces/mcp.ts",
+          "category": "implementation",
+          "inFirstPage": false,
+          "inExaminedPages": false,
+          "inSnapshot": true,
+          "outcome": "not-retrieved-within-budget",
+          "extractionMethods": [
+            "repository-file-extractor",
+            "scip-symbol-extractor"
+          ]
+        },
+        {
+          "path": "src/application/saved-evidence.ts",
+          "category": "implementation",
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "inSnapshot": true,
+          "outcome": "retrieved",
+          "extractionMethods": [
+            "repository-file-extractor",
+            "scip-symbol-extractor"
+          ]
+        },
+        {
+          "path": "src/graph/query.test.ts",
+          "category": "test",
+          "inFirstPage": false,
+          "inExaminedPages": true,
+          "inSnapshot": true,
+          "outcome": "retrieved",
+          "extractionMethods": [
+            "repository-file-extractor"
+          ]
+        },
+        {
+          "path": "docs/ADR-004-rdf-query-path.md",
+          "category": "intent-document",
+          "inFirstPage": false,
+          "inExaminedPages": false,
+          "inSnapshot": false,
+          "outcome": "no-extracted-relationship",
+          "extractionMethods": []
+        }
+      ],
+      "distractions": [
+        {
+          "path": "src/extraction/codex-command.ts",
+          "inSnapshot": true,
+          "inFirstPage": false,
+          "inExaminedPages": false
+        }
+      ]
+    },
+    {
+      "id": "codex-launcher",
+      "budget": {
+        "maxFacts": 60,
+        "maxDepth": 32,
+        "maxPages": 3
+      },
+      "recall": {
+        "expected": 6,
+        "firstPage": 3,
+        "examinedPages": 4,
+        "examinedFraction": 0.6666666666666666
+      },
+      "exploration": {
+        "pages": 3,
+        "factsExamined": 180,
+        "reachableFacts": 1368,
+        "depthLimitReached": false,
+        "pageBudgetExhausted": true,
+        "complete": false
+      },
+      "targets": [
+        {
+          "path": "src/extraction/semantic.ts",
+          "category": "implementation",
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "inSnapshot": true,
+          "outcome": "retrieved",
+          "extractionMethods": [
+            "repository-file-extractor",
+            "scip-symbol-extractor"
+          ]
+        },
+        {
+          "path": "src/extraction/codex-auth.ts",
+          "category": "implementation",
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "inSnapshot": true,
+          "outcome": "retrieved",
+          "extractionMethods": [
+            "repository-file-extractor",
+            "scip-symbol-extractor"
+          ]
+        },
+        {
+          "path": "src/interfaces/doctor.ts",
+          "category": "implementation",
+          "inFirstPage": false,
+          "inExaminedPages": true,
+          "inSnapshot": true,
+          "outcome": "retrieved",
+          "extractionMethods": [
+            "repository-file-extractor",
+            "scip-symbol-extractor"
+          ]
+        },
+        {
+          "path": "src/extraction/codex-command.test.ts",
+          "category": "test",
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "inSnapshot": true,
+          "outcome": "retrieved",
+          "extractionMethods": [
+            "repository-file-extractor"
+          ]
+        },
+        {
+          "path": "docs/PROVIDERS.md",
+          "category": "intent-document",
+          "inFirstPage": false,
+          "inExaminedPages": false,
+          "inSnapshot": false,
+          "outcome": "no-extracted-relationship",
+          "extractionMethods": []
+        },
+        {
+          "path": "docs/ADR-006-provider-boundaries.md",
+          "category": "intent-document",
+          "inFirstPage": false,
+          "inExaminedPages": false,
+          "inSnapshot": false,
+          "outcome": "no-extracted-relationship",
+          "extractionMethods": []
+        }
+      ],
+      "distractions": [
+        {
+          "path": "src/visualization/viewer-interaction.ts",
+          "inSnapshot": true,
+          "inFirstPage": false,
+          "inExaminedPages": false
+        }
+      ]
+    },
+    {
+      "id": "working-content",
+      "budget": {
+        "maxFacts": 60,
+        "maxDepth": 32,
+        "maxPages": 3
+      },
+      "recall": {
+        "expected": 6,
+        "firstPage": 5,
+        "examinedPages": 5,
+        "examinedFraction": 0.8333333333333334
+      },
+      "exploration": {
+        "pages": 3,
+        "factsExamined": 180,
+        "reachableFacts": 1368,
+        "depthLimitReached": false,
+        "pageBudgetExhausted": true,
+        "complete": false
+      },
+      "targets": [
+        {
+          "path": "src/application/overlay.ts",
+          "category": "implementation",
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "inSnapshot": true,
+          "outcome": "retrieved",
+          "extractionMethods": [
+            "repository-file-extractor",
+            "scip-symbol-extractor"
+          ]
+        },
+        {
+          "path": "src/application/saved-evidence.ts",
+          "category": "implementation",
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "inSnapshot": true,
+          "outcome": "retrieved",
+          "extractionMethods": [
+            "repository-file-extractor",
+            "scip-symbol-extractor"
+          ]
+        },
+        {
+          "path": "src/application/snapshot-checks.ts",
+          "category": "implementation",
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "inSnapshot": true,
+          "outcome": "retrieved",
+          "extractionMethods": [
+            "repository-file-extractor",
+            "scip-symbol-extractor"
+          ]
+        },
+        {
+          "path": "src/application/overlay.test.ts",
+          "category": "test",
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "inSnapshot": true,
+          "outcome": "retrieved",
+          "extractionMethods": [
+            "repository-file-extractor"
+          ]
+        },
+        {
+          "path": "src/repository/working-content.test.ts",
+          "category": "test",
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "inSnapshot": true,
+          "outcome": "retrieved",
+          "extractionMethods": [
+            "repository-file-extractor"
+          ]
+        },
+        {
+          "path": "docs/ADR-003-draft-overlays.md",
+          "category": "intent-document",
+          "inFirstPage": false,
+          "inExaminedPages": false,
+          "inSnapshot": false,
+          "outcome": "no-extracted-relationship",
+          "extractionMethods": []
+        }
+      ],
+      "distractions": [
+        {
+          "path": "src/extraction/codex-command.ts",
+          "inSnapshot": true,
+          "inFirstPage": false,
+          "inExaminedPages": false
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Expected paths are reviewable hypotheses, not exhaustive labels or approved product policy.",
+    "Recall measures candidate file relationship retrieval, not a proven dependency path or whether a proposed change is safe.",
+    "Unjudged results are not false positives. Distraction controls measure query noise, not false graph assertions.",
+    "Presence of a test file does not prove that behavior was tested or that the test passed.",
+    "Missing relationships are gaps in this extraction/configuration, not proof of missing implementation.",
+    "A successful evaluation command means measurement completed; it is not a quality or merge gate."
+  ]
+}

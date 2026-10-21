@@ -8,6 +8,45 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## Self-repository impact evaluation, 2026-10-21
+
+The [evaluation protocol](IMPACT-EVALUATION.md) and public-safe
+`evaluations/weftlet/baseline.json` record a deterministic control against committed
+Weftlet `eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d`. The active checkout contained
+the new evaluator; its source/suite/configuration digests are recorded separately.
+No current working source bytes were substituted for that evidence commit.
+
+On Linux, Node 24.19.0 and pnpm 10.18.2:
+
+- Real SCIP, RDF/SHACL and publication produced 1,369 facts. Four fixed scenarios
+  retrieved 13/24 expected candidate files on the first page and 16/24 in three pages.
+  These are measurements, not a quality pass. Intent documents, workspace contracts,
+  test coverage and query ranking have the gaps described in the protocol.
+- Repeated hydration extracted zero and reused six document-control artifacts, retaining
+  snapshot identity and content digest
+  `5b4003c527b0f797d45814679326c59da995bc677d0706768a9d9b1b21aedb4f`.
+- Saved-snapshot scoring succeeded with the semantic-artifact directory temporarily
+  unavailable and returned identical recall. No hydration phases ran; artifacts were
+  restored afterward. Missing-snapshot and live-provider-refresh probes both failed
+  clearly without starting an indexer or model.
+- Five evaluator tests passed, covering first/later-page scores, extraction versus
+  bounded-retrieval misses, non-relationship exclusions, duplicate/drifting pages,
+  stale case paths and invalid budgets. Strict TypeScript checking of the evaluator passed.
+- The full publication gate passed: 183 deterministic tests (1 core + 182 toolkit),
+  one optional OML integration skipped, builds, 12 advisory architecture findings,
+  inventory, licenses and fresh packed-consumer installation/indexing/RDF/MCP smoke.
+  All 79 original import paths and source hashes remain unchanged.
+
+Hosted [checks for the initial evaluation commit
+8e82453d92357451e832f3bf16666a6bef89b6de](https://github.com/jchewitt/weftlet/actions/runs/39687986720)
+also passed on Ubuntu (full publication gate) and Windows (34 selected reliability tests,
+inventory and licenses). The full self-repository control run above was performed in Linux
+cloud; these hosted checks do not imply a Windows evaluation run or browser validation.
+
+No live semantic assertions, runtime traces, owner approvals, browser interactions or
+new authentication results are claimed. The control sends no model requests. Broader
+semantic quality still needs a separately bounded live run and human citation review.
+
 ## Milestone 1: standalone baseline
 
 Passed `pnpm context-graph:publication-check`:
