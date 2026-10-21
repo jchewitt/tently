@@ -1,17 +1,18 @@
 # Weftlet — Context Graph Toolkit
 
-An extracted Apache-2.0 toolkit for connecting product intent, contracts, implementation,
-tests and observed runtime evidence. Derived from LaunchEcho Context Graph; see
-[NOTICE](NOTICE) and the [source inventory](docs/SOURCE-INVENTORY.md).
+Weftlet is an open-source context-graph toolkit that helps AI development agents understand
+how a local change affects the broader product. It connects approved product intent, shared
+contracts, implementing code, downstream consumers, tests and observed runtime evidence.
 
-This standalone implementation uses small, recorded delivery milestones. See [roadmap](docs/ROADMAP.md) and
-[validation](docs/VALIDATION.md) for completed checks and limitations.
+Agents can query cited evidence and explore dependencies across module and asynchronous
+boundaries. See the [roadmap](docs/ROADMAP.md) and [validation](docs/VALIDATION.md) for
+supported capabilities and limitations.
 
 ## Set up a project
 
 Weftlet uses `@weftlet/toolkit`; its neutral `@weftlet/core` dependency is installed
-automatically. The initial Weftlet release targets `0.1.0`. Check [release status](docs/RELEASING.md)
-for public availability before using the npm commands below. Existing Tently users should follow
+automatically. Both packages are available on npm at `0.1.0`; source now prepares `0.1.1`.
+See [release status](docs/RELEASING.md). Existing Tently users should follow
 the [migration guide](docs/MIGRATING-TO-WEFTLET.md).
 
 From your TypeScript project's directory (Node 24+):
@@ -59,7 +60,8 @@ For a project-local dependency, install `npm install --save-dev @weftlet/toolkit
 the project's absolute configuration path. Pin a reviewed version for reproducible agent setup.
 
 Linux/WSL is the validated full-suite path. Native Windows has a recorded live Codex pass;
-archive-byte, snapshot replacement and MCP fixture fixes await native confirmation.
+the archive-byte, snapshot replacement and MCP startup regression suite also passes hosted
+Windows CI. Full native Windows release preparation remains separately unvalidated.
 See the [validation record](docs/VALIDATION.md).
 
 ## Development
@@ -103,7 +105,7 @@ Install the locally packed core and toolkit tarballs together. The installed com
 `weftlet`, `weftlet-mcp`, and the compatible `context-graph` / `context-graph-mcp` aliases. For example, after preparing a release:
 
 ```sh
-npm install --save-dev /path/to/tently/.release/weftlet-core-0.1.0.tgz /path/to/tently/.release/weftlet-toolkit-0.1.0.tgz
+npm install --save-dev /path/to/weftlet/.release/weftlet-core-0.1.1.tgz /path/to/weftlet/.release/weftlet-toolkit-0.1.1.tgz
 npx weftlet init
 ```
 
@@ -154,3 +156,8 @@ See [provider contract](docs/PROVIDERS.md) for bounded extraction and adapters, 
 [architecture policy](docs/architecture-policy.md) for deterministic governance.
 
 See the [bounded viewer guide](docs/VIEWER.md) and [cloud setup](docs/CLOUD-ENVIRONMENT.md).
+
+## License and provenance
+
+Apache-2.0. See [LICENSE](LICENSE), [NOTICE](NOTICE), and the
+[source inventory](docs/SOURCE-INVENTORY.md) for attribution and extraction history.

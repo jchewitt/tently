@@ -1,8 +1,8 @@
 # Migrating from Tently to Weftlet
 
 The project is now Weftlet. LaunchEcho remains the maintainer; the GitHub repository remains
-[jchewitt/weftlet](https://github.com/jchewitt/weftlet). Check [release status](RELEASING.md) before
-installing the new names: source preparation is not proof of public npm availability.
+[jchewitt/weftlet](https://github.com/jchewitt/weftlet). Both new package names are published
+at 0.1.0; see [release status](RELEASING.md) for subsequent releases.
 
 | Previous package / command | Replacement |
 | --- | --- |
@@ -12,7 +12,7 @@ installing the new names: source preparation is not proof of public npm availabi
 | `context-graph` | Still supported; `weftlet` is the primary CLI |
 | `context-graph-mcp` | Still supported; `weftlet-mcp` is the primary MCP binary |
 
-After the new release is public, replace the old dependency using your package manager. For
+Replace the old dependency using your package manager. For
 an npm project that installed the toolkit as a development dependency:
 
 ```sh
@@ -51,4 +51,4 @@ Native Windows limitations remain documented in [validation](VALIDATION.md).
 
 The old `@launch-echo` releases remain immutable and usable. Do not unpublish them. Deprecation
 is a later registry action, only after both replacements and a fresh public installation are
-verified. This migration does not modify or reintegrate the original TradePilot repository.
+verified. Existing consumer integrations can migrate independently.

@@ -1,7 +1,7 @@
 {
   "name": "@weftlet/toolkit",
-  "version": "0.1.0",
-  "description": "Reusable commit-keyed semantic, implementation, runtime, and evidence graph toolkit",
+  "version": "0.1.1",
+  "description": "Evidence-backed context graphs for AI development agents: product intent, contracts, code, tests and runtime behavior",
   "license": "Apache-2.0",
   "type": "module",
   "files": [

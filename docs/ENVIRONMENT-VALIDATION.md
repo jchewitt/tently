@@ -12,6 +12,11 @@ ran checkout and the repository's composite action. That action selects Node 24 
 packed-consumer smoke. It neither publishes packages nor invokes a live model. Codex/npm
 publication credentials and the managed cloud filesystem are not needed by this job.
 
+A subsequent hosted [run 39656137105](https://github.com/jchewitt/weftlet/actions/runs/39656137105)
+passed at `4cdc4e5bc8b53bde3b23ce0be550146ac6ae817c`: the full Ubuntu job and a focused
+Windows job covering storage contention, committed archive bytes and all original MCP startup
+cases. This Windows subset does not establish full Windows release-preparation readiness.
+
 ## Fresh cloud: requires a new task
 
 Before publishing the current environment snapshot:

@@ -488,3 +488,31 @@ The Windows job does not replace the full Linux release gate. Native Windows exe
 fixes remains pending; simulated Windows errors on Linux are not a native pass. CRLF checkout
 inventory checking and npm Codex executable discovery remain separate follow-ups. No live model
 call or npm publication was performed. Use WSL for the validated full release-preparation route.
+
+
+## Weftlet publication and native Windows CI — 2026-10-21
+
+The maintainer reported successful publication. Public npm metadata independently confirms
+`@weftlet/core@0.1.0` and `@weftlet/toolkit@0.1.0`, both with `latest` pointing to 0.1.0 and
+repository metadata pointing to `jchewitt/weftlet`. Downloaded archives match their registry
+SHA-512 integrity values. The toolkit archive contains the Windows atomic-rename helper.
+This check verifies registry availability and archive integrity, not a fresh public consumer install.
+
+[Hosted run 39656137105](https://github.com/jchewitt/weftlet/actions/runs/39656137105) succeeded
+at `4cdc4e5bc8b53bde3b23ce0be550146ac6ae817c`. Both the full Ubuntu deterministic job and the
+focused `windows-storage-and-startup` job passed. The Windows job completed frozen installation,
+build, Git archive-byte checks, snapshot contention/failure checks and all three original MCP
+startup cases. This establishes a native hosted-Windows regression pass; full Windows release
+preparation, HDesk reruns, CRLF inventory checking and npm Codex discovery remain separate.
+
+Current source prepares 0.1.1 for both packages to update public descriptions and documentation.
+The project overview and core README describe Weftlet independently; original attribution,
+licenses and extraction provenance remain intact. npm trusted publishing still needs package-level
+configuration and a successful OIDC release. A manual publication does not validate OIDC.
+
+
+For the 0.1.1 documentation/metadata patch, frozen install and the full Linux publication gate
+passed again: 155 deterministic tests (one optional Docker/OML test skipped), build, architecture
+with 12 advisory findings, inventory, licenses and fresh packed-consumer smoke. No runtime code
+changed from 4cdc4e5. GitHub's About description was blank; an attempted metadata update returned
+HTTP 403, so no GitHub description change is claimed. No npm upload was made by the agent.

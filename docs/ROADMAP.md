@@ -1,12 +1,12 @@
 # Delivery roadmap
 
-Destination: `jchewitt/weftlet`. Read-only source:
-`launchecho/tradepilot@fda97e0146099543aeaa6b338ef2b0e9fab0d1d6`.
+Project: `jchewitt/weftlet`. Extraction provenance is recorded in the
+[source inventory](SOURCE-INVENTORY.md).
 
 | Milestone | Delivered and checked | Remaining limits |
 | --- | --- | --- |
 | 1. Standalone | Explicit committed inventory, core/toolkit boundary, public examples, build/tests, packed independent consumer and real TypeScript indexing | GitHub exported; both @launch-echo packages published at 0.1.0 and public installation verified |
-| 2a. Saved evidence | Read/refresh separation, commit/config/scope metadata, dirty querying, isolated archives, atomic snapshots validated on Linux/WSL, failed-refresh preservation | Archive LF conversion and bounded atomic head-replacement fixes pass Linux regressions; native Windows confirmation pending; archives reject symlinks/submodules and sizes above 128 MiB |
+| 2a. Saved evidence | Read/refresh separation, commit/config/scope metadata, dirty querying, isolated archives, atomic snapshots validated on Linux/WSL, failed-refresh preservation | Archive LF conversion and atomic head-replacement regressions pass Linux and hosted Windows CI; archives reject symlinks/submodules and sizes above 128 MiB |
 | 2b. Draft overlays | Base/content identity, reindexed replacement, delete/rename handling, separate checkout/agent heads | Full implementation reindex; changed prose invalidated pending re-extraction |
 | 3. Unified graph | RDF/SPARQL, SHACL, lossless projection, bounded continuation, six-stage async cross-source fixture, negative extraction/linkage cases | Local SELECT only; 100,000-fact projection bound; no universal language support |
 | 4. Governance | Canonical approved rules, dependency-cruiser/ESLint/jscpd, scoped debt/expiry, transitive inference, optional OML ADR/parity | No active OWL reasoner; live formal compilation unverified; heuristics remain advisory |
@@ -23,14 +23,15 @@ The post-release module-organization increment is described in
 public entry points remain stable, and proposed internal dependency restrictions are advisory
 pending explicit owner approval. It does not publish a replacement for npm 0.1.0.
 
-The following unreleased increment adds explicit Codex authentication configuration: ChatGPT
+Weftlet 0.1.0 includes explicit Codex authentication configuration: ChatGPT
 login by default, API-key mode by opt-in, and presence-only API diagnostics. Validation is
 tentative and explicitly non-blocking for release. The maintainer plans follow-up after publication
-and adoption into Banditrade; API-key testing remains optional. No new live model results are claimed.
+and adoption into a consumer project; API-key testing remains optional. No new live model results are claimed.
 See [provider configuration](PROVIDERS.md#codex-authentication) and the validation record.
 
 Native Windows archive conversion, concurrent head-replacement and MCP file-symlink fixes are
-implemented with regression tests; a focused Windows CI job and HDesk rerun must confirm them.
+implemented with regression tests and pass focused hosted Windows CI. HDesk confirmation and
+full native Windows release preparation remain separate checks.
 Next work should be separate, reviewed increments: improve CRLF checkout integrity checks;
 run bounded semantic-quality evaluations; retain the passing hosted Ubuntu CI gate; validate fresh-cloud
 restoration; resolve the cloud-specific live provider block; add browser
@@ -45,9 +46,10 @@ Validation evidence and decisions are in `VALIDATION.md` and the ADR files. Sour
 model assertion review are distinct. On 2026-10-20 the user authorized pushing the reviewed
 destination to `jchewitt/tently` for local testing. The subsequent npm request authorizes release
 preparation/publication under `@launch-echo`; the maintainer completed the 0.1.0 release from WSL. Visibility changes and
-TradePilot reintegration remain outside the authorized scope. See [release instructions](RELEASING.md).
+source-application reintegration remain outside the authorized scope. See [release instructions](RELEASING.md).
 
 The maintainer authorized the Weftlet migration on 2026-10-21. Current source targets
 `@weftlet/core` and `@weftlet/toolkit`, with a `weftlet` CLI and a manually dispatched trusted
-publishing workflow. First publication, npm trust configuration and a live OIDC publish remain
-separate external steps; the earlier Tently packages remain available and undeprecated.
+publishing workflow. Both Weftlet packages are published at 0.1.0; source prepares 0.1.1.
+npm trust configuration and a live OIDC publish remain external steps; the earlier Tently
+packages remain available and undeprecated.

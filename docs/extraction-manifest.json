@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "96a6cf7ae18dd4c976c6ec3cfca31ce37f44229dc6c9df46f58d6eae5de0e36d"
+      "destinationSha256": "acc98f285f29b2b124cd863c391d575b87e8bdd51756223d76765a868e6ee805"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -129,7 +129,7 @@
       "destinationPath": "packages/core/README.md",
       "sourceSha256": "6044bf7b9a3dc793f41e2ff048546ed11938957d10a5b143eb1739ac4cd7477c",
       "modified": true,
-      "destinationSha256": "8f2d73048bcf7e1d411e0942505af58700ef6f4715b40de5efcd73afbb062be7"
+      "destinationSha256": "1cb03b2eb415ac35ef7a4405d3cbb415c59717fe6d088968533e3ac51658f7fb"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/THIRD_PARTY_NOTICES.md",
@@ -143,7 +143,7 @@
       "destinationPath": "packages/core/package.json",
       "sourceSha256": "2a29066eb8452f22fafcb06bb035a84dda93c5705dba32aba600a1b7e5aaf19c",
       "modified": true,
-      "destinationSha256": "ac71f77c54b9fa92c0304705154b1a24a2b4d69da410b34d04854215c7d1ca91"
+      "destinationSha256": "cfa4fb46c486bf3b06a72bb90adc8521fad1afd20b5cded9c5b0d177ffce0438"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/core.ts",

@@ -1,8 +1,9 @@
 # Weftlet npm releases
 
-Current source prepares the first `@weftlet/core@0.1.0` and `@weftlet/toolkit@0.1.0` release.
-The maintainer created the `weftlet` npm organization. Neither new package is claimed published
-by this document. The earlier `@launch-echo/tently-core@0.1.0` and `@launch-echo/tently@0.1.0`
+The maintainer published `@weftlet/core@0.1.0` and `@weftlet/toolkit@0.1.0`; both versions
+and their archive integrity are verified against the public registry. Current source prepares
+`0.1.1` for both packages, with independent-project descriptions and updated documentation.
+The earlier `@launch-echo/tently-core@0.1.0` and `@launch-echo/tently@0.1.0`
 releases remain available and undeprecated; their public installation evidence is in
 [validation](VALIDATION.md). GitHub is now `jchewitt/weftlet`; npm and GitHub owner names need not match.
 
@@ -10,12 +11,12 @@ Live Codex authentication validation is tentative and non-blocking for release, 
 the maintainer. Deterministic release checks still apply. Native Windows limitations remain
 recorded; use Linux or WSL for the full release gate. See [consumer migration](MIGRATING-TO-WEFTLET.md).
 
-## First publication and maintainer setup
+## Trusted-publisher setup
 
-Creating an npm organization does not publish its packages or configure package-level trusted
-publishers. Use an npm account with permission to publish both names in `@weftlet`. The initial
-publication can use the normal npm login/2FA flow below. Once the packages exist, configure each
-package's Settings → Trusted Publisher with the following GitHub Actions identity:
+The initial manual publication is complete. Sign in to npm with package administration permission
+and configure **both** [core](https://www.npmjs.com/package/@weftlet/core) and
+[toolkit](https://www.npmjs.com/package/@weftlet/toolkit): Settings → Trusted Publisher →
+GitHub Actions, using the following identity:
 
 | npm setting | Value |
 | --- | --- |
@@ -27,7 +28,8 @@ package's Settings → Trusted Publisher with the following GitHub Actions ident
 
 On GitHub, create repository Settings → Environments → `npm-release`. Restrict deployment branches
 to `main` and configure a required reviewer. A sole maintainer must be allowed to approve their own
-release. Do not rely on the YAML environment name alone: an automatically created environment has
+release: leave **Prevent self-review** unchecked when approving your own runs. Do not rely on the YAML environment
+name alone: an automatically created environment has
 no review protection until you configure it. No npm token secret is required for OIDC publication.
 Keep npm account 2FA enabled. The package's repository metadata already identifies `jchewitt/weftlet`.
 

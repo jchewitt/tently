@@ -21,9 +21,9 @@ Artifact storage contains model output and must remain private with the source r
 
 ## Codex authentication
 
-Status: implemented in unreleased source; live validation is **tentative and non-blocking for
-release**, as accepted by the maintainer. Follow-up is planned after publication and adoption into
-Banditrade using the maintainer's existing ChatGPT login; API-key testing may remain deferred.
+Status: included in `@weftlet/toolkit@0.1.0`; live validation is **tentative and non-blocking for
+release**, as accepted by the maintainer. Follow-up is planned in a consumer project using an
+existing ChatGPT login; API-key testing may remain deferred.
 The earlier `@launch-echo/tently@0.1.0` release does not contain this option. Both modes still use Codex CLI;
 this is not a direct OpenAI API provider or a fix for the managed-cloud filesystem issue.
 

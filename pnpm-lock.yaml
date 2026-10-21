@@ -11,9 +11,6 @@ importers:
       '@comunica/query-sparql':
         specifier: 5.4.1
         version: 5.4.1
-      '@weftlet/core':
-        specifier: workspace:^
-        version: link:packages/core
       '@modelcontextprotocol/sdk':
         specifier: 1.30.0
         version: 1.30.0(zod@4.6.7)
@@ -29,6 +26,9 @@ importers:
       '@sourcegraph/scip-typescript':
         specifier: 0.4.0
         version: 0.4.0
+      '@weftlet/core':
+        specifier: workspace:^
+        version: link:packages/core
       import-meta-resolve:
         specifier: 4.2.0
         version: 4.2.0
