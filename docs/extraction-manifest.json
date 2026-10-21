@@ -199,7 +199,7 @@
       "destinationPath": "scripts/generate-third-party-notices.mjs",
       "sourceSha256": "42cd4996ecab49b008634958e47b0a9eadf9ea775678b8daaeeafea59eaabadf",
       "modified": true,
-      "destinationSha256": "e42322c9c2182b5cdaaec722379ff65fd6bdb7da45cf950565118d9a5d81c760"
+      "destinationSha256": "6e9ddb9a0985e2c39d8386168871efeb2589f6bc1bf8c24684cf6c546eced1b2"
     },
     {
       "sourcePath": "tools/context-graph/src/agent-context.test.ts",
@@ -451,7 +451,7 @@
       "destinationPath": "src/extraction/semantic.ts",
       "sourceSha256": "1a41fb3fc5a9508c76be59d1c50b74d70ec96411fcbb7f63b0e098c1813d8473",
       "modified": true,
-      "destinationSha256": "1986e292161475e6fe238bf7960d89fcd63798556c1e0e19b08e5ba2779bde1a"
+      "destinationSha256": "9872f2b8ac3bd14f33194d76082fecf0fd34325a6e74b2397f538898aa8fe21e"
     },
     {
       "sourcePath": "tools/context-graph/src/snapshot-checks.test.ts",
@@ -654,6 +654,7 @@
     "scripts/check-restoration.mjs",
     "scripts/clean-build.mjs",
     "scripts/cloud-install.sh",
+    "scripts/git-content.mjs",
     "scripts/inventory.test.ts",
     "scripts/npm-auth.mjs",
     "scripts/npm-auth.test.ts",

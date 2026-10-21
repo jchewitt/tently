@@ -22,7 +22,7 @@ it.each([
     await mkdir(join(root, 'docs'), { recursive: true });
     await mkdir(join(root, 'node_modules/@changesets'), { recursive: true });
     for (const path of ['package.json', 'packages/core/package.json', 'pnpm-workspace.yaml',
-      'pnpm-lock.yaml', '.changeset/config.json', 'scripts/update-inventory.mjs']) {
+      'pnpm-lock.yaml', '.changeset/config.json', 'scripts/update-inventory.mjs', 'scripts/git-content.mjs']) {
       await cp(join(original, path), join(root, path));
     }
     // Keep this fixture independent of future package version bumps.

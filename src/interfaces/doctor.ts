@@ -13,9 +13,12 @@ export async function diagnoseSetup(configPath: string) {
   const environment = semanticCommandEnvironment(process.env);
   const probe = async (name: string, args: string[]) => {
     try {
+      const started = performance.now();
       const invocation = name === 'codex' ? await resolveCodexInvocation(name, environment) : { command: name, prefixArgs: [] };
+      const remaining = Math.ceil(5000 - (performance.now() - started));
+      if (remaining <= 0) return { available: false, output: '' };
       const result = await execute(invocation.command, [...invocation.prefixArgs, ...args], {
-        cwd: repositoryRoot, timeout: 5000, maxBuffer: 8192, windowsHide: true, env: name === 'codex' ? environment : process.env,
+        cwd: repositoryRoot, timeout: remaining, maxBuffer: 8192, windowsHide: true, env: name === 'codex' ? environment : process.env,
       });
       return { available: true, output: `${result.stdout}${result.stderr}` };
     } catch { return { available: false, output: '' }; }

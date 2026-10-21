@@ -585,3 +585,11 @@ tests** (1 core + 176 toolkit/example/script), one optional OML test skipped, bu
 with shellcheck integration disabled. The Windows CI job now runs the added launcher, process,
 inventory and license checks; its native result is recorded separately after execution. Browser
 interaction and live authentication testing remain explicitly deferred by the maintainer.
+
+
+The first hosted Windows run at `6f2f83f` passed all **33** selected tests and the repository
+inventory check, including real npm launchers and process-tree cancellation. Its newly enabled
+license check caught CRLF conversion of a pinned reviewed notice. That check now shares the
+Git-aware content reader; the reviewed notice and its approved SHA-256 remain unchanged.
+Discovery time is included in existing probe/extraction timeout budgets. Updated hosted checks
+are required before merging this increment.

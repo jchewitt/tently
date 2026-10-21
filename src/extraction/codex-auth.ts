@@ -48,9 +48,13 @@ export type CodexLoginProbe = (
 /** Read-only status check. Never expose output: API login status may contain key fragments. */
 export const readCodexLoginMode: CodexLoginProbe = async (command, environment, options = {}) => {
   try {
-    const invocation = await resolveCodexInvocation(command, environment, process.platform, options);
+    const started = performance.now();
+    const timeoutMs = Math.min(options.timeoutMs ?? 5000, 5000);
+    const invocation = await resolveCodexInvocation(command, environment, process.platform, { ...options, timeoutMs });
+    const remaining = Math.ceil(timeoutMs - (performance.now() - started));
+    if (remaining <= 0) return 'unavailable';
     const result = await promisify(execFile)(invocation.command, [...invocation.prefixArgs, 'login', 'status'], {
-      env: environment, timeout: Math.min(options.timeoutMs ?? 5000, 5000),
+      env: environment, timeout: remaining,
       signal: options.signal, maxBuffer: 8192, windowsHide: true,
     });
     const output = `${result.stdout}\n${result.stderr}`;

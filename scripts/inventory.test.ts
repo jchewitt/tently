@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { promisify } from 'node:util';
 import { afterEach, expect, it } from 'vitest';
+import { createGitLineEndingReader } from './git-content.mjs';
 
 const execute = promisify(execFile);
 const roots: string[] = [];
@@ -18,7 +19,9 @@ async function fixture(attributes = '') {
   const run = (...args: string[]) => execute(process.execPath, ['scripts/update-inventory.mjs', ...args], { cwd: root });
   await mkdir(join(root, 'scripts'));
   await mkdir(join(root, 'docs'));
-  await cp(resolve('scripts/update-inventory.mjs'), join(root, 'scripts/update-inventory.mjs'));
+  for (const name of ['update-inventory.mjs', 'git-content.mjs']) {
+    await cp(resolve('scripts', name), join(root, 'scripts', name));
+  }
   await writeFile(join(root, '.gitattributes'), attributes);
   await writeFile(join(root, 'intent.md'), '# Public intent\nA worker consumes a contract.\n');
   const manifest = { imports: [{ sourcePath: 'original/intent.md', destinationPath: 'intent.md',
@@ -88,4 +91,19 @@ it('refuses custom clean filters without executing them', async () => {
   await git('config', 'filter.private-filter.clean', 'echo filter-was-run > unexpected-filter-output');
   await expect(run('--check')).rejects.toThrow('custom Git filter');
   await expect(readFile(join(root, 'unexpected-filter-output'))).rejects.toMatchObject({ code: 'ENOENT' });
+});
+
+it('preserves pinned reviewed-license hashes across CRLF but detects changed license text', async () => {
+  const { root, git } = await fixture();
+  await git('config', 'core.autocrlf', 'true');
+  const canonical = createGitLineEndingReader(root);
+  const reviewed = JSON.parse(await readFile(resolve('reviewed-licenses.json'), 'utf8'));
+  expect(reviewed.length).toBeGreaterThan(0);
+  for (const record of reviewed) {
+    const approved = await readFile(resolve(record.notice), 'utf8');
+    const crlf = Buffer.from(approved.replace(/\r?\n/g, '\r\n'));
+    expect(hash(canonical(record.notice, crlf))).toBe(record.noticeSha256);
+    expect(hash(canonical(record.notice, Buffer.concat([crlf, Buffer.from('Changed license terms.\r\n')]))))
+      .not.toBe(record.noticeSha256);
+  }
 });

@@ -143,8 +143,13 @@ export interface SemanticCommandRunner {
 
 const spawnSemanticCommand: SemanticCommandRunner = {
   async run(command, args, cwd, prompt, environment, options) {
+    const started = performance.now();
+    const timeoutMs = options?.timeoutMs ?? 120_000;
     const invocation = await resolveCodexInvocation(command, environment, process.platform, options);
-    return runSemanticProcess(invocation.command, [...invocation.prefixArgs, ...args], cwd, prompt, environment, options);
+    const remaining = Math.ceil(timeoutMs - (performance.now() - started));
+    if (remaining <= 0) throw new SemanticProviderError('timeout', 'Semantic extraction timeout');
+    return runSemanticProcess(invocation.command, [...invocation.prefixArgs, ...args], cwd, prompt, environment,
+      { ...options, timeoutMs: remaining });
   },
 };
 

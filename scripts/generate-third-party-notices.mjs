@@ -4,6 +4,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
+import { createGitLineEndingReader } from './git-content.mjs';
 import { pnpmInvocation } from './package-manager.mjs';
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
@@ -11,9 +12,10 @@ const toolkitRoot = resolve(scriptDirectory, '..');
 const repositoryRoot = toolkitRoot;
 const checkOnly = process.argv.includes('--check');
 const allowedLicenses = new Set(['Apache-2.0', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC', 'MIT']);
+const committedLineEndings = createGitLineEndingReader(toolkitRoot);
 const reviewed = JSON.parse(await readFile(resolve(toolkitRoot, 'reviewed-licenses.json'), 'utf8'));
 for (const record of reviewed) {
-  const text = await readFile(resolve(toolkitRoot, record.notice));
+  const text = committedLineEndings(record.notice, await readFile(resolve(toolkitRoot, record.notice)));
   if (createHash('sha256').update(text).digest('hex') !== record.noticeSha256) {
     throw new Error(`Reviewed license notice changed: ${record.notice}`);
   }
