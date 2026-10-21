@@ -18,6 +18,8 @@ pnpm evaluate:impact --ref eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d
 That exact commit must exist in local Git history. Omit `--ref` to measure the current
 HEAD with the same cases. The runner rejects cases whose paths no longer exist; review
 the expectations when the product changes instead of silently shrinking the denominator.
+Keep the evidence SHA fixed for controlled comparisons: query tie-breaking uses fact IDs
+that include provenance, so even an unrelated commit can change equally ranked results.
 
 The configuration uses real committed source bytes, bundled TypeScript SCIP, document
 linking, RDF projection, SHACL, immutable publication and the normal saved-evidence query

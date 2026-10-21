@@ -37,6 +37,12 @@ On Linux, Node 24.19.0 and pnpm 10.18.2:
   inventory, licenses and fresh packed-consumer installation/indexing/RDF/MCP smoke.
   All 79 original import paths and source hashes remain unchanged.
 
+Hosted [checks for the initial evaluation commit
+8e82453d92357451e832f3bf16666a6bef89b6de](https://github.com/jchewitt/weftlet/actions/runs/39687986720)
+also passed on Ubuntu (full publication gate) and Windows (34 selected reliability tests,
+inventory and licenses). The full self-repository control run above was performed in Linux
+cloud; these hosted checks do not imply a Windows evaluation run or browser validation.
+
 No live semantic assertions, runtime traces, owner approvals, browser interactions or
 new authentication results are claimed. The control sends no model requests. Broader
 semantic quality still needs a separately bounded live run and human citation review.

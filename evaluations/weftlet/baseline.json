@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "status": "advisory-control-not-a-quality-pass",
-  "measuredAt": "2026-10-21T22:35:36.955Z",
+  "measuredAt": "2026-10-21T22:40:56.651Z",
   "evidenceCommit": "eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d",
   "snapshotId": "eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d-graph-v2-f2ea3640346913de-4f68cb388720",
   "contentDigest": "5b4003c527b0f797d45814679326c59da995bc677d0706768a9d9b1b21aedb4f",
   "configurationDigest": "f2ea3640346913ded829ae27b933a9fdd5b46566c99eb7718b6c31b2a3acf092",
   "suiteDigest": "104a3c4b46955b1bbdde3949e8784eedada271dee5245dcada2eebd578069ef7",
   "evaluatorSourceDigests": {
-    "scripts/evaluation/run.ts": "4ca6c24e090b6d7859bad42d39b9fefc4ef778d105ee9b70d5fd811ed02be1c6",
+    "scripts/evaluation/run.ts": "2f28a4fb08fefc991a8a7f53a4e6206b88055ba59ada9bed4494680db46d0be2",
     "scripts/evaluation/score.ts": "cdcce7863471e12fe0398cce94082ff40ea32551f4ab6f2900083a5f340c2e74",
     "evaluations/weftlet/document-only.mjs": "743ff498cbc7ec308931218ae8bbb01e38c2ffd28933e699d2133c347216c3f2"
   },
@@ -17,7 +17,7 @@
     "platform": "linux",
     "arch": "x64"
   },
-  "reportDigest": "7cd0a057f2d04f1e64bf766fed343862c3752050926065b0036332544a345e4f",
+  "reportDigest": "0c456bb717397f97d0cb4ee70afd5ea23057034ff314e47e6bbf6148a9151c57",
   "scope": [
     "docs/ADR-002-saved-evidence.md",
     "docs/ADR-003-draft-overlays.md",

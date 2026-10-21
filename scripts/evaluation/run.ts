@@ -1,4 +1,4 @@
-import { readFile, mkdir, rename, writeFile, rm } from 'node:fs/promises';
+import { readFile, mkdir, writeFile, rm } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
@@ -6,6 +6,7 @@ import { randomUUID } from 'node:crypto';
 import { createContextGraphApplication } from '../../src/application/application.js';
 import { createSemanticExtractor } from '../../src/extraction/providers.js';
 import { sha256, stableJson } from '../../src/infrastructure/util.js';
+import { atomicRename } from '../../src/storage/atomic-rename.js';
 import { scoreImpactCase, validateSuite, type EvaluationSuite } from './score.js';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
@@ -85,7 +86,7 @@ await mkdir(dirname(output), { recursive: true });
 const temporary = `${output}.${randomUUID()}.tmp`;
 try {
   await writeFile(temporary, JSON.stringify(report, null, 2) + '\n', { flag: 'wx' });
-  await rename(temporary, output);
+  await atomicRename(temporary, output);
 } finally { await rm(temporary, { force: true }); }
 process.stdout.write(JSON.stringify({ report: output, snapshot: snapshot.manifest.snapshotId,
   results: results.map(({ id, recall, exploration }) => ({ id, recall, exploration })) }, null, 2) + '\n');
