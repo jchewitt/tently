@@ -10,7 +10,7 @@ import type {
   ImpactQueryService,
   ImpactScanRequest,
   GraphFact,
-} from "@launch-echo/tently-core";
+} from "@weftlet/core";
 import { contextPackEvidenceAuthority, contextPackLaneForFact } from "../graph/query.js";
 import { viewerScript } from "./viewer-interaction.js";
 import { diagnosticSummary } from "../graph/diagnostics.js";

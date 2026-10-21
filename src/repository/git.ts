@@ -3,7 +3,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { posix } from 'node:path';
 
-import type { ExtractionContext, SemanticSource } from "@launch-echo/tently-core";
+import type { ExtractionContext, SemanticSource } from "@weftlet/core";
 import { sha256, slug } from "../infrastructure/util.js";
 
 const execFileAsync = promisify(execFile);

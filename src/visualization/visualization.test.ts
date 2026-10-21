@@ -8,7 +8,7 @@ import { findEvidencePath } from "./viewer-interaction.js";
 import { runtimeEvidenceFacts } from "../extraction/runtime-evidence.js";
 import { describe, expect, it, vi } from 'vitest';
 
-import type { ContextPack, GraphFact } from "@launch-echo/tently-core";
+import type { ContextPack, GraphFact } from "@weftlet/core";
 import { selectDiagnostics } from "../graph/diagnostics.js";
 import {
   MAX_VISUALIZATION_FACTS,

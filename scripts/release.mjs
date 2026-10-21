@@ -5,7 +5,7 @@ import { access, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { pnpmInvocation } from './package-manager.mjs';
-import { npmAuthOptions } from './npm-auth.mjs';
+import { npmAuthOptions, releaseAuthentication } from './npm-auth.mjs';
 import { runNpm } from './npm-command.mjs';
 import { publishAndVerify } from './registry-publication.mjs';
 
@@ -18,8 +18,8 @@ const execute = (command, args, cwd = root) => execFileSync(command, args, {
 const git = (...args) => execute('git', args).trim();
 const digest = (bytes) => createHash('sha512').update(bytes).digest('base64');
 const entries = [
-  ['@launch-echo/tently-core', 'packages/core'],
-  ['@launch-echo/tently', '.'],
+  ['@weftlet/core', 'packages/core'],
+  ['@weftlet/toolkit', '.'],
 ];
 let authentication = { args: [], cleanup: async () => {} };
 
@@ -58,8 +58,10 @@ function registryIntegrity(npmCli, pkg) {
 
 async function main() {
   const mode = process.argv[2];
-  if (!['--prepare', '--publish'].includes(mode) || process.argv.length !== 3) {
-    throw new Error('Use pnpm release:prepare or pnpm release:publish');
+  const authArgument = process.argv[3];
+  if (!['--prepare', '--publish'].includes(mode) || process.argv.length > 4 ||
+      (authArgument !== undefined && (mode !== '--publish' || !['--auth=login', '--auth=oidc'].includes(authArgument)))) {
+    throw new Error('Use pnpm release:prepare or pnpm release:publish [--auth=login|--auth=oidc]');
   }
   if (git('status', '--porcelain=v1', '--untracked-files=normal')) {
     throw new Error('Commit the reviewed source and documentation before preparing or publishing a release');
@@ -112,9 +114,10 @@ async function main() {
       throw new Error('Release archive identity or integrity mismatch');
     }
   }
-  // Use the operator's login or the secure cloud variable reference; never persist its value.
-  authentication = await npmAuthOptions();
-  npm('whoami');
+  const auth = releaseAuthentication(authArgument?.slice('--auth='.length) ?? 'login', npm('--version'));
+  // OIDC is scoped to publish; whoami cannot establish trusted-publisher permission.
+  authentication = await npmAuthOptions(undefined, { isolate: auth.isolate });
+  if (auth.requiresWhoami) npm('whoami');
   for (const pkg of manifest.packages) {
     const receipt = join(destination, `${pkg.filename}.accepted.json`);
     await publishAndVerify({

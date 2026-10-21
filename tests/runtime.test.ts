@@ -11,7 +11,7 @@ it('keeps toolkit engine metadata and version guidance consistent', async () => 
   expect(manifest.engines.node).toBe(`>=${minimumNodeMajor}.0.0`);
   expect((await readFile(new URL("../.nvmrc", import.meta.url), 'utf8')).trim()).toBe(String(minimumNodeMajor));
   for (const version of ['20.11.0', '22.14.0', '22.19.0', '23.11.0']) {
-    expect(() => assertSupportedNode(version)).toThrow(`Tently requires Node.js 24 or newer; found ${version}`);
+    expect(() => assertSupportedNode(version)).toThrow(`Weftlet requires Node.js 24 or newer; found ${version}`);
   }
   for (const version of ['24.0.0', '24.6.0', '24.19.0', '25.0.0']) {
     expect(() => assertSupportedNode(version)).not.toThrow();
@@ -31,7 +31,7 @@ it.each(['../src/cli.ts', '../src/mcp.ts', '../src/index.ts', '../mcp-launcher.m
     `]).then(() => { throw new Error('Unsupported runtime unexpectedly succeeded'); }, error => error);
     expect(result.code).toBe(1);
     expect(result.stdout).toBe('');
-    expect(result.stderr).toContain('Tently requires Node.js 24 or newer; found 22.14.0');
+    expect(result.stderr).toContain('Weftlet requires Node.js 24 or newer; found 22.14.0');
     expect(result.stderr).not.toContain('decompress.js');
     expect(result.stderr).not.toContain('Building current context graph');
   },

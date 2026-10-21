@@ -9,7 +9,7 @@ import { pathToFileURL } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
 
-import type { ExtractionContext, GraphSnapshot, SnapshotStore } from "@launch-echo/tently-core";
+import type { ExtractionContext, GraphSnapshot, SnapshotStore } from "@weftlet/core";
 import type { GitRepository } from "../repository/git.js";
 import { SnapshotImpactQueryService } from "../graph/query.js";
 import {

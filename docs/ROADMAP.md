@@ -45,3 +45,8 @@ model assertion review are distinct. On 2026-10-20 the user authorized pushing t
 destination to `jchewitt/tently` for local testing. The subsequent npm request authorizes release
 preparation/publication under `@launch-echo`; the maintainer completed the 0.1.0 release from WSL. Visibility changes and
 TradePilot reintegration remain outside the authorized scope. See [release instructions](RELEASING.md).
+
+The maintainer authorized the Weftlet migration on 2026-10-21. Current source targets
+`@weftlet/core` and `@weftlet/toolkit`, with a `weftlet` CLI and a manually dispatched trusted
+publishing workflow. First publication, npm trust configuration and a live OIDC publish remain
+separate external steps; the earlier Tently packages remain available and undeprecated.

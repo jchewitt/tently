@@ -48,3 +48,6 @@ This does not split large functions, remove complexity findings, change graph se
 change snapshot identities/formats, fix the outstanding native Windows issues or publish
 another npm release. The published 0.1.0 archives remain immutable; this development change
 needs a new version before future publication.
+
+Package naming update: the original `@launch-echo/tently-core` boundary is now `@weftlet/core`;
+see [ADR 008](ADR-008-weftlet-packages.md). This does not change the module decision above.

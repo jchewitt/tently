@@ -6,7 +6,7 @@ import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import type { ExtractionContext } from "@launch-echo/tently-core";
+import type { ExtractionContext } from "@weftlet/core";
 import { captureValidationTrace, OtlpJsonRuntimeEvidenceProvider } from "./telemetry.js";
 
 describe('OpenTelemetry runtime evidence', () => {

@@ -2,7 +2,7 @@ import { readFile, mkdtemp, realpath, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { isAbsolute, join, relative, resolve } from 'node:path';
 import { createRequire } from 'node:module';
-import type { GraphFact, GraphSnapshot } from "@launch-echo/tently-core";
+import type { GraphFact, GraphSnapshot } from "@weftlet/core";
 import { GitRepository } from "../repository/git.js";
 import { RdfEvidenceGraph, CG, nodeIri } from "../graph/rdf.js";
 import { sha256, stableJson } from "../infrastructure/util.js";

@@ -144,6 +144,6 @@ export async function runInit(args: readonly string[]): Promise<void> {
   process.stdout.write(`Selected ${result.config.semanticSources.length} document paths; approved intent sources: none.\n`);
   process.stdout.write('Review the configuration, select any contracts and owner-approved documents, and commit the inputs you want indexed.\n');
   const configArg = JSON.stringify(result.configPath);
-  process.stdout.write(`Next: npx @launch-echo/tently doctor --config ${configArg}\nThen: npx @launch-echo/tently hydrate --config ${configArg} --ref HEAD\n`);
+  process.stdout.write(`Next: npx @weftlet/toolkit doctor --config ${configArg}\nThen: npx @weftlet/toolkit hydrate --config ${configArg} --ref HEAD\n`);
   process.stdout.write('Hydration with selected documents uses Codex and may incur model charges. Setup made no model requests.\n');
 }

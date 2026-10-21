@@ -2,7 +2,7 @@
 
 import { describe, expect, it } from 'vitest';
 
-import type { ExtractionContext, RuntimeTraceReference } from "@launch-echo/tently-core";
+import type { ExtractionContext, RuntimeTraceReference } from "@weftlet/core";
 import { runtimeEvidenceFacts } from "./runtime-evidence.js";
 
 describe('runtime evidence graph facts', () => {

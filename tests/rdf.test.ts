@@ -14,7 +14,7 @@ import { SnapshotImpactQueryService, contextPackEvidenceAuthority } from "../src
 import { verifyPipeline } from "../examples/pipeline/test/pipeline.test.js";
 import { sha256, stableJson } from "../src/infrastructure/util.js";
 import type { ContextGraphConfig } from "../src/configuration/config.js";
-import type { GraphFact } from "@launch-echo/tently-core";
+import type { GraphFact } from "@weftlet/core";
 import { DirectRdfOntologyCompiler } from "../src/extraction/ontology.js";
 
 describe('unified evidence graph', () => {

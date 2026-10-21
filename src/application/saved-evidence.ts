@@ -1,4 +1,4 @@
-import type { ImpactQueryService, ImpactScanRequest } from "@launch-echo/tently-core";
+import type { ImpactQueryService, ImpactScanRequest } from "@weftlet/core";
 import type { GitRepository } from "../repository/git.js";
 import { MarkdownContextPackRenderer } from "../graph/query.js";
 import { inWorkingScope, readWorkingContent } from "../repository/working-content.js";

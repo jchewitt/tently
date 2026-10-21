@@ -10,7 +10,7 @@ import { describe, expect, it } from 'vitest';
 import { AgentSemanticScopeResolver, PreparedImpactQueryService } from "./agent-context.js";
 import { resolveStorageRoot } from "../configuration/cache.js";
 import type { ContextGraphConfig } from "../configuration/config.js";
-import type { ExtractionContext, GraphSnapshot, SemanticArtifact, SemanticSource } from "@launch-echo/tently-core";
+import type { ExtractionContext, GraphSnapshot, SemanticArtifact, SemanticSource } from "@weftlet/core";
 import { linkSemanticDocuments } from "../extraction/document.js";
 import { GitRepository } from "../repository/git.js";
 import type { ContextGraphHydrator, HydrationOptions } from "./hydrator.js";

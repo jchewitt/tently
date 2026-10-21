@@ -3,7 +3,7 @@ import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { promisify } from 'node:util';
 import type { ContextGraphConfig } from "../configuration/config.js";
-import type { ExtractionContext, GraphSnapshot } from "@launch-echo/tently-core";
+import type { ExtractionContext, GraphSnapshot } from "@weftlet/core";
 import { GitRepository } from "../repository/git.js";
 import { withCommittedTree } from "../repository/committed-tree.js";
 import { FileSnapshotStore } from "../storage/storage.js";

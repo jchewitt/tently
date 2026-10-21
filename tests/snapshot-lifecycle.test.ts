@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
 import { describe, expect, it } from 'vitest';
-import type { GraphSnapshot } from "@launch-echo/tently-core";
+import type { GraphSnapshot } from "@weftlet/core";
 import { FileSnapshotStore } from "../src/storage/storage.js";
 import { GitRepository } from "../src/repository/git.js";
 import { withCommittedTree } from "../src/repository/committed-tree.js";

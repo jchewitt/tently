@@ -1,5 +1,5 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
-import type { ExtractionContext, GraphFact, GraphNode, RuntimeTraceReference } from "@launch-echo/tently-core";
+import type { ExtractionContext, GraphFact, GraphNode, RuntimeTraceReference } from "@weftlet/core";
 import { sha256, stableJson } from "../infrastructure/util.js";
 
 const extractor = { id: 'otlp-runtime-evidence', version: '1.0.0' } as const;

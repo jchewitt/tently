@@ -1,4 +1,4 @@
-# Tently — Context Graph Toolkit
+# Weftlet — Context Graph Toolkit
 
 An extracted Apache-2.0 toolkit for connecting product intent, contracts, implementation,
 tests and observed runtime evidence. Derived from LaunchEcho Context Graph; see
@@ -9,15 +9,17 @@ This standalone implementation uses small, recorded delivery milestones. See [ro
 
 ## Set up a project
 
-The published npm package is `@launch-echo/tently`; its neutral `@launch-echo/tently-core`
-dependency is installed automatically. Both packages are available at version `0.1.0`.
+Weftlet uses `@weftlet/toolkit`; its neutral `@weftlet/core` dependency is installed
+automatically. The initial Weftlet release targets `0.1.0`. Check [release status](docs/RELEASING.md)
+for public availability before using the npm commands below. Existing Tently users should follow
+the [migration guide](docs/MIGRATING-TO-WEFTLET.md).
 
 From your TypeScript project's directory (Node 24+):
 
 ```sh
-npx @launch-echo/tently init
-npx @launch-echo/tently config validate
-npx @launch-echo/tently doctor
+npx @weftlet/toolkit init
+npx @weftlet/toolkit config validate
+npx @weftlet/toolkit doctor
 ```
 
 `init` asks for the repository ID, code roots, selected document paths and model, then writes
@@ -26,7 +28,7 @@ version fields, requires no Git commit or Codex login to run, and refuses to ove
 configuration. Setup makes no model requests. For automation:
 
 ```sh
-npx @launch-echo/tently init --yes --repository-id your-org/your-project --code-root src --semantic-source docs/product --evidence-root tests
+npx @weftlet/toolkit init --yes --repository-id your-org/your-project --code-root src --semantic-source docs/product --evidence-root tests
 ```
 
 Source flags may be repeated. Without `--semantic-source`, non-interactive setup selects no
@@ -39,21 +41,21 @@ ignore rules alone. Configuration remains JSON; `config show` displays the valid
 Review the selected sources, configure Codex authentication when using semantic documents,
 and commit the inputs you want indexed before hydrating:
 
-In unreleased source, `semantic.auth.mode` defaults to `chatgpt`, using your existing Codex
+In Weftlet, `semantic.auth.mode` defaults to `chatgpt`, using your existing Codex
 ChatGPT login. API billing requires explicitly selecting `api-key`; credentials stay in an
 environment variable. See [authentication configuration](docs/PROVIDERS.md#codex-authentication)
-for both modes and their tentative validation status. Published 0.1.0 predates this option.
+for both modes and their tentative validation status. The earlier `@launch-echo/tently@0.1.0` release predates this option.
 
 ```sh
-npx @launch-echo/tently hydrate --ref HEAD
-npx @launch-echo/tently impact scan --changed-file src/search.ts --json
+npx @weftlet/toolkit hydrate --ref HEAD
+npx @weftlet/toolkit impact scan --changed-file src/search.ts --json
 ```
 
 Hydration with selected documents may incur model charges. Saved queries do not call a model.
 Docker is optional for openCAESAR; the default RDF backend needs no Docker.
-For a project-local dependency, install `npm install --save-dev @launch-echo/tently` and use
-`npx tently` or `npx context-graph`. MCP clients can launch
-`npx --yes --package @launch-echo/tently context-graph-mcp` with `CONTEXT_GRAPH_CONFIG` set to
+For a project-local dependency, install `npm install --save-dev @weftlet/toolkit` and use
+`npx weftlet` or the compatible `npx context-graph` alias. MCP clients can launch
+`npx --yes --package @weftlet/toolkit weftlet-mcp` with `CONTEXT_GRAPH_CONFIG` set to
 the project's absolute configuration path. Pin a reviewed version for reproducible agent setup.
 
 Linux/WSL is the validated full-suite path. Native Windows has a live Codex pass but still has
@@ -63,7 +65,8 @@ archive-byte and concurrent snapshot replacement issues; see the [validation rec
 
 The development source is organized by responsibility; see
 [toolkit modules and boundaries](docs/ADR-007-toolkit-modules.md). The two npm packages and
-their public entry points are unchanged. The module refactor is not part of published 0.1.0.
+their public library entry points retain the same API under the new package names.
+The module refactor was not part of the earlier Tently 0.1.0 release.
 
 The toolkit requires Node.js 24 or newer; Node 24 is the validated runtime.
 Use pnpm 10.18.2 for development. The neutral core package has no toolkit runtime dependencies
@@ -96,11 +99,11 @@ Configure semantic source selection, TypeScript roots/indexer arguments, contrac
 evidence roots, runtime evidence, storage and optional adapter explicitly.
 
 Install the locally packed core and toolkit tarballs together. The installed commands are
-`tently`, `context-graph` and `context-graph-mcp`. For example, after preparing a release:
+`weftlet`, `weftlet-mcp`, and the compatible `context-graph` / `context-graph-mcp` aliases. For example, after preparing a release:
 
 ```sh
-npm install --save-dev /path/to/tently/.release/launch-echo-tently-core-0.1.0.tgz /path/to/tently/.release/launch-echo-tently-0.1.0.tgz
-npx tently init
+npm install --save-dev /path/to/tently/.release/weftlet-core-0.1.0.tgz /path/to/tently/.release/weftlet-toolkit-0.1.0.tgz
+npx weftlet init
 ```
 
 Pass `--config /absolute/path/context-graph.config.json`
@@ -140,7 +143,7 @@ for query bounds and authority configuration.
 
 Never submit credentials, account data or private runtime payloads as semantic sources.
 Live provider tests are separate from deterministic CI. The maintainer authorized the GitHub
-export and requested npm publication under `@launch-echo`. Registry publication still requires
+export and migration from the published `@launch-echo` names to `@weftlet`. Registry publication requires
 an authorized npm identity. Repository visibility changes require separate authorization.
 
 See [npm release instructions](docs/RELEASING.md) for prepared archives, integrity checks and

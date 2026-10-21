@@ -5,7 +5,7 @@ import { join, resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import type { ExtractionContext, SemanticSource } from "@launch-echo/tently-core";
+import type { ExtractionContext, SemanticSource } from "@weftlet/core";
 import { OpenCaesarOntologyCompiler } from "../src/extraction/ontology.js";
 import { SemanticHydrator } from "../src/extraction/semantic.js";
 import { SemanticArtifactStore } from "../src/storage/storage.js";

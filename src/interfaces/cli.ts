@@ -6,7 +6,7 @@ import { resolve } from 'node:path';
 import process from 'node:process';
 
 import { createContextGraphApplication } from "../application/application.js";
-import type { ImpactScanRequest } from "@launch-echo/tently-core";
+import type { ImpactScanRequest } from "@weftlet/core";
 import { compileOntologyAtExactCheckout } from "../extraction/ontology.js";
 import { visualizeContextPack } from "../visualization/visualization.js";
 import { buildWorkingOverlay } from "../application/overlay.js";
@@ -55,7 +55,7 @@ export function impactRequestFromArgs(args: readonly string[]): ImpactScanReques
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   if (args.includes('--help') || !args.length) {
-    process.stdout.write('context-graph init|config show|config validate|doctor|hydrate|overlay|impact scan|sparql|validate|govern|visualize|diagnostics show|invariant check|clean-compare|ontology compile\nUse --config <file>; queries accept --snapshot <id>. impact scan accepts --changed-file, --capability, --max-facts, --max-depth, --continuation.\ninit [--yes] [--directory <project>] [--config <file>] [--repository-id <id>] [--code-root <path>] [--semantic-source <path>] [--evidence-root <path>] [--model <name>] [--no-gitignore]\nSource flags may be repeated. init never overwrites an existing config. See README.md for examples.\n');
+    process.stdout.write('weftlet init|config show|config validate|doctor|hydrate|overlay|impact scan|sparql|validate|govern|visualize|diagnostics show|invariant check|clean-compare|ontology compile\nUse --config <file>; queries accept --snapshot <id>. impact scan accepts --changed-file, --capability, --max-facts, --max-depth, --continuation.\ninit [--yes] [--directory <project>] [--config <file>] [--repository-id <id>] [--code-root <path>] [--semantic-source <path>] [--evidence-root <path>] [--model <name>] [--no-gitignore]\nSource flags may be repeated. init never overwrites an existing config. See README.md for examples.\n');
     return;
   }
   if (args[0] === 'init') {
@@ -217,7 +217,7 @@ async function main(): Promise<void> {
     return;
   }
   throw new Error(
-    'Usage: context-graph hydrate|clean-compare|impact scan|diagnostics show --snapshot <id>|invariant check|ontology compile|visualize --output <file.html|file.dot|file.svg>',
+    'Usage: weftlet hydrate|clean-compare|impact scan|diagnostics show --snapshot <id>|invariant check|ontology compile|visualize --output <file.html|file.dot|file.svg>',
   );
 }
 

@@ -37,7 +37,12 @@ Minimal destination equivalents replace root automation; no monorepo lockfile is
 On 2026-10-20 the user authorized pushing the reviewed destination to `jchewitt/tently` after
 fixing the secondary review findings, so it can be cloned and tested locally. This authorization
 initially covered the destination Git repository only. A subsequent request authorizes npm
-publication using the maintainer-selected `@launch-echo` scope. The destination packages are now
+publication using the maintainer-selected `@launch-echo` scope. That release used
 `@launch-echo/tently` and `@launch-echo/tently-core`; original notices and source hashes remain
 unchanged. Registry authentication is still pending. No repository visibility change is authorized.
 `extraction-manifest.json` records both authorization scopes.
+
+On 2026-10-21 the maintainer selected and created the `@weftlet` scope and authorized migration
+to `@weftlet/core` and `@weftlet/toolkit`. This changes destination package names only; the original
+source SHA, imported-path inventory, copyright and attribution remain intact. GitHub remains
+`jchewitt/tently`. See [migration](MIGRATING-TO-WEFTLET.md) and [release status](RELEASING.md).

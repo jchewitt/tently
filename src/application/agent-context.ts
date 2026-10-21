@@ -2,7 +2,7 @@
 import { basename } from 'node:path';
 
 import type { ContextGraphConfig } from "../configuration/config.js";
-import type { ImpactQueryService, ImpactScanRequest, SnapshotStore } from "@launch-echo/tently-core";
+import type { ImpactQueryService, ImpactScanRequest, SnapshotStore } from "@weftlet/core";
 import type { GitRepository } from "../repository/git.js";
 import type { ContextGraphHydrator } from "./hydrator.js";
 import { SnapshotImpactQueryService } from "../graph/query.js";

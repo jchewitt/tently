@@ -1,5 +1,5 @@
 # Modified for standalone extraction; see docs/extraction-manifest.json.
-name: LaunchEcho Context Graph Check
+name: Weftlet Context Graph Check
 description: Build, test, license-check, and pack a Context Graph distribution without semantic credentials
 author: LaunchEcho
 

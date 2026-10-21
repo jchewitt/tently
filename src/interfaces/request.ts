@@ -1,5 +1,5 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
-import type { ImpactScanRequest } from "@launch-echo/tently-core";
+import type { ImpactScanRequest } from "@weftlet/core";
 
 const allowedFields = new Set([
   'snapshotId',

@@ -1,4 +1,4 @@
-import type { GraphFact } from "@launch-echo/tently-core";
+import type { GraphFact } from "@weftlet/core";
 
 export function contextPackEvidenceAuthority(
   fact: GraphFact,

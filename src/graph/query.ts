@@ -11,7 +11,7 @@ import type {
   ImpactQueryService,
   ImpactScanRequest,
   SnapshotStore,
-} from "@launch-echo/tently-core";
+} from "@weftlet/core";
 import { diagnosticSummary, selectDiagnostics } from "./diagnostics.js";
 
 export const DEFAULT_CONTEXT_PACK_FACTS = 60;

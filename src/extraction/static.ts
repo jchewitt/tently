@@ -7,7 +7,7 @@ import { dirname, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 import type { ContextGraphConfig } from "../configuration/config.js";
-import type { ExtractionContext, FactExtractor, GraphFact } from "@launch-echo/tently-core";
+import type { ExtractionContext, FactExtractor, GraphFact } from "@weftlet/core";
 import type { GitRepository } from "../repository/git.js";
 import { matchesRepositoryGlob } from "../repository/glob.js";
 import { runProcess } from "../infrastructure/process.js";

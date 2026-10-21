@@ -9,7 +9,7 @@ import type {
   RuntimeTraceReference,
   RuntimeEvidenceProvider,
   SnapshotStore,
-} from "@launch-echo/tently-core";
+} from "@weftlet/core";
 import type { GitRepository } from "../repository/git.js";
 import { contractPatternRoots } from "../repository/glob.js";
 import type { OntologyCompiler } from "../extraction/ontology.js";

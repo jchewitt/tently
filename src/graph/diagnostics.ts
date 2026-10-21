@@ -7,7 +7,7 @@ import type {
   GraphFact,
   GraphSnapshot,
   ImpactScanRequest,
-} from "@launch-echo/tently-core";
+} from "@weftlet/core";
 
 export const diagnosticKinds: readonly DiagnosticKind[] = [
   'missingIntent',

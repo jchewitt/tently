@@ -1,6 +1,6 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
 import type { AgentSemanticScopeResolver } from "./agent-context.js";
-import type { ImpactScanRequest, SnapshotStore } from "@launch-echo/tently-core";
+import type { ImpactScanRequest, SnapshotStore } from "@weftlet/core";
 import type { GitRepository } from "../repository/git.js";
 import type { ContextGraphHydrator } from "./hydrator.js";
 

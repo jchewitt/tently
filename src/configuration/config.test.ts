@@ -47,7 +47,7 @@ describe('loadConfig', () => {
   it('accepts explicit auth modes and rejects inline credentials or invalid key references', async () => {
     const root = await mkdtemp(join(tmpdir(), 'context-graph-config-auth-'));
     const path = join(root, 'config.json');
-    for (const auth of [undefined, { mode: 'chatgpt' }, { mode: 'api-key' }, { mode: 'api-key', apiKeyEnv: 'TENTLY_KEY' }]) {
+    for (const auth of [undefined, { mode: 'chatgpt' }, { mode: 'api-key' }, { mode: 'api-key', apiKeyEnv: 'WEFTLET_KEY' }]) {
       await writeFile(path, JSON.stringify({ ...validConfig, semantic: { ...validConfig.semantic, auth } }));
       await expect(loadConfig(path)).resolves.toBeDefined();
     }

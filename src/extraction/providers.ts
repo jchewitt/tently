@@ -1,5 +1,5 @@
 import type { ContextGraphConfig } from "../configuration/config.js";
-import type { ExtractionContext, SemanticSource } from "@launch-echo/tently-core";
+import type { ExtractionContext, SemanticSource } from "@weftlet/core";
 import { CodexCliSemanticExtractor, SemanticProviderError, type SemanticExtractor, type SemanticRunOptions } from "./semantic.js";
 import { sha256, stableJson } from "../infrastructure/util.js";
 import { resolveConsumerModule } from "../infrastructure/module-resolution.js";

@@ -20,12 +20,12 @@ for (const record of reviewed) {
 }
 const packageTargets = [
   {
-    name: '@launch-echo/tently-core',
+    name: '@weftlet/core',
     path: resolve(toolkitRoot, 'packages', 'core', 'THIRD_PARTY_NOTICES.md'),
     includeExternalTools: false,
   },
   {
-    name: '@launch-echo/tently',
+    name: '@weftlet/toolkit',
     path: resolve(toolkitRoot, 'THIRD_PARTY_NOTICES.md'),
     includeExternalTools: true,
   },
@@ -57,7 +57,7 @@ function dependencyRows(report) {
   const unsupported = [];
   for (const [license, dependencies] of Object.entries(report)) {
     for (const dependency of dependencies) {
-      if (['@launch-echo/tently', '@launch-echo/tently-core'].includes(dependency.name)) continue;
+      if (['@weftlet/toolkit', '@weftlet/core'].includes(dependency.name)) continue;
       const exceptions = dependency.versions.map((version) => reviewed.find((record) =>
         record.name === dependency.name && record.version === version && record.expression === license));
       if (!isAllowedLicenseExpression(license) && !exceptions.every(Boolean)) {

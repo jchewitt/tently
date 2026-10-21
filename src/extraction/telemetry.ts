@@ -10,7 +10,7 @@ import {
   SimpleSpanProcessor,
 } from '@opentelemetry/sdk-trace-base';
 
-import type { ExtractionContext, RuntimeEvidenceProvider, RuntimeTraceReference } from "@launch-echo/tently-core";
+import type { ExtractionContext, RuntimeEvidenceProvider, RuntimeTraceReference } from "@weftlet/core";
 import type { ContextGraphConfig } from "../configuration/config.js";
 import { sha256 } from "../infrastructure/util.js";
 

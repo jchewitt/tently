@@ -1,6 +1,6 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
 import { describe, expect, it } from 'vitest';
-import type { GraphDiagnostic, GraphFact } from "@launch-echo/tently-core";
+import type { GraphDiagnostic, GraphFact } from "@weftlet/core";
 import { diagnosticSummary, MAX_DIAGNOSTICS_PER_KIND, selectDiagnostics } from "./diagnostics.js";
 
 const span = {

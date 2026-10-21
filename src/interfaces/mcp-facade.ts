@@ -1,5 +1,5 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
-import type { ImpactQueryService, ImpactScanRequest } from "@launch-echo/tently-core";
+import type { ImpactQueryService, ImpactScanRequest } from "@weftlet/core";
 
 export const impactScanToolName = 'impact.scan';
 

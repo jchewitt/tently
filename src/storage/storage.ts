@@ -3,7 +3,7 @@ import { mkdir, readFile, rename, writeFile, link, rm } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 
-import type { GraphSnapshot, SemanticArtifact, SnapshotStore } from "@launch-echo/tently-core";
+import type { GraphSnapshot, SemanticArtifact, SnapshotStore } from "@weftlet/core";
 
 async function readJson<T>(path: string): Promise<T | undefined> {
   try {

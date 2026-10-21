@@ -5,7 +5,7 @@ import { join, resolve } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import type { GraphFact, GraphNode, GraphSnapshot } from "@launch-echo/tently-core";
+import type { GraphFact, GraphNode, GraphSnapshot } from "@weftlet/core";
 import { handleImpactScan, impactScanToolName } from "../interfaces/mcp-facade.js";
 import { SnapshotImpactQueryService } from "./query.js";
 import { FileSnapshotStore } from "../storage/storage.js";

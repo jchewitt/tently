@@ -18,7 +18,7 @@ import type {
   SemanticSource,
   DiagnosticKind,
   GraphDiagnostic,
-} from "@launch-echo/tently-core";
+} from "@weftlet/core";
 import type { ContextGraphConfig } from "../configuration/config.js";
 import type { SemanticArtifactStore } from "../storage/storage.js";
 import { sha256, stableJson } from "../infrastructure/util.js";

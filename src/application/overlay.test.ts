@@ -9,7 +9,7 @@ import { GitRepository } from "../repository/git.js";
 import { FileSnapshotStore } from "../storage/storage.js";
 import { sha256, stableJson } from "../infrastructure/util.js";
 import type { ContextGraphConfig } from "../configuration/config.js";
-import type { GraphSnapshot } from "@launch-echo/tently-core";
+import type { GraphSnapshot } from "@weftlet/core";
 import { ScipSymbolExtractor, ScipTypeScriptIndexer } from "../extraction/static.js";
 import { SnapshotImpactQueryService } from "../graph/query.js";
 import { SavedEvidenceQueryService } from "./saved-evidence.js";

@@ -1,6 +1,6 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
 import "../runtime-check.mjs";
-export * from "@launch-echo/tently-core";
+export * from "@weftlet/core";
 export * from "./repository/git.js";
 export * from "./application/hydrator.js";
 export * from "./graph/query.js";

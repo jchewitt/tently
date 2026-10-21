@@ -6,7 +6,7 @@ import { expect, it } from 'vitest';
 import { assertSemanticOutput, CodexCliSemanticExtractor, SemanticProviderError } from "./semantic.js";
 import { runSemanticProcess } from "./semantic-process.js";
 import { createSemanticExtractor } from "./providers.js";
-import type { ExtractionContext, SemanticSource } from "@launch-echo/tently-core";
+import type { ExtractionContext, SemanticSource } from "@weftlet/core";
 
 const config = { provider: 'codex-cli' as const, model: 'test', reasoningEffort: 'low',
   promptVersion: '1', extractorVersion: '1', adapterVersion: '1', ontologyVersion: '1',

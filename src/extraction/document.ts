@@ -5,7 +5,7 @@ import type {
   GraphNode,
   SemanticArtifact,
   SemanticSource,
-} from "@launch-echo/tently-core";
+} from "@weftlet/core";
 import { sha256, stableJson } from "../infrastructure/util.js";
 
 const identity = { id: 'document-linker', version: '1.0.0' } as const;

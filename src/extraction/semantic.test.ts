@@ -5,7 +5,7 @@ import { join } from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import type { ExtractionContext, SemanticSource } from "@launch-echo/tently-core";
+import type { ExtractionContext, SemanticSource } from "@weftlet/core";
 import { CodexCliSemanticExtractor, SemanticHydrator } from "./semantic.js";
 import { SemanticArtifactStore } from "../storage/storage.js";
 

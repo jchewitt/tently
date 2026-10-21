@@ -24,7 +24,7 @@ Artifact storage contains model output and must remain private with the source r
 Status: implemented in unreleased source; live validation is **tentative and non-blocking for
 release**, as accepted by the maintainer. Follow-up is planned after publication and adoption into
 Banditrade using the maintainer's existing ChatGPT login; API-key testing may remain deferred.
-Published 0.1.0 does not contain this option. Both modes still use Codex CLI;
+The earlier `@launch-echo/tently@0.1.0` release does not contain this option. Both modes still use Codex CLI;
 this is not a direct OpenAI API provider or a fix for the managed-cloud filesystem issue.
 
 Merge one of these fragments into your existing `context-graph.config.json`:
@@ -34,24 +34,24 @@ Merge one of these fragments into your existing `context-graph.config.json`:
 ```
 
 Omitting `auth` also selects `chatgpt`; `init` writes it explicitly. Sign in using `codex login`
-and select ChatGPT. Tently checks `codex login status` before an uncached extraction and requires
+and select ChatGPT. Weftlet checks `codex login status` before an uncached extraction and requires
 it to report ChatGPT login. A missing, unrecognized or API-key login fails before model execution.
 There is no automatic API fallback. Existing saved API logins are not changed or logged out by
-Tently. The status probe has a maximum five-second timeout in addition to the extraction timeout.
+Weftlet. The status probe has a maximum five-second timeout in addition to the extraction timeout.
 This mode uses your plan's Codex allowance and limits.
 
 ```json
 {
   "semantic": {
     "provider": "codex-cli",
-    "auth": { "mode": "api-key", "apiKeyEnv": "TENTLY_CODEX_API_KEY" }
+    "auth": { "mode": "api-key", "apiKeyEnv": "WEFTLET_CODEX_API_KEY" }
   }
 }
 ```
 
 API mode uses separately billed API access. Supply the named variable through your local secret
 manager or trusted automation environment. `apiKeyEnv` defaults to `CODEX_API_KEY` when omitted.
-Tently passes only the selected key as `CODEX_API_KEY` to `codex exec`, which supports per-invocation
+Weftlet passes only the selected key as `CODEX_API_KEY` to `codex exec`, which supports per-invocation
 API authentication without an interactive login. Missing or blank keys fail without falling back
 to saved authentication. A key's presence does not establish validity, model access or available
 quota. Authentication failures do not trigger a switch to the other mode.

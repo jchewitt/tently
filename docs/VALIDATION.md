@@ -398,3 +398,37 @@ workflow after publication and adoption into Banditrade, and report any issues. 
 may remain tentative; obtaining API credentials or making paid requests is not required for that
 follow-up. This records acceptance of deferred validation, not a passing result. Ordinary
 deterministic release checks remain applicable. No source-application reintegration was performed.
+
+## Weftlet migration and trusted-publishing preparation
+
+2026-10-21: the maintainer created `@weftlet` and authorized migration from Tently. Current source
+uses `@weftlet/core@0.1.0`, `@weftlet/toolkit@0.1.0`, `weftlet` and `weftlet-mcp`. The compatible
+context-graph aliases, config/storage paths, neutral-core boundary and all 79 original imported
+source paths/SHA-256 hashes are preserved. GitHub remains `jchewitt/tently`.
+
+Linux, Node 24.19.0, pnpm 10.18.2 and npm 11.9.0: frozen installation, build and the full
+publication gate passed **147 deterministic tests** (1 core + 146 toolkit/example/script),
+with one optional Docker/OML test skipped. Architecture checks passed with 12 advisory findings;
+extraction inventory and licenses passed. A fresh packed consumer installed the new toolkit
+and automatically resolved the new core name, exercised npm exec setup/config, real TypeScript
+SCIP indexing, RDF/SPARQL/SHACL, visualization output and MCP. Cold/stale/compiler-error MCP
+startup tests passed with workspace fixtures wired to `@weftlet/core`.
+
+The previously deferred deterministic Codex-auth/config regression cases now pass. Live ChatGPT
+and API-key authentication validation remains tentative and non-blocking; no model was invoked.
+Public runtime export counts remain 35 toolkit, 3 core and 2 telemetry. After final help-text and
+documentation edits, compilation and extraction inventory were checked again.
+
+`publish.yml` was checked with actionlint 1.7.7 (shellcheck integration disabled). It defaults to
+preparation only; publication is explicitly selected and uses a separately permissioned,
+environment-gated GitHub-hosted job. Synthetic tests cover OIDC prerequisites, minimum npm version,
+rejection of ambient tokens and cleanup of isolated npm configurations. Manual login and legacy
+cloud-token references remain supported. The workflow pins npm 11.21.1; local checks used npm
+11.9.0, which also exceeds npm's 11.5.1 minimum for trusted publishing.
+
+No new npm packages have been published or old packages deprecated by this change. Package-level
+npm trust settings, GitHub environment reviewer rules, a live OIDC release/provenance check and
+fresh public-registry installation remain external validation steps. The new release workflow
+has not yet been run on GitHub; a successful local gate or actionlint run is not evidence of OIDC
+permissions. Native Windows fixes, fresh-task restoration and actual browser interaction remain
+separate work. See [release instructions](RELEASING.md) for the maintainer's exact setup steps.

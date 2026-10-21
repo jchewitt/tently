@@ -7,7 +7,7 @@ import { pathToFileURL } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 import { loadContextGraphAdapterModule } from "./application.js";
-import type { ContextGraphRepository } from "@launch-echo/tently-core";
+import type { ContextGraphRepository } from "@weftlet/core";
 
 const repository: ContextGraphRepository = {
   async readFileAt() {

@@ -1,7 +1,7 @@
 import { QueryEngine } from '@comunica/query-sparql';
 import { DataFactory, Parser, Store, Writer } from 'n3';
 import SHACLValidator from 'rdf-validate-shacl';
-import type { GraphFact, GraphSnapshot } from "@launch-echo/tently-core";
+import type { GraphFact, GraphSnapshot } from "@weftlet/core";
 import { contextPackEvidenceAuthority } from "./authority.js";
 import { stableJson } from "../infrastructure/util.js";
 import { createRequire } from 'node:module';

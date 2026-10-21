@@ -7,7 +7,7 @@ import { promisify } from 'node:util';
 
 import { describe, expect, it } from 'vitest';
 
-import type { SemanticArtifact } from "@launch-echo/tently-core";
+import type { SemanticArtifact } from "@weftlet/core";
 import { GitRepository } from "../repository/git.js";
 import {
   compileOntologyAtExactCheckout,

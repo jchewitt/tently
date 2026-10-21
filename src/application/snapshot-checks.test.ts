@@ -1,7 +1,7 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
 import { describe, expect, it, vi } from 'vitest';
 
-import type { GraphSnapshot } from "@launch-echo/tently-core";
+import type { GraphSnapshot } from "@weftlet/core";
 import { SnapshotChecks } from "./snapshot-checks.js";
 
 function fixture({ agent = true, stale = false, missing = false } = {}) {

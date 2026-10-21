@@ -37,11 +37,16 @@ does not publish repository commits or prove fresh-task restoration; those are s
 Saving an environment draft does not apply/publish it. Review and activate it through environment
 settings separately from any repository/package publication decision.
 
-Optional npm publication uses the secure `TENTLY_NPM_TOKEN` environment binding, scoped to
-`registry.npmjs.org`. Its requirement has been saved as an environment draft; supplying the
-credential and publishing that configuration are separate user actions. Development and
-validation do not need this secret. See `RELEASING.md` for the publisher's temporary npm
+Optional npm publication uses the secure `WEFTLET_NPM_TOKEN` environment binding, scoped to
+`registry.npmjs.org`. The older draft may still list `TENTLY_NPM_TOKEN`, which remains supported
+as a compatibility alias. Neither secret is needed for development, validation, local npm login
+or GitHub OIDC publication; no new cloud token requirement was added for the rename. See `RELEASING.md` for the publisher's temporary npm
 configuration and archive verification. No credential value belongs in this repository.
 
 See [environment validation](ENVIRONMENT-VALIDATION.md) for the hosted CI evidence, fresh-task
 restoration procedure and browser-MCP checklist. These checks do not require live Codex.
+
+Current package identity is Weftlet (`@weftlet/core`, `@weftlet/toolkit`); checkout path and
+GitHub repository remain `tently`. GitHub OIDC publishing is configured separately through
+`publish.yml` and the `npm-release` environment; no cloud npm token is required for that path.
+See [releasing](RELEASING.md). Live auth validation remains tentative and non-blocking.

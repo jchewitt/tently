@@ -1,35 +1,46 @@
-# npm release
+# Weftlet npm releases
 
-Package names selected by the maintainer:
+Current source prepares the first `@weftlet/core@0.1.0` and `@weftlet/toolkit@0.1.0` release.
+The maintainer created the `weftlet` npm organization. Neither new package is claimed published
+by this document. The earlier `@launch-echo/tently-core@0.1.0` and `@launch-echo/tently@0.1.0`
+releases remain available and undeprecated; their public installation evidence is in
+[validation](VALIDATION.md). GitHub remains `jchewitt/tently`; npm and GitHub owner names need not match.
 
-- `@launch-echo/tently`: the CLI/MCP/toolkit users install.
-- `@launch-echo/tently-core`: neutral contracts and utilities, installed transitively.
+Live Codex authentication validation is tentative and non-blocking for release, as accepted by
+the maintainer. Deterministic release checks still apply. Native Windows limitations remain
+recorded; use Linux or WSL for the full release gate. See [consumer migration](MIGRATING-TO-WEFTLET.md).
 
-Both currently target version `0.1.0`. This is the initial standalone release, with the native
-Windows limitations in `VALIDATION.md`. The old `@launchecho/context-graph-*` names were never
-published by this extraction. Licenses and LaunchEcho attribution are preserved.
+## First publication and maintainer setup
 
-## Current status
+Creating an npm organization does not publish its packages or configure package-level trusted
+publishers. Use an npm account with permission to publish both names in `@weftlet`. The initial
+publication can use the normal npm login/2FA flow below. Once the packages exist, configure each
+package's Settings → Trusted Publisher with the following GitHub Actions identity:
 
-Both `@launch-echo/tently-core@0.1.0` and `@launch-echo/tently@0.1.0` were published by the
-maintainer from WSL. Public `latest` tags resolve to `0.1.0`; downloaded archives match the
-prepared hashes recorded at commit `02fb65c987154d925fc523c91ccedbdca96fff9d`. Fresh public
-npm exec runs passed `init --yes`, `config validate` and `config show` in an independent
-project, resolving core transitively. Both licenses are Apache-2.0.
+| npm setting | Value |
+| --- | --- |
+| Organization or user | `jchewitt` |
+| Repository | `tently` |
+| Workflow filename | `publish.yml` (filename only) |
+| Environment name | `npm-release` |
+| Allowed action | Enable direct `npm publish` |
 
-npm temporarily displayed `0.0.0-stage` holding versions while reviewing the uploads. Those
-placeholders were not operational releases. This cloud has no publishing identity; verification
-used public reads and installation only. Subsequent source changes require a new version before
-another npm release; published `0.1.0` archives are immutable.
+On GitHub, create repository Settings → Environments → `npm-release`. Restrict deployment branches
+to `main` and configure a required reviewer. A sole maintainer must be allowed to approve their own
+release. Do not rely on the YAML environment name alone: an automatically created environment has
+no review protection until you configure it. No npm token secret is required for OIDC publication.
+Keep npm account 2FA enabled. The package's repository metadata already identifies `jchewitt/tently`.
 
-The maintainer has accepted live validation of the new Codex authentication modes as tentative
-and non-blocking for the next release. Follow-up is planned after adoption into Banditrade;
-API-key testing may remain deferred. Keep this limitation in release notes without claiming a
-live pass. The deterministic preparation checks below still apply; see `VALIDATION.md`.
+npm trusted-publisher setup is not validated merely by saving these settings. Test with a later,
+intentional versioned publication. Current npm documentation says a new trust configuration must
+be used within two days or it expires; configure it close to the intended release, and reconfirm
+that behavior in [npm's documentation](https://docs.npmjs.com/trusted-publishers/).
 
-## Prepare and review
+## Prepare reviewed archives
 
-Use Node 24, pnpm 10.18.2 and a clean checkout containing the reviewed changes:
+Use Node 24 and pnpm 10.18.2 in a clean, committed checkout. The new namespace starts at 0.1.0;
+subsequent content changes require a new version for the affected packages. Update the lockfile
+when changing workspace dependency versions. Never overwrite or republish an existing version.
 
 ```sh
 nvm install
@@ -38,92 +49,96 @@ pnpm install --frozen-lockfile
 pnpm release:prepare
 ```
 
-The repository's `.nvmrc` selects Node 24; use your preferred version manager if nvm is not
-installed. Check `node --version` in the shell running the release. Node 22.14.0 cannot load
-the locked Undici dependency: its missing `zlib.createZstdDecompress` causes failures before
-the CLI or MCP starts. The toolkit now declares Node 24+ and checks this before dependency
-loading. This replaces the earlier incorrect Node 20.11+ toolkit claim.
+This runs build, deterministic tests, architecture checks, extraction inventory, license checks
+and a fresh packed-consumer smoke. The smoke uses a disposable registry for the two local packages,
+exercises npx inference and automatic core installation, and checks SCIP, RDF/SHACL, visualization
+and MCP. No live model or public npm upload is invoked.
 
-Both the JavaScript pnpm distribution and standalone `@pnpm/exe` are supported. The release,
-license and package-smoke scripts detect which entry point pnpm supplied instead of passing
-a native executable to Node. An `ELF` syntax error from the license check on an older checkout
-is this launcher bug; pull the fix before retrying.
+Preparation packs with pnpm, resolves workspace dependency ranges and records commit, names,
+versions and SHA-512 integrity in `.release/manifest.json`. Review it, the tarball file lists and
+`docs/extraction-manifest.json`. Existing versions must match the prepared archive exactly;
+unpublished versions receive an npm dry run. A dry run does not establish OIDC authorization.
 
-Preparation runs the full publication gate, including setup/config tests and a disposable
-registry that serves only the two local archives. The npm exec test installs just
-`@launch-echo/tently`, resolves its core dependency and infers the `tently` binary as npx does.
-It exercises `init --yes`, `config validate` and `config show`. This is an installation test;
-it does not publish packages to npm. The independent consumer also tests SCIP, RDF/SHACL,
-visualization and MCP.
+Both JavaScript pnpm and standalone `@pnpm/exe` are supported. The publisher must find npm's
+JavaScript entry point beside Node. The workflow pins npm 11.21.1; trusted publishing requires
+at least npm 11.5.1. Use the workflow's pinned tools when reproducing CI release preparation.
 
-The command packs both workspaces with pnpm so `workspace:` dependency ranges become normal
-version ranges, runs `npm publish --dry-run` for unpublished versions, and writes `.release/manifest.json` with the
-source commit, package versions and SHA-512 integrity of each tarball. Review that manifest,
-the package contents and `docs/extraction-manifest.json`. `.release/` is ignored by Git.
-Build outputs, credentials, caches and runtime evidence do not become source commits.
-For an already published version, preparation instead verifies that its registry integrity
-matches the archive; npm rejects a dry-run publish of an existing version too. Different
-bytes at an existing version stop preparation.
+## Initial or local publication with npm login
 
-## Publish from an authorized environment
-
-Authenticate an npm account with publishing permission for the `launch-echo` organization.
-Use npm's normal login/2FA flow or configured CI credentials; do not add secrets to the project.
-Then, from the same clean checkout and prepared archives:
+From the same clean checkout and reviewed archives, in an interactive terminal:
 
 ```sh
+npm login --registry=https://registry.npmjs.org
 npm whoami --registry=https://registry.npmjs.org
 pnpm release:publish
 ```
 
-Run publication directly in an interactive terminal (without piping or redirecting its output).
-Enabling npm 2FA means publication can request an additional browser approval or one-time code;
-complete npm's challenge in that terminal. The registry URL above is the public npm registry.
-The publisher inherits terminal input/output for real publication so npm can perform its normal
-2FA flow. An earlier wrapper captured stdout, which disabled npm's interactive challenge and
-returned `EOTP` immediately. Pull the fix and prepare archives again before retrying.
+Complete npm's browser/2FA challenge when requested. Do not pipe or redirect the publication
+command: npm needs terminal input and output for the interactive flow. The default `login` mode
+retains npm's normal credentials and uses `whoami`; it does not silently select OIDC.
 
-For the managed cloud, configure `TENTLY_NPM_TOKEN` through secure environment settings with
-access limited to `registry.npmjs.org`, then save and publish the environment configuration.
-The saved requirement alone does not provide a token or activate it. Use a credential authorized
-to publish both packages in the `launch-echo` scope. Never paste its value into chat or a file.
-The release publisher uses a temporary, restricted-permission npm configuration containing
-only the literal `${TENTLY_NPM_TOKEN}` reference and removes it afterward. Its own `whoami`
-check uses that configuration; a separate bare `npm whoami` may still report no login.
-Without this variable, the publisher retains normal npm login configuration.
+For an authorized token environment, `WEFTLET_NPM_TOKEN` is supported through a temporary,
+restricted-permission npm configuration containing only the literal variable reference. Legacy
+`TENTLY_NPM_TOKEN` remains accepted if the new variable is absent. Never paste tokens in chat,
+commit them, or provide either token to the trusted-publishing workflow. No cloud secret is needed
+when publication happens from the maintainer's authenticated WSL session.
 
-The publisher verifies all archive hashes and the source commit before any registry write.
-It publishes core first, then the toolkit, using public access. It verifies each published
-archive's registry integrity. If a prior attempt published one package, rerunning skips it only
-when the existing version has exactly the prepared integrity; a different archive at the same
-version is an error. npm package publication is not atomic across the two packages.
+## GitHub trusted publication
 
-After npm accepts an upload, metadata can remain unavailable while npm processes it. The
-publisher saves an archive-specific acceptance record in `.release/`, then checks visibility
-up to 21 times, 15 seconds apart, before proceeding to the next package. Each lookup has a
-bounded timeout and requests fresh registry data. Only 404 triggers this wait; authentication,
-network errors and integrity mismatches stop publication. A visibility timeout reports that
-the upload was accepted, rather than claiming it failed. Keep `.release/` and retry later:
-an acceptance record resumes verification without another upload. These local records do not
-make the two uploads atomic and cannot cover a process interruption before a record is saved.
+The workflow `.github/workflows/publish.yml` is manually dispatched, main-branch only, and serialized.
+It does not run on pushes or pull requests. From GitHub Actions → **Weftlet release** → **Run workflow**:
 
-For the first core upload made with the earlier script, there is no acceptance record. Core
-is now publicly visible, so rerunning with its original prepared bytes will verify and skip it.
-Pulling publisher changes requires a new preparation because the manifest is tied to a commit;
-do not delete the existing release directory or change a published version's package contents.
+1. Select `main`. Leave **publish** unchecked for preparation only. Review the uploaded
+   `weftlet-release` artifact and manifest in the run summary.
+2. For an intentional release, select **publish**. The preparation job runs again on that exact
+   commit, without publishing credentials. Inspect that run's artifact before approving its
+   `npm-release` deployment; a different run's archive is not the approval target.
+3. After configured environment approval, the publish job checks out the same source, downloads
+   those artifacts and runs `node scripts/release.mjs --publish --auth=oidc`. It does not install
+   project dependencies or rebuild the packages. Only this job has `id-token: write`.
 
-Local publication explicitly disables provenance because it cannot generate a supported CI
-attestation. On GitHub Actions the script requests provenance; that environment must have npm
-publishing authentication/trusted publishing configured and `id-token: write`. Merely setting an
-environment variable does not establish provenance or authentication. No automatic release runs
-on repository pushes.
+Actions are pinned to commits. Neither job restores a dependency cache. OIDC mode requires a
+GitHub-hosted runner, the expected repository/ref/manual trigger and OIDC request variables;
+it rejects ambient npm token variables and isolates user/global npm configuration. npm performs
+actual identity validation against each package's trust settings. `npm whoami` is deliberately
+skipped in OIDC mode because it is not a trusted-publisher authorization check. Unsupported npm,
+missing trust or rejected identity must fail; there is no token fallback configured by this workflow.
 
-After successful publication, verify from a fresh project:
+npm creates provenance for public packages published from this public repository through OIDC.
+Local publication explicitly disables CI provenance. Prepared artifacts and synthetic OIDC tests
+do not prove that a live trusted publish or provenance verification has succeeded.
+
+## Ordering, delayed visibility and recovery
+
+Before any upload, the publisher validates every archive hash and its source commit. It publishes
+core first, waits for registry visibility and verifies integrity, then publishes the toolkit. An
+existing identical release is skipped; different bytes at the same version stop publication.
+Publication across packages is not atomic.
+
+After npm accepts an upload it may remain invisible while processing. The publisher saves a
+package/integrity-specific `.accepted.json` receipt under `.release/` and retries only public
+metadata reads, up to 21 checks, 15 seconds apart. Only 404 is treated as pending. Never repeatedly
+upload an accepted version. Keep `.release/` and retry `release:publish` later to resume verification.
+A receipt cannot cover a process interruption before it is written; inspect registry state before
+recovery. Authentication, network and integrity errors are not treated as missing packages.
+
+The workflow uploads `weftlet-publication-state`, including receipts, even when publication fails.
+For a processing timeout, recover those exact archives and receipts into `.release/` at the
+manifest's source commit before an authorized local retry. Do not blindly rerun the whole workflow
+while an accepted upload is still processing: a new run starts without the old receipt. Once a
+release is visible, the normal integrity check safely skips its already published packages.
+
+## Verify public installation before retiring old names
+
+After successful publication, use a fresh disposable project:
 
 ```sh
-npx --yes @launch-echo/tently@0.1.0 init --yes
-npx --yes @launch-echo/tently@0.1.0 config validate
+npm init -y
+npx --yes @weftlet/toolkit@0.1.0 init --yes
+npx --yes @weftlet/toolkit@0.1.0 config validate
 ```
 
-Update the README and this release status only after public-registry installation succeeds.
-The local tarball/disposable-registry smoke alone is not proof that a public release exists.
+Use the actual release version for later releases. Verify registry versions and hashes, core's
+transitive resolution, CLI/MCP operation and provenance when applicable. Update release status
+only after those public checks pass. Deprecating the old `@launch-echo` names is a separate registry
+action after replacement verification; never unpublish the old releases.

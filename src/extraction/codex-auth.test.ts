@@ -18,8 +18,8 @@ it.each(['api-key', 'unknown', 'unavailable'] as const)('rejects %s login in Cha
 
 it('passes only the selected key to Codex without consulting saved login', async () => {
   const probe = vi.fn();
-  const environment = await prepareCodexAuthentication({ mode: 'api-key', apiKeyEnv: 'TENTLY_TEST_KEY' },
-    { TENTLY_TEST_KEY: 'selected-key', CODEX_API_KEY: 'other-key', OPENAI_API_KEY: 'other-key' }, 'codex', {}, probe);
+  const environment = await prepareCodexAuthentication({ mode: 'api-key', apiKeyEnv: 'WEFTLET_TEST_KEY' },
+    { WEFTLET_TEST_KEY: 'selected-key', CODEX_API_KEY: 'other-key', OPENAI_API_KEY: 'other-key' }, 'codex', {}, probe);
   expect(environment).toEqual({ CODEX_API_KEY: 'selected-key' });
   expect(probe).not.toHaveBeenCalled();
 });

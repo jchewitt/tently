@@ -9,7 +9,7 @@ import { promisify } from 'node:util';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 
 import type { ContextGraphConfig } from "../configuration/config.js";
-import type { SemanticArtifact, ExtractionContext } from "@launch-echo/tently-core";
+import type { SemanticArtifact, ExtractionContext } from "@weftlet/core";
 import type { GitRepository } from "../repository/git.js";
 import { runProcess } from "../infrastructure/process.js";
 import { sha256, stableJson } from "../infrastructure/util.js";

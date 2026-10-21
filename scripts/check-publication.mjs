@@ -13,8 +13,8 @@ import { pnpmInvocation } from './package-manager.mjs';
 
 const toolkitRoot = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const packages = [
-  ['@launch-echo/tently-core', resolve(toolkitRoot, 'packages', 'core')],
-  ['@launch-echo/tently', toolkitRoot],
+  ['@weftlet/core', resolve(toolkitRoot, 'packages', 'core')],
+  ['@weftlet/toolkit', toolkitRoot],
 ];
 
 function run(command, args, cwd) {
@@ -76,7 +76,7 @@ try {
       if (!entries.includes(required))
         throw new Error(`${expectedName} archive is missing ${required}`);
     }
-    if (expectedName === '@launch-echo/tently') {
+    if (expectedName === '@weftlet/toolkit') {
       for (const asset of [
         'dist/cli.js', 'dist/mcp.js',
         'dist/interfaces/cli.js', 'dist/interfaces/mcp.js', 'dist/extraction/static.js',
@@ -102,14 +102,14 @@ try {
     if (ranges.some((range) => String(range).startsWith('workspace:'))) {
       throw new Error(`${expectedName} archive retains an unpublished workspace dependency range`);
     }
-    if (expectedName === '@launch-echo/tently' &&
+    if (expectedName === '@weftlet/toolkit' &&
         packedManifest.bin?.[expectedName.split('/').at(-1)] !== 'dist/cli.js') {
       throw new Error('Package must expose its basename as a CLI binary for npx executable inference');
     }
   }
 
-  const coreArchive = archives.get('@launch-echo/tently-core');
-  const toolkitArchive = archives.get('@launch-echo/tently');
+  const coreArchive = archives.get('@weftlet/core');
+  const toolkitArchive = archives.get('@weftlet/toolkit');
   if (!coreArchive || !toolkitArchive) throw new Error('Publication smoke archives are incomplete');
   const freshProject = join(destination, 'fresh-project');
   await mkdir(join(freshProject, 'src'), { recursive: true });
@@ -142,11 +142,11 @@ try {
   });
   try {
     registryUrl = `http://127.0.0.1:${registry.address().port}`;
-    await writeFile(join(freshProject, '.npmrc'), `@launch-echo:registry=${registryUrl}\n`);
+    await writeFile(join(freshProject, '.npmrc'), `@weftlet:registry=${registryUrl}\n`);
     const npmCli = await npmCliPath();
-    const version = registryPackages.get('@launch-echo/tently').manifest.version;
+    const version = registryPackages.get('@weftlet/toolkit').manifest.version;
     const npx = async (...args) => (await promisify(execFile)(process.execPath,
-      [npmCli, 'exec', '--yes', '--', `@launch-echo/tently@${version}`, ...args],
+      [npmCli, 'exec', '--yes', '--', `@weftlet/toolkit@${version}`, ...args],
       { cwd: freshProject, timeout: 180_000, maxBuffer: 4 * 1024 * 1024 })).stdout;
     const setup = await npx('init', '--yes', '--semantic-source', 'docs/intent');
     if (!setup.includes('Setup made no model requests')) throw new Error('Packed npx initialization failed');
@@ -177,12 +177,12 @@ try {
           private: true,
           type: 'module',
           dependencies: {
-            '@launch-echo/tently-core': fileDependency(coreArchive),
-            '@launch-echo/tently': fileDependency(toolkitArchive),
+            '@weftlet/core': fileDependency(coreArchive),
+            '@weftlet/toolkit': fileDependency(toolkitArchive),
           },
           pnpm: {
             overrides: {
-              '@launch-echo/tently-core': fileDependency(coreArchive),
+              '@weftlet/core': fileDependency(coreArchive),
             },
           },
         },
@@ -214,10 +214,10 @@ try {
   ]);
   runPnpm(['install', '--prefer-offline', '--ignore-scripts', '--no-frozen-lockfile'], consumer);
   const staticModule = pathToFileURL(
-    join(consumer, 'node_modules', '@launch-echo', 'tently', 'dist', 'extraction', 'static.js'),
+    join(consumer, 'node_modules', '@weftlet', 'toolkit', 'dist', 'extraction', 'static.js'),
   ).href;
   const toolkitModule = pathToFileURL(
-    join(consumer, 'node_modules', '@launch-echo', 'tently', 'dist', 'index.js'),
+    join(consumer, 'node_modules', '@weftlet', 'toolkit', 'dist', 'index.js'),
   ).href;
   await writeFile(
     join(consumer, 'smoke.mjs'),
@@ -307,7 +307,7 @@ for (const [format, marker] of [['html', '<!doctype html>'], ['dot', 'digraph Co
     consumer,
   );
   run(process.execPath, ['smoke.mjs'], consumer);
-  const installedRoot = join(consumer, 'node_modules', '@launch-echo', 'tently');
+  const installedRoot = join(consumer, 'node_modules', '@weftlet', 'toolkit');
   const config = JSON.parse(await readFile(
     join(installedRoot, 'examples/generic-typescript/context-graph.config.json'), 'utf8',
   ));

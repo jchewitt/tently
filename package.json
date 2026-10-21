@@ -1,5 +1,5 @@
 {
-  "name": "@launch-echo/tently",
+  "name": "@weftlet/toolkit",
   "version": "0.1.0",
   "description": "Reusable commit-keyed semantic, implementation, runtime, and evidence graph toolkit",
   "license": "Apache-2.0",
@@ -19,8 +19,10 @@
     "docs"
   ],
   "bin": {
+    "weftlet": "dist/cli.js",
+    "toolkit": "dist/cli.js",
+    "weftlet-mcp": "dist/mcp.js",
     "context-graph": "dist/cli.js",
-    "tently": "dist/cli.js",
     "context-graph-mcp": "dist/mcp.js"
   },
   "types": "./dist/index.d.ts",
@@ -39,13 +41,13 @@
     }
   },
   "scripts": {
-    "build": "node runtime-check.mjs && node scripts/clean-build.mjs && pnpm --filter @launch-echo/tently-core build && tsc -p tsconfig.json",
+    "build": "node runtime-check.mjs && node scripts/clean-build.mjs && pnpm --filter @weftlet/core build && tsc -p tsconfig.json",
     "context-graph": "tsx src/cli.ts",
     "hydrate": "tsx src/cli.ts hydrate --ref HEAD",
     "mcp": "tsx src/mcp.ts",
     "ontology:build": "tsx src/cli.ts ontology compile",
     "scip:index": "scip-typescript index --pnpm-workspaces --no-global-caches",
-    "test": "node runtime-check.mjs && pnpm --filter @launch-echo/tently-core test && vitest run",
+    "test": "node runtime-check.mjs && pnpm --filter @weftlet/core test && vitest run",
     "test:watch": "vitest",
     "context-graph:licenses": "node scripts/generate-third-party-notices.mjs",
     "context-graph:licenses:check": "node scripts/generate-third-party-notices.mjs --check",
@@ -55,7 +57,8 @@
     "inventory:check": "node scripts/update-inventory.mjs --check",
     "release:prepare": "pnpm context-graph:publication-check && node scripts/release.mjs --prepare",
     "release:publish": "node scripts/release.mjs --publish",
-    "govern": "tsx src/cli.ts govern --policy architecture.policy.json --output .context-graph/architecture-report.json"
+    "govern": "tsx src/cli.ts govern --policy architecture.policy.json --output .context-graph/architecture-report.json",
+    "weftlet": "tsx src/cli.ts"
   },
   "engines": {
     "node": ">=24.0.0"
@@ -70,7 +73,7 @@
   },
   "dependencies": {
     "@comunica/query-sparql": "5.4.1",
-    "@launch-echo/tently-core": "workspace:^",
+    "@weftlet/core": "workspace:^",
     "@modelcontextprotocol/sdk": "1.30.0",
     "@opentelemetry/api": "1.9.0",
     "@opentelemetry/resources": "2.2.0",

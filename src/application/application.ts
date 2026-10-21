@@ -8,7 +8,7 @@ import type {
   ContextGraphAdapter,
   ContextGraphAdapterModule,
   ContextGraphRepository,
-} from "@launch-echo/tently-core";
+} from "@weftlet/core";
 import { GitRepository } from "../repository/git.js";
 import { ContextGraphHydrator } from "./hydrator.js";
 import { OpenCaesarOntologyCompiler, DirectRdfOntologyCompiler } from "../extraction/ontology.js";
