@@ -8,6 +8,45 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## Impact ranking, 2026-10-22
+
+[ADR 012](ADR-012-impact-ranking.md) describes query ordering by weighted proximity and
+source diversity. Implementation `2e4a3bbc55bd3a15cf619f56827963a699a5b56b` was measured
+against two existing immutable snapshots, with no hydration or model calls. The public-safe
+record is `evaluations/weftlet/ranking-baseline.json`; cases, labels, budgets, configuration,
+snapshot bytes and reachable fact counts are unchanged.
+
+Linux cloud, Node 24.19.0, pnpm 10.18.2:
+
+- On the document-link snapshot, first-page candidate retrieval improved from **22/24 to
+  24/24**, retaining 24/24 within three pages. Labeled distractions fell from 1/4 to 0/4
+  on page one and from 3/4 to 1/4 within three pages. The query test and setup doctor now
+  appear on page one. Telemetry is a new later-page distraction for atomic publication;
+  the aggregate improvement does not mean that every case has less noise.
+- On the older source-project control, first-page retrieval improved from 15/24 to 19/24
+  and three-page retrieval from 18/24 to 19/24. The five missing document relationships
+  remain absent. Labeled distractions worsened from 0/4 to 1/4 within three pages, again
+  telemetry. These four cases from one repository do not establish generalization or
+  exhaustive precision. Every scan remains truncated after 180 facts with continuation.
+- The full publication gate passed: **197 deterministic tests** (1 core + 196 toolkit),
+  one optional OML skip, build, 12 advisory architecture findings, inventory, licenses
+  and fresh packed-consumer installation. The installed smoke now exhausts ranked
+  continuation over actual extracted facts, checking for duplicate or missing results.
+- Focused coverage includes large-source consumer diversity, deep asynchronous flows,
+  generic shared imports, citation-only anchors, stable ties across commit-derived IDs,
+  complete pagination, versioned continuation rejection and evaluator version drift.
+  The real TypeScript/RDF pipeline retains field-for-field projection equivalence.
+- The first full run omitted the cloud's writable cache/store settings, causing four
+  installation-fixture failures. Correcting the command environment produced the passing
+  full rerun above; no source workaround was needed. Actionlint passed without shellcheck.
+  All 79 original import paths and source hashes remain unchanged.
+
+Hosted Ubuntu/Windows outcomes are attached to the implementation PR. Ranking changes
+ordering only, preserving evidence authority, confidence, scope and current-diff eligibility.
+Saved snapshots need no refresh; old continuation tokens require restarting the scan.
+Browser interaction, live-provider/authentication checks and broader semantic quality remain
+deferred. No new source approval, runtime observation or npm publication is claimed.
+
 ## Explicit document linkage, 2026-10-22
 
 [ADR 011](ADR-011-explicit-document-links.md) describes committed Markdown references,
@@ -40,7 +79,8 @@ Linux cloud, Node 24.19.0, pnpm 10.18.2:
   identities, provenance witnesses, scores, noise and limitations.
 - Three of four labeled distractions appear within three pages, including one on the first
   page. All scans remain truncated at 180 facts. Better candidate recall does not establish
-  precision, complete product understanding, or a safe change. Query ranking remains open.
+  precision, complete product understanding, or a safe change. Ranking is measured separately
+  in the subsequent increment above.
 - An initial real-document run caught false missing-file diagnostics for slash-separated
   prose and package names. The final linker diagnoses unresolved explicit Markdown links;
   unresolved literal mentions are ignored. Regression cases include the observed examples.

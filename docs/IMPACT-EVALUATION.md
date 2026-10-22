@@ -18,8 +18,9 @@ pnpm evaluate:impact --ref eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d
 That exact commit must exist in local Git history. Omit `--ref` to measure the current
 HEAD with the same cases. The runner rejects cases whose paths no longer exist; review
 the expectations when the product changes instead of silently shrinking the denominator.
-Keep the evidence SHA fixed for controlled comparisons: query tie-breaking uses fact IDs
-that include provenance, so even an unrelated commit can change equally ranked results.
+Keep the evidence SHA fixed for controlled comparisons. The earlier ordering used
+commit-dependent fact IDs for ties; current ranking uses structural/citation fields first.
+Freezing evidence still prevents changes in extracted facts from confounding the comparison.
 
 The configuration uses real committed source bytes, bundled TypeScript SCIP, document
 linking, RDF projection, SHACL, immutable publication and the normal saved-evidence query
@@ -157,16 +158,55 @@ Every case still reaches the broad graph and stops at 180 returned facts with co
 The higher recall comes with additional noise; it is not a precision or completeness pass.
 
 This changes the evidence input, including the preceding source-indexing implementation,
-and commit-dependent tie-breaking can change ordering. The cases, query budget and ranking
+and the earlier commit-dependent tie-breaking could change ordering. The cases, query budget and ranking
 implementation stay fixed, but the scores are not a controlled claim about semantic model
 quality or ranking. Document links prove explicit references, not fulfillment of intent or
 passing tests. There are still zero approved intent sources, model assertions, live model
 calls and runtime observations. The new refresh reused six unchanged control artifacts.
 
+## Fixed-snapshot ranking comparison
+
+[ADR 012](ADR-012-impact-ranking.md) changes ordering without changing extraction, reachability
+or evidence authority. The version is `proximity-diversity-v1`; the measurement record is
+`evaluations/weftlet/ranking-baseline.json`. Both existing snapshots were queried directly
+and remained byte-for-byte unchanged. No indexer or model ran. The four cases, expected
+paths, distraction labels, 60-fact page size, three-page budget and depth 32 stayed fixed.
+
+| Saved evidence | Previous first / three pages | Ranked first / three pages | Distractions, previous / ranked within three pages |
+| --- | ---: | ---: | ---: |
+| Document links (3,648 facts) | 22 / 24 | 24 / 24 | 3 / 1 |
+| Older source project (3,490 facts) | 15 / 18 | 19 / 19 | 0 / 1 |
+
+Recall is out of 24 expected candidate files; distractions are out of four labeled controls.
+On the document-link input all six targets in each case now appear on page one, including
+the query test and setup doctor previously found later. No labeled distraction appears on
+page one, down from one. On the older input, all 19 targets with extracted relationships now
+appear on page one, including the MCP implementation previously outside the budget. The
+five expected document links remain missing; ranking cannot supply absent evidence.
+
+Telemetry now appears on a later page for atomic publication in both inputs. That case
+previously had no labeled distraction, and the older control's noise score therefore worsens.
+This is a tradeoff, not uniformly better relevance. The same broad graph remains reachable;
+every scan stops at 180 facts with continuation. Four cases in one repository do not
+establish generalization, precision, complete dependency discovery or change safety.
+
+Reproduce against the saved document-link input:
+
+```sh
+pnpm evaluate:impact --config evaluations/weftlet/source-project.config.json --snapshot dcef64001d8d47cd1aeb4c1434992612158a104a-graph-v3-links-2.0.0-42f885befb5ce881-4f68cb388720 --output .context-graph/evaluation/weftlet-source-project/ranking.json
+```
+
+For the older control, substitute snapshot
+`eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d-graph-v2-42f885befb5ce881-4f68cb388720`.
+These snapshots must already exist locally; the command does not rebuild missing evidence.
+The report records the ranking version and query-source digests. After an ordering upgrade,
+restart scans with old continuation tokens; they fail explicitly instead of silently
+applying their offset to a different order.
+
 ## Next bounded increments
 
-1. Inspect query witnesses and common contract/import nodes for overly broad reachability;
-   measure ranking changes with first-page recall and distraction controls unchanged.
+1. Add held-out public scenarios before further ranking tuning, including upstream contracts
+   and ambiguous consumers; retain the existing cases and noise controls as regressions.
 2. Review the explicit mappings with a consumer owner, then compare a bounded Codex extraction
    against the control when ready. Preserve inferred/unreviewed assertion labels.
 
