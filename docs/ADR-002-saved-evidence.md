@@ -6,12 +6,18 @@ Status: implemented, with bounded validation.
 Explicit hydration produces committed evidence in disposable archive directories, without
 registering worktrees or requiring the active checkout to be clean. Symlinks/submodules and
 archives larger than 128 MiB are currently rejected; they are not silently partially indexed.
-The archive path requires `git` and `tar`; only Linux is validated.
+The archive path requires `git` and `tar`; Linux and focused hosted Windows checks are
+recorded in [validation](VALIDATION.md). [Committed-tree materialization](../src/repository/committed-tree.ts)
+enforces those isolation and archive bounds.
 
 Snapshot IDs bind configuration and semantic scope in addition to commit and runtime revisions.
 User-scope cache heads are isolated by checkout identity. Snapshots publish via an atomic
 create-if-absent operation; head pointers replace atomically only after a complete snapshot
 exists. Concurrent conflicting content fails instead of replacing a winner.
+[Snapshot storage](../src/storage/storage.ts) and [atomic replacement](../src/storage/atomic-rename.ts)
+implement publication; [hydration](../src/application/hydrator.ts) validates evidence before
+advancing the head. [Lifecycle tests](../tests/snapshot-lifecycle.test.ts) exercise concurrent
+publication and saved querying during edits; their presence alone is not a passing run.
 
 Queries identify source commit, scope, configuration match and excluded working changes.
 Final checks reject dirty working trees, old commits, configuration mismatch and draft overlays.

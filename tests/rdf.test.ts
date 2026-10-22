@@ -22,6 +22,9 @@ describe('unified evidence graph', () => {
     await verifyPipeline();
     const root = await mkdtemp(join(tmpdir(), 'rdf-pipeline-'));
     await cp(new URL("../examples/pipeline", import.meta.url), root, { recursive: true });
+    const discoveryPath = join(root, 'docs/discovery.md');
+    await writeFile(discoveryPath, await readFile(discoveryPath, 'utf8') +
+      '\nSee [discovery implementation](../src/discovery.ts) and [pipeline checks](../test/pipeline.test.ts).\n');
     const execute = promisify(execFile);
     const git = (...args: string[]) => execute('git', args, { cwd: root });
     await git('init', '--quiet'); await git('add', '.');
@@ -89,9 +92,14 @@ describe('unified evidence graph', () => {
     const repeated = await hydrator.hydrate({ ref: 'HEAD', headName: 'default' });
     expect(repeated.semanticReused).toBe(6);
     expect(repeated.snapshot.manifest.contentDigest).toBe(snapshot.manifest.contentDigest);
-    expect(snapshot.facts.filter((f) => f.sourceAuthority === 'declared')).toHaveLength(12);
+    expect(snapshot.facts.filter((f) => f.sourceAuthority === 'declared' &&
+      f.extractor.id !== 'document-linker')).toHaveLength(12);
     expect(snapshot.facts.filter((f) => f.sourceAuthority === 'declared').every((f) =>
-      f.authority === 'inferred' && f.extractionReview === 'unreviewed')).toBe(true);
+      f.authority === 'inferred' && (f.extractor.id === 'document-linker' || f.extractionReview === 'unreviewed'))).toBe(true);
+    const testLink = snapshot.facts.find((f) => f.extractor.id === 'document-linker' &&
+      f.predicate === 'references' && f.object.id === 'component:file:test/pipeline.test.ts');
+    expect(testLink).toMatchObject({ object: { kind: 'Evidence' }, authority: 'inferred',
+      sourceAuthority: 'declared', extractionReview: 'deterministic', provenance: { path: 'docs/discovery.md' } });
     const graph = new RdfEvidenceGraph(snapshot);
     expect((await graph.validate()).conforms).toBe(true);
     expect((await graph.facts()).map((f) => f.id).sort()).toEqual(snapshot.facts.map((f) => f.id).sort());

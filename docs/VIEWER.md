@@ -4,6 +4,11 @@
 renders the same Context Pack returned by `impact.scan`. HTML is self-contained; DOT and SVG
 remain available. No CDN, service, model or alternative graph extraction is involved.
 
+[Visualization rendering](../src/visualization/visualization.ts) consumes the
+[impact-query result](../src/graph/query.ts). [Viewer interaction](../src/visualization/viewer-interaction.ts)
+handles page-local filtering and path selection. [Rendering tests](../src/visualization/visualization.test.ts)
+check generated output; interactive browser validation remains a separate check.
+
 Nodes are grouped by evidence lane, then module/layer metadata or node kind. Filter by cluster,
 authority or source text. Select a node (click or Enter) to inspect its relationships, confidence,
 extractor, source approval, extraction review state and commit-bound citations. The neighbor

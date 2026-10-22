@@ -1,81 +1,61 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
 import type {
-  ExtractionContext,
-  GraphFact,
-  GraphNode,
-  SemanticArtifact,
-  SemanticSource,
-} from "@weftlet/core";
-import { sha256, stableJson } from "../infrastructure/util.js";
+  ExtractionContext, GraphDiagnostic, GraphFact, GraphNode, SemanticArtifact, SemanticSource, SourceSpan,
+} from '@weftlet/core';
+import { sha256, stableJson } from '../infrastructure/util.js';
+import { documentReferences, resolveDocumentReference } from './document-references.js';
 
-const identity = { id: 'document-linker', version: '1.0.0' } as const;
-const repositoryPathPattern = /\b[A-Za-z0-9_.-]+(?:\/[A-Za-z0-9_.-]+)+/g;
+export const documentLinkerIdentity = { id: 'document-linker', version: '2.0.0' } as const;
 
-function documentNode(path: string): GraphNode {
-  return { id: `document:${path}`, kind: 'Document', label: path };
+function fileNode(path: string): GraphNode {
+  if (/\.(?:md|mdx|txt)$/i.test(path)) return { id: `document:${path}`, kind: 'Document', label: path };
+  return { id: `component:file:${path}`, label: path,
+    kind: /\.(spec|test)\.[^.]+$/i.test(path) ? 'Evidence' : 'Component' };
 }
 
 export function linkSemanticDocuments(
   context: ExtractionContext,
   hydrated: readonly { source: SemanticSource; artifact: SemanticArtifact }[],
-  trackedPaths: readonly string[] = [],
-): readonly GraphFact[] {
-  const facts: GraphFact[] = [];
-  const makeFact = (
-    source: SemanticSource,
-    subject: GraphNode,
-    predicate: 'contains' | 'references',
-    object: GraphNode,
-  ): GraphFact => ({
-    id: sha256(
-      stableJson({ source: source.path, subject: subject.id, predicate, object: object.id }),
-    ),
-    subject,
-    predicate,
-    object,
-    provenance: {
-      path: source.path,
-      startLine: 1,
-      endLine: Math.max(1, source.content.split('\n').length),
-      digest: source.digest,
-      commitSha: context.commitSha,
-    },
-    extractor: identity,
-    confidence: 1,
-    authority: 'inferred',
-    extractionReview: predicate === 'contains' ? 'unreviewed' : 'deterministic',
-    snapshotId: context.snapshotId,
-  });
-
+  trackedPaths: readonly string[],
+  approvedSourcePaths: readonly string[] = [],
+): { readonly facts: readonly GraphFact[]; readonly diagnostics: readonly GraphDiagnostic[] } {
+  const facts = new Map<string, GraphFact>();
+  const diagnostics = new Map<string, GraphDiagnostic>();
+  const tracked = new Set(trackedPaths);
   for (const { source, artifact } of hydrated) {
-    const owner = documentNode(source.path);
-    const nodes = new Map(
-      artifact.facts.flatMap((fact) => [fact.subject, fact.object]).map((node) => [node.id, node]),
-    );
-    for (const node of nodes.values()) facts.push(makeFact(source, owner, 'contains', node));
-    const references = [
-      ...new Set(
-        (source.content.match(repositoryPathPattern) ?? []).map((path) =>
-          path.replace(/[.,;:]+$/, ''),
-        ),
-      ),
-    ].sort();
-    const resolvedReferences = new Set<string>();
-    for (const path of references) {
-      if (trackedPaths.includes(path) || /\.(?:md|mdx|txt)$/i.test(path)) {
-        resolvedReferences.add(path);
-        continue;
-      }
-      for (const trackedPath of trackedPaths) {
-        if (trackedPath.startsWith(`${path}/`)) resolvedReferences.add(trackedPath);
+    const owner: GraphNode = { id: `document:${source.path}`, kind: 'Document', label: source.path };
+    const span = (startLine: number, endLine: number): SourceSpan => ({
+      path: source.path, startLine, endLine, digest: source.digest, commitSha: context.commitSha,
+    });
+    const add = (predicate: 'contains' | 'references', object: GraphNode, provenance: SourceSpan) => {
+      const id = sha256(stableJson({ subject: owner.id, predicate, object: object.id, provenance,
+        extractor: documentLinkerIdentity }));
+      facts.set(id, { id, subject: owner, predicate, object, provenance,
+        extractor: documentLinkerIdentity, confidence: 1, authority: 'inferred',
+        sourceAuthority: approvedSourcePaths.includes(source.path) ? 'declared' : 'inferred',
+        extractionReview: predicate === 'contains' ? 'unreviewed' : 'deterministic',
+        snapshotId: context.snapshotId });
+    };
+    // Containment follows the assertion's actual cited passage and stays unreviewed.
+    for (const fact of artifact.facts) {
+      for (const node of [fact.subject, fact.object]) {
+        add('contains', node, span(fact.provenance.startLine, fact.provenance.endLine));
       }
     }
-    for (const path of [...resolvedReferences].sort()) {
-      const target: GraphNode = /\.(?:md|mdx|txt)$/i.test(path)
-        ? documentNode(path)
-        : { id: `component:file:${path}`, kind: 'Component', label: path };
-      facts.push(makeFact(source, owner, 'references', target));
+    for (const reference of documentReferences(source.content)) {
+      const resolved = resolveDocumentReference(source.path, reference, tracked);
+      if (resolved.kind === 'ignored') continue;
+      const provenance = span(reference.startLine, reference.endLine);
+      if (resolved.kind === 'resolved') {
+        add('references', fileNode(resolved.path), provenance);
+      } else {
+        const id = sha256(stableJson({ provenance, reason: resolved.reason, extractor: documentLinkerIdentity }));
+        diagnostics.set(id, { id, kind: 'implementationGaps', reason: resolved.reason,
+          provenance: [provenance], relatedNodeIds: [owner.id, ...(resolved.path ? [fileNode(resolved.path).id] : [])],
+          evidenceScope: 'source' });
+      }
     }
   }
-  return facts;
+  return { facts: [...facts.values()].sort((a, b) => a.id.localeCompare(b.id)),
+    diagnostics: [...diagnostics.values()].sort((a, b) => a.id.localeCompare(b.id)) };
 }

@@ -8,6 +8,48 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## Explicit document linkage, 2026-10-22
+
+[ADR 011](ADR-011-explicit-document-links.md) describes committed Markdown references,
+precise citations, authority boundaries, and the new snapshot assembly identity. Implementation
+`90726be3751cf23de7f1cdd595d1e9ddb151b139` is measured separately from the evidence inputs.
+The six documents' source mappings were committed at
+`dcef64001d8d47cd1aeb4c1434992612158a104a`, before the linker implementation.
+
+Linux cloud, Node 24.19.0, pnpm 10.18.2:
+
+- Full publication gate: **192 deterministic tests** (1 core + 191 toolkit), one optional
+  OML skip, build, 12 advisory architecture findings, inventory, licenses and fresh packed
+  consumer. The installed smoke now parses committed Markdown and combines its references
+  with real SCIP facts before RDF/SHACL validation. Actionlint passed without shellcheck.
+- Focused cases cover relative/root/reference-style/encoded Markdown destinations, CRLF
+  source citations, duplicate basenames without guessing, missing/deleted/renamed paths,
+  directories, URLs, code examples, and distinct source approval/assertion review. Real
+  pipeline hydration links a test using SCIP's Evidence identity, passes SHACL and retains
+  field-for-field RDF projection equivalence. Cached prose is rechecked against target
+  deletion, while the preceding immutable snapshot stays readable.
+- The original saved v2 evidence was queried without hydration: its digest and 15/24
+  first-page, 18/24 three-page scores remain unchanged. Fresh assembly uses a different
+  identity, binds the linker version, and reuses the existing semantic artifacts.
+- The fixed old-source control still returns 15/24 first-page and 18/24 three-page candidates.
+  With the new explicit source mappings, the measurement returns **22/24 first-page and
+  24/24 three-page candidates**. All five expected intent-document paths are retrieved.
+  This new input also contains the intervening source-indexing implementation; it is not
+  an isolated model-quality or ranking experiment. The original case labels and budgets
+  are unchanged. `evaluations/weftlet/document-links-baseline.json` records the evidence
+  identities, provenance witnesses, scores, noise and limitations.
+- Three of four labeled distractions appear within three pages, including one on the first
+  page. All scans remain truncated at 180 facts. Better candidate recall does not establish
+  precision, complete product understanding, or a safe change. Query ranking remains open.
+- An initial real-document run caught false missing-file diagnostics for slash-separated
+  prose and package names. The final linker diagnoses unresolved explicit Markdown links;
+  unresolved literal mentions are ignored. Regression cases include the observed examples.
+  All 79 original import paths and source hashes remain unchanged.
+
+Hosted Ubuntu/Windows outcomes are attached to the implementation PR. No live model call,
+new source approval, browser interaction, runtime behavior or authentication result is claimed.
+The control provider returns no assertions. Browser and live-provider validation remain deferred.
+
 ## Committed source-project indexing, 2026-10-22
 
 [ADR 010](ADR-010-committed-source-indexing.md) records the opt-in profile and its limits.

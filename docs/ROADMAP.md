@@ -40,10 +40,14 @@ evaluation](IMPACT-EVALUATION.md) now measures four realistic changes with real 
 and zero model assertions: 13/24 expected candidate files on the first page, 16/24 within
 three pages. The opt-in [committed source-project increment](ADR-010-committed-source-indexing.md)
 adds test/workspace indexing and improves the same cases to 15/24 first-page and 18/24
-three-page candidates, with typed relationships from 33 test files. Prose linkage and broad
-query reachability remain gaps; live semantic quality is not established by either control.
+three-page candidates, with typed relationships from 33 test files. [Explicit document linkage](ADR-011-explicit-document-links.md) now resolves cited Markdown
+references against committed files. With new contributor source mappings, a separately recorded
+input returns 22/24 first-page and 24/24 three-page candidates; three labeled distractions also
+appear. The old-source control remains 15/24 and 18/24. Broad query reachability and live semantic
+quality remain gaps; explicit navigation links do not establish either.
 Next work should be separate, reviewed increments:
-review explicit intent mappings and run a bounded live semantic comparison; improve query ranking;
+improve query ranking against the fixed cases and distraction controls; review explicit mappings
+and run a bounded live semantic comparison when the maintainer is ready;
 retain the passing hosted Ubuntu CI gate; validate fresh-cloud
 restoration; resolve the cloud-specific live provider block; add browser
 interaction/accessibility tests; benchmark larger RDF graphs; evaluate a second real provider.

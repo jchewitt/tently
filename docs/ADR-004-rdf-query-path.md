@@ -7,6 +7,8 @@ an RDF named graph, with reified provenance, authority, confidence, source diges
 configuration metadata. A structured record preserves compatibility fields. The traversal
 projection is read through SPARQL and has field-for-field equivalence tests, including order.
 The viewer consumes the resulting Context Pack, not an independently extracted graph.
+[RDF projection](../src/graph/rdf.ts) implements the dataset;
+[RDF integration tests](../tests/rdf.test.ts) check projection equivalence and cross-source linkage.
 
 Comunica executes local SELECT queries. Parsed queries reject remote SERVICE/dataset access
 and updates. `rdf-validate-shacl` checks structural integrity and identity-kind consistency.
@@ -19,6 +21,10 @@ depth exhaustion, result truncation and snapshot/query-bound continuation tokens
 results using `--continuation`. Depth exhaustion requires an explicit larger `--max-depth`;
 the result never represents that partial traversal as complete.
 The graph projection itself has a fail-closed 100,000-fact bound.
+[Impact querying](../src/graph/query.ts) produces the [core Context Pack contract](../packages/core/src/core.ts).
+The [MCP interface](../src/interfaces/mcp.ts) exposes that result to agents and the
+[viewer renderer](../src/visualization/visualization.ts) consumes it. [Query tests](../src/graph/query.test.ts)
+exercise bounded retrieval; linked tests are evidence locations, not proof of a passing run.
 
 Only paths explicitly listed in `approvedIntentSources` receive `sourceAuthority: declared`.
 Their extracted assertions remain `authority: inferred` and `extractionReview: unreviewed`.

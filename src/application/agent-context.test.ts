@@ -51,7 +51,7 @@ const config: ContextGraphConfig = {
 };
 
 describe('agent context preparation', () => {
-  it('expands explicit repository directory references to tracked implementation files', () => {
+  it('does not expand directory mentions into relationships to every descendant', () => {
     const commitSha = '7'.repeat(40);
     const source: SemanticSource = {
       stableSemanticId: 'doc:owner',
@@ -71,16 +71,14 @@ describe('agent context preparation', () => {
       renamedPaths: {},
     };
 
-    const facts = linkSemanticDocuments(
+    const result = linkSemanticDocuments(
       context,
       [{ source, artifact }],
       ['lib/graph/src/query.ts', 'apps/api/src/main.ts', 'apps/web/src/main.ts'],
     );
 
-    expect(facts.map((fact) => fact.object.id)).toEqual([
-      'component:file:apps/api/src/main.ts',
-      'component:file:lib/graph/src/query.ts',
-    ]);
+    expect(result.facts).toEqual([]);
+    expect(result.diagnostics).toEqual([]);
   });
 
   it('selects philosophy, the owner doc, linked docs, and validation evidence', async () => {

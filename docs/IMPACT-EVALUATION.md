@@ -127,12 +127,48 @@ distraction control appears within the examined pages in this run, which is not 
 exhaustive precision result. The five expected intent documents are still unlinked.
 There are still zero model assertions, approved intent sources and runtime references.
 
+## Explicit document-link measurement
+
+[ADR 011](ADR-011-explicit-document-links.md) replaces loose path matching with cited committed
+Markdown references. The original v2 snapshot remains queryable and unchanged. Under the new
+linker, refreshing the same frozen old input adds two document references but preserves the
+15/24 first-page and 18/24 three-page scores. It cannot infer missing conceptual mappings.
+
+The six documents now explicitly link descriptions of responsibilities to implementation and
+test sources. Their evidence revision is `dcef64001d8d47cd1aeb4c1434992612158a104a`;
+implementation and measurement identities are recorded in
+`evaluations/weftlet/document-links-baseline.json`. Reproduce with:
+
+```sh
+pnpm evaluate:impact --config evaluations/weftlet/source-project.config.json --ref dcef64001d8d47cd1aeb4c1434992612158a104a --output .context-graph/evaluation/weftlet-source-project/linked-documents.json
+```
+
+| Change scenario | First page | Three pages | Labeled distraction within three pages |
+| --- | ---: | ---: | --- |
+| Atomic snapshot publication | 6 / 6 | 6 / 6 | None |
+| Impact-query result/continuation | 5 / 6 | 6 / 6 | Codex command discovery |
+| Codex executable discovery | 5 / 6 | 6 / 6 | Viewer interaction |
+| Working-file capture and freshness | 6 / 6 | 6 / 6 | Codex command discovery (also on first page) |
+| Total | 22 / 24 | 24 / 24 | 3 / 4 controls |
+
+The graph contains 3,648 facts: 3,065 SCIP, 550 repository-file and 33 document-link facts.
+All five expected intent-document paths now have cited links to actual file identities.
+Every case still reaches the broad graph and stops at 180 returned facts with continuation.
+The higher recall comes with additional noise; it is not a precision or completeness pass.
+
+This changes the evidence input, including the preceding source-indexing implementation,
+and commit-dependent tie-breaking can change ordering. The cases, query budget and ranking
+implementation stay fixed, but the scores are not a controlled claim about semantic model
+quality or ranking. Document links prove explicit references, not fulfillment of intent or
+passing tests. There are still zero approved intent sources, model assertions, live model
+calls and runtime observations. The new refresh reused six unchanged control artifacts.
+
 ## Next bounded increments
 
-1. Add and review explicit intent-to-implementation mappings, then compare a bounded Codex
-   extraction against the control. Preserve inferred/unreviewed assertion labels.
-2. Inspect query witnesses and common contract/import nodes for overly broad reachability;
+1. Inspect query witnesses and common contract/import nodes for overly broad reachability;
    measure ranking changes with first-page recall and distraction controls unchanged.
+2. Review the explicit mappings with a consumer owner, then compare a bounded Codex extraction
+   against the control when ready. Preserve inferred/unreviewed assertion labels.
 
 The six-stage public fixture continues testing extraction/linkage, queues, missing links,
 ambiguous intent and inconsistent identities. The evaluator's unit tests separately check
