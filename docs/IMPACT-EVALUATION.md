@@ -97,13 +97,41 @@ conceptual prose-to-code mappings. A live provider comparison and human citation
 are needed before drawing any conclusion about semantic comprehension. Zero runtime
 references and zero approved intent sources were configured intentionally.
 
+## Committed source-project comparison
+
+The opt-in [source-project profile](ADR-010-committed-source-indexing.md) selects tests and
+core source files explicitly and resolves `@weftlet/core` to its committed source entry.
+It leaves the original profile and baseline intact. Run the comparison with:
+
+```sh
+pnpm evaluate:impact --config evaluations/weftlet/source-project.config.json --ref eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d --output .context-graph/evaluation/weftlet-source-project/report.json
+```
+
+The commit, four cases, six documents, query budget and ranking are unchanged. The new
+snapshot has 3,490 facts, including 2,970 SCIP facts and typed relationships from 33 test
+files. The shared core contract and lifecycle test now appear in the results. The new
+measurement is recorded in `evaluations/weftlet/source-project-baseline.json`.
+
+| Change scenario | Original first / three pages | Source project first / three pages |
+| --- | ---: | ---: |
+| Atomic snapshot publication | 3 / 4 | 3 / 5 |
+| Impact-query result/continuation | 2 / 3 | 4 / 4 |
+| Codex executable discovery | 3 / 4 | 3 / 4 |
+| Working-file capture and freshness | 5 / 5 | 5 / 5 |
+| Total, out of 24 targets | 13 / 16 | 15 / 18 |
+
+The original six test targets now have SCIP relationships as well as any simple import
+facts. All four scans still reach the same broad component (3,490 facts) and stop at 180
+returned facts; the MCP implementation remains outside the query budget. No labeled
+distraction control appears within the examined pages in this run, which is not an
+exhaustive precision result. The five expected intent documents are still unlinked.
+There are still zero model assertions, approved intent sources and runtime references.
+
 ## Next bounded increments
 
-1. Improve test and workspace-contract indexing in an isolated committed tree, then repeat
-   these same cases. Keep dependency resolution explicit; do not borrow dirty checkout code.
-2. Add and review explicit intent-to-implementation mappings, then compare a bounded Codex
+1. Add and review explicit intent-to-implementation mappings, then compare a bounded Codex
    extraction against the control. Preserve inferred/unreviewed assertion labels.
-3. Inspect query witnesses and common contract/import nodes for overly broad reachability;
+2. Inspect query witnesses and common contract/import nodes for overly broad reachability;
    measure ranking changes with first-page recall and distraction controls unchanged.
 
 The six-stage public fixture continues testing extraction/linkage, queues, missing links,
