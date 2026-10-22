@@ -52,8 +52,15 @@ missing, and all reachable facts remain available through versioned continuation
 [fixed-input comparison](IMPACT-EVALUATION.md#fixed-snapshot-ranking-comparison).
 Broad query reachability and live semantic quality remain gaps; these four cases do not
 establish generalization or exhaustive precision.
+The [prospective dispatch evaluation](IMPACT-EVALUATION.md#prospective-dispatch-evaluation)
+adds three frozen synthetic cases outside Weftlet internals. Unchanged ranking retrieves
+15/16 expected files on page one; all seven case-specific distractions appear on later pages.
+Full continuation confirms the topic-string archival consumer is disconnected, while generic
+relative-import identity joins distinct domain modules. No cases or ranking were tuned after
+measurement. Original saved-snapshot results remain unchanged.
 Next work should be separate, reviewed increments:
-add held-out public cases before further ranking tuning; review explicit mappings
+correct generic relative-import identity against these frozen cases; evaluate explicit
+operational routing evidence separately; review explicit mappings
 and run a bounded live semantic comparison when the maintainer is ready;
 retain the passing hosted Ubuntu CI gate; validate fresh-cloud
 restoration; resolve the cloud-specific live provider block; add browser

@@ -11,6 +11,7 @@ export interface EvaluationCase {
 export interface EvaluationSuite {
   schemaVersion: 1;
   status: string;
+  repositoryId?: string;
   budget: { maxFacts: number; maxDepth: number; maxPages: number };
   cases: EvaluationCase[];
 }
