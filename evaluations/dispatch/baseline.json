@@ -1,0 +1,918 @@
+{
+  "schemaVersion": 1,
+  "status": "advisory-prospective-synthetic-evaluation",
+  "inputAndProtocolCommit": "fa902165a1f212a6d3245c847e1ab9b64a69715b",
+  "rankingVersion": "proximity-diversity-v1",
+  "measuredAt": "2026-10-22T20:46:51.460Z",
+  "runtime": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "suiteFile": "evaluations/dispatch/cases.json",
+  "suiteDigest": "3f41615755b80e3bd561f5b28c3677bf95e6a94eead5571e9b1ec882a3d8dc34",
+  "configurationFile": "evaluations/dispatch/context-graph.config.json",
+  "configurationDigest": "3f17b3a8ad39bbd638b7032d3a5e5f95119a8d5d4d564e82a67768b4093fd0aa",
+  "inputSha256": {
+    "evaluations/dispatch/README.md": "e9a6675a569e58b5d7d09a5f7a1ca2af5ea90a7de78feec03ccf5f9c9ddb6015",
+    "evaluations/dispatch/cases.json": "3f41615755b80e3bd561f5b28c3677bf95e6a94eead5571e9b1ec882a3d8dc34",
+    "evaluations/dispatch/context-graph.config.json": "902772e851553aede8e8ee02a51ff927ea16446252b9f09ed3209b140c1f7b24",
+    "evaluations/dispatch/project/README.md": "9eed53719033547137bfa850bfd09cff7bc1a9733c2c2a7e54000d9a2bbd0a4f",
+    "evaluations/dispatch/project/docs/delivery-flow.md": "feb75abd2cc8b55e949132e9f8fbc661f4a80c0a176662a27964112e9273d5e2",
+    "evaluations/dispatch/project/docs/dispatch-contract.md": "8f3bc8e0b7ae70364ff3931e9356e8e7dedeaae89de6bf803e60ff2649fcae8f",
+    "evaluations/dispatch/project/docs/dispatch-policy.md": "da1edfbcb27f7ca451e898ad92fca9635ad53aae8dc8ab5ffefd076b11170f2b",
+    "evaluations/dispatch/project/package.json": "80c4b01322df68801b290100d81ed154586f69828ca97aa5566e764fa6ffe336",
+    "evaluations/dispatch/project/src/api/dispatch.ts": "2af85dbe1afd679a39e587e7915a4272ef8853810cf9392bd550ddf4d0bfa8cd",
+    "evaluations/dispatch/project/src/archive/consumer.ts": "6cb6307518341f28b8ea758d66eae947e5cbdf49fdabb4d2659d0796a9422519",
+    "evaluations/dispatch/project/src/audit/consumer.ts": "6e1a8df8aaba86c2d4429056107f059d9899220fb2955a19432ec220b5263ab9",
+    "evaluations/dispatch/project/src/contracts/dispatch-plan.ts": "250a130b21d9d68f6288ad0995300f8df3f3bf89d71f9fdc6b906fc702b92e44",
+    "evaluations/dispatch/project/src/contracts/dispatch-receipt.ts": "4d9334b29a7a07e3a894f72029dbe99af10622e7930cc50363cbaa258867b618",
+    "evaluations/dispatch/project/src/contracts/dispatch-request.ts": "5423d760980ed6bdd75bbd7a176e7d3807ab0099072fbcf7418fb7f89fd48d9b",
+    "evaluations/dispatch/project/src/dispatch/executor.ts": "dfd0e17353b1fa5a9b99a7afdb362b1792bf6d8e8ea388fa2e26dd825589655a",
+    "evaluations/dispatch/project/src/dispatch/outcomes.ts": "b5e29c4f41812e14461ffe3e69b317d3ab7ab560791086bf03d50d36d93976c4",
+    "evaluations/dispatch/project/src/dispatch/planner.ts": "336c46e8be27db84ffae305012ad487bb2af6ab4f2c1eab4f0596255dbded553",
+    "evaluations/dispatch/project/src/dispatch/policy.ts": "5674144b4d329f26b869585f5facb74683bb042298026e8994e10b698c365110",
+    "evaluations/dispatch/project/src/dispatch/retry.ts": "64d4b77cab77405879fd64807ced4578c576749a6a19be6c966f9fa4e611feb8",
+    "evaluations/dispatch/project/src/refund/planner.ts": "28b1e047dea447acd46e28e91fbfe3d7083d72e0109cc7707ed17e56df526d68",
+    "evaluations/dispatch/project/src/refund/policy.ts": "5562943325667c9fc1a1f56a1c8b2b23dcf6c52e9a290988a1664a790d0c1631",
+    "evaluations/dispatch/project/src/transport/queue.ts": "75935a2673cb3be270c1943089075c7d05199409d3c3ef8c4a2cf7919f8b41f7",
+    "evaluations/dispatch/project/test/archive.test.ts": "ed6c12037c5d5dddc2151dd319e634099eb966c45141b2ddc662c41a790c6c7b",
+    "evaluations/dispatch/project/test/dispatch.test.ts": "216882b74f75fc1c64e16e4b4cd1df02e4e49cd084510e04ec00d709ef1f4c4b",
+    "evaluations/dispatch/project/test/policy.test.ts": "f851cd9395caf779de7d0926d7fec6de9202d2efc61e20c256eb7eb2aa435428",
+    "evaluations/dispatch/project/test/refund.test.ts": "f58a47deb143a3e52809249898ee6081343ffc53ccd0d409bb5f0ed96363b985",
+    "evaluations/dispatch/project/tsconfig.json": "4a1270fa58ffc211effed00ad316c590426e6a62ccc83efb300e4e691104c938"
+  },
+  "evaluatorSourceDigests": {
+    "scripts/evaluation/run.ts": "6f8bacca802739724605fa0c4b8226ad376692f14183d1d710f7211609f0a962",
+    "scripts/evaluation/score.ts": "ceaa4d9fd6ba54c8cddd4020aa721470193a39cd170a3a391dd6b45f444df391",
+    "scripts/evaluation/protocol.ts": "a0ca8e6336236495e22c31506ec9f9619a840585d52f2cda9bcbe71ca6a95cbe",
+    "evaluations/weftlet/document-only.mjs": "743ff498cbc7ec308931218ae8bbb01e38c2ffd28933e699d2133c347216c3f2",
+    "src/graph/query.ts": "ead61dfde748cd1a02c8b1a14dc729173a6b85ec3b8213af2bd5169c60b70253",
+    "src/graph/ranking.ts": "da29de6e0979bec8c3ca7f014bcfa9aa89cfbbf97d1bdb5a64d279b94e651fd5"
+  },
+  "snapshot": {
+    "repositoryId": "example/dispatch-evaluation",
+    "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b",
+    "snapshotId": "fa902165a1f212a6d3245c847e1ab9b64a69715b-graph-v3-links-2.0.0-3f17b3a8ad39bbd6-f5177df64ec0",
+    "contentDigest": "60cbaaf9b9c98fa778199730cfcddf4e52245655448fe4ae16d779b7f7c8c75c",
+    "scipIndexDigest": "666e9cf042344aaa7ae9dd06971abcd8604c24390b1816d77b32f5b3bb0031e0",
+    "rdfDigest": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+  },
+  "snapshotFileSha256": "267e2dea2ea98026d8345347f5c9d3030efbb757a6751a52e5a720795e8a1519",
+  "reportDigest": "82174dd432ae9b645941fa4608de2abe1e28e3e2cba693dcff2b620443b018f6",
+  "hydration": {
+    "first": {
+      "extracted": 3,
+      "reused": 0
+    },
+    "repeated": {
+      "extracted": 0,
+      "reused": 3
+    },
+    "snapshotIdentityAndContentUnchanged": true,
+    "modelCalls": 0
+  },
+  "coverage": {
+    "totalFacts": 227,
+    "extractorCounts": {
+      "scip-symbol-extractor": 164,
+      "document-linker": 13,
+      "repository-file-extractor": 50
+    },
+    "semanticAssertions": 0,
+    "runtimeReferences": 0,
+    "approvedIntentSources": []
+  },
+  "results": [
+    {
+      "id": "upstream-request-contract",
+      "budget": {
+        "maxFacts": 60,
+        "maxDepth": 32,
+        "maxPages": 3
+      },
+      "recall": {
+        "expected": 6,
+        "firstPage": 6,
+        "examinedPages": 6,
+        "examinedFraction": 1
+      },
+      "exploration": {
+        "rankingVersion": "proximity-diversity-v1",
+        "pages": 3,
+        "factsExamined": 180,
+        "reachableFacts": 214,
+        "depthLimitReached": false,
+        "pageBudgetExhausted": true,
+        "complete": false
+      },
+      "targets": [
+        {
+          "path": "src/api/dispatch.ts",
+          "category": "implementation",
+          "inSnapshot": true,
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "outcome": "retrieved",
+          "witnesses": [
+            {
+              "id": "00f45116fbdf1e00e417653f30d1cae93487ce1fed49e228b2a984760d2ee109",
+              "subject": "component:file:src/api/dispatch.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:56d17bacee9385e31266851bb90b9067fee374e91199ee3a9656c6d74418097b",
+              "provenance": {
+                "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b",
+                "digest": "2af85dbe1afd679a39e587e7915a4272ef8853810cf9392bd550ddf4d0bfa8cd",
+                "endLine": 1,
+                "path": "src/api/dispatch.ts",
+                "startLine": 1
+              },
+              "extractor": {
+                "id": "scip-symbol-extractor",
+                "version": "1.0.0"
+              },
+              "authority": "unspecified"
+            }
+          ]
+        },
+        {
+          "path": "src/dispatch/planner.ts",
+          "category": "implementation",
+          "inSnapshot": true,
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "outcome": "retrieved",
+          "witnesses": [
+            {
+              "id": "1b0a87c7f70b90a5b83a35764a3a3da75894be1520b5fa5ddde264e5b9a529dd",
+              "subject": "component:file:src/dispatch/planner.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:56d17bacee9385e31266851bb90b9067fee374e91199ee3a9656c6d74418097b",
+              "provenance": {
+                "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b",
+                "digest": "336c46e8be27db84ffae305012ad487bb2af6ab4f2c1eab4f0596255dbded553",
+                "endLine": 1,
+                "path": "src/dispatch/planner.ts",
+                "startLine": 1
+              },
+              "extractor": {
+                "id": "scip-symbol-extractor",
+                "version": "1.0.0"
+              },
+              "authority": "unspecified"
+            }
+          ]
+        },
+        {
+          "path": "src/dispatch/retry.ts",
+          "category": "implementation",
+          "inSnapshot": true,
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "outcome": "retrieved",
+          "witnesses": [
+            {
+              "id": "7b3b1d5f2e0f5d5071a7c68bfb74f95a7136fd902e5fe519f99f76d5c4df2476",
+              "subject": "component:file:src/dispatch/retry.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:56d17bacee9385e31266851bb90b9067fee374e91199ee3a9656c6d74418097b",
+              "provenance": {
+                "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b",
+                "digest": "64d4b77cab77405879fd64807ced4578c576749a6a19be6c966f9fa4e611feb8",
+                "endLine": 1,
+                "path": "src/dispatch/retry.ts",
+                "startLine": 1
+              },
+              "extractor": {
+                "id": "scip-symbol-extractor",
+                "version": "1.0.0"
+              },
+              "authority": "unspecified"
+            }
+          ]
+        },
+        {
+          "path": "src/contracts/dispatch-plan.ts",
+          "category": "contract",
+          "inSnapshot": true,
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "outcome": "retrieved",
+          "witnesses": [
+            {
+              "id": "789976688c00462d5ce272d9d0b02e344fab03a591444ecb8356e686822ab215",
+              "subject": "component:file:src/contracts/dispatch-plan.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:56d17bacee9385e31266851bb90b9067fee374e91199ee3a9656c6d74418097b",
+              "provenance": {
+                "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b",
+                "digest": "250a130b21d9d68f6288ad0995300f8df3f3bf89d71f9fdc6b906fc702b92e44",
+                "endLine": 1,
+                "path": "src/contracts/dispatch-plan.ts",
+                "startLine": 1
+              },
+              "extractor": {
+                "id": "scip-symbol-extractor",
+                "version": "1.0.0"
+              },
+              "authority": "unspecified"
+            }
+          ]
+        },
+        {
+          "path": "test/dispatch.test.ts",
+          "category": "test",
+          "inSnapshot": true,
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "outcome": "retrieved",
+          "witnesses": [
+            {
+              "id": "29e126ce6cce5457f6cadbcbe20224df7dea638d82517329b226ac025c8d85de",
+              "subject": "component:file:test/dispatch.test.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:56d17bacee9385e31266851bb90b9067fee374e91199ee3a9656c6d74418097b",
+              "provenance": {
+                "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b",
+                "digest": "216882b74f75fc1c64e16e4b4cd1df02e4e49cd084510e04ec00d709ef1f4c4b",
+                "endLine": 1,
+                "path": "test/dispatch.test.ts",
+                "startLine": 1
+              },
+              "extractor": {
+                "id": "scip-symbol-extractor",
+                "version": "1.0.0"
+              },
+              "authority": "unspecified"
+            }
+          ]
+        },
+        {
+          "path": "docs/dispatch-contract.md",
+          "category": "intent-document",
+          "inSnapshot": true,
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "outcome": "retrieved",
+          "witnesses": [
+            {
+              "id": "74612895211316809d22e7cfd537c9695e23b68a87057aed7f99270bec27fa59",
+              "subject": "document:docs/dispatch-contract.md",
+              "predicate": "references",
+              "object": "component:file:src/contracts/dispatch-request.ts",
+              "provenance": {
+                "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b",
+                "digest": "8f3bc8e0b7ae70364ff3931e9356e8e7dedeaae89de6bf803e60ff2649fcae8f",
+                "endLine": 5,
+                "path": "docs/dispatch-contract.md",
+                "startLine": 5
+              },
+              "extractor": {
+                "id": "document-linker",
+                "version": "2.0.0"
+              },
+              "authority": "inferred",
+              "sourceAuthority": "inferred",
+              "extractionReview": "deterministic"
+            }
+          ]
+        }
+      ],
+      "distractions": [
+        {
+          "path": "src/refund/policy.ts",
+          "inSnapshot": true,
+          "inFirstPage": false,
+          "inExaminedPages": true
+        },
+        {
+          "path": "src/audit/consumer.ts",
+          "inSnapshot": true,
+          "inFirstPage": false,
+          "inExaminedPages": true
+        }
+      ]
+    },
+    {
+      "id": "async-submission-consumers",
+      "budget": {
+        "maxFacts": 60,
+        "maxDepth": 32,
+        "maxPages": 3
+      },
+      "recall": {
+        "expected": 6,
+        "firstPage": 5,
+        "examinedPages": 5,
+        "examinedFraction": 0.8333333333333334
+      },
+      "exploration": {
+        "rankingVersion": "proximity-diversity-v1",
+        "pages": 3,
+        "factsExamined": 180,
+        "reachableFacts": 214,
+        "depthLimitReached": false,
+        "pageBudgetExhausted": true,
+        "complete": false
+      },
+      "targets": [
+        {
+          "path": "src/contracts/dispatch-request.ts",
+          "category": "contract",
+          "inSnapshot": true,
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "outcome": "retrieved",
+          "witnesses": [
+            {
+              "id": "9b9bc317bae30b39ac1c509bc0e2c94d393c88078ba1af817fa713cd45e81fd3",
+              "subject": "component:file:src/contracts/dispatch-request.ts",
+              "predicate": "contains",
+              "object": "symbol:scip:56d17bacee9385e31266851bb90b9067fee374e91199ee3a9656c6d74418097b",
+              "provenance": {
+                "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b",
+                "digest": "5423d760980ed6bdd75bbd7a176e7d3807ab0099072fbcf7418fb7f89fd48d9b",
+                "endLine": 1,
+                "path": "src/contracts/dispatch-request.ts",
+                "startLine": 1
+              },
+              "extractor": {
+                "id": "scip-symbol-extractor",
+                "version": "1.0.0"
+              },
+              "authority": "unspecified"
+            }
+          ]
+        },
+        {
+          "path": "src/dispatch/planner.ts",
+          "category": "implementation",
+          "inSnapshot": true,
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "outcome": "retrieved",
+          "witnesses": [
+            {
+              "id": "232c426359f4d9024c9e7e812913ba87220bc9edfa4dd44a800e6de92b2bbf0c",
+              "subject": "document:docs/dispatch-policy.md",
+              "predicate": "references",
+              "object": "component:file:src/dispatch/planner.ts",
+              "provenance": {
+                "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b",
+                "digest": "da1edfbcb27f7ca451e898ad92fca9635ad53aae8dc8ab5ffefd076b11170f2b",
+                "endLine": 6,
+                "path": "docs/dispatch-policy.md",
+                "startLine": 6
+              },
+              "extractor": {
+                "id": "document-linker",
+                "version": "2.0.0"
+              },
+              "authority": "inferred",
+              "sourceAuthority": "inferred",
+              "extractionReview": "deterministic"
+            }
+          ]
+        },
+        {
+          "path": "src/dispatch/executor.ts",
+          "category": "implementation",
+          "inSnapshot": true,
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "outcome": "retrieved",
+          "witnesses": [
+            {
+              "id": "5660027d73f1272968f311ed2138fe1065d4398098ee720f0eb40178ec1bc200",
+              "subject": "component:file:src/dispatch/executor.ts",
+              "predicate": "contains",
+              "object": "symbol:scip:660d6430a9680003f58d1a2b5b5ceb52580a973b70f0d27a9ee8f19b7359f0c7",
+              "provenance": {
+                "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b",
+                "digest": "dfd0e17353b1fa5a9b99a7afdb362b1792bf6d8e8ea388fa2e26dd825589655a",
+                "endLine": 1,
+                "path": "src/dispatch/executor.ts",
+                "startLine": 1
+              },
+              "extractor": {
+                "id": "scip-symbol-extractor",
+                "version": "1.0.0"
+              },
+              "authority": "unspecified"
+            }
+          ]
+        },
+        {
+          "path": "src/dispatch/outcomes.ts",
+          "category": "implementation",
+          "inSnapshot": true,
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "outcome": "retrieved",
+          "witnesses": [
+            {
+              "id": "4a047fa05c8a970d7198fdefa645d494218f0617f2f853406f9ac5cddf8924d6",
+              "subject": "component:file:src/dispatch/outcomes.ts",
+              "predicate": "contains",
+              "object": "symbol:scip:a6aa388837fefcf057d88086357887579b4e0c866de7c878896689b4d608cb41",
+              "provenance": {
+                "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b",
+                "digest": "b5e29c4f41812e14461ffe3e69b317d3ab7ab560791086bf03d50d36d93976c4",
+                "endLine": 1,
+                "path": "src/dispatch/outcomes.ts",
+                "startLine": 1
+              },
+              "extractor": {
+                "id": "scip-symbol-extractor",
+                "version": "1.0.0"
+              },
+              "authority": "unspecified"
+            }
+          ]
+        },
+        {
+          "path": "src/archive/consumer.ts",
+          "category": "implementation",
+          "inSnapshot": true,
+          "inFirstPage": false,
+          "inExaminedPages": false,
+          "outcome": "not-retrieved-within-budget",
+          "witnesses": [],
+          "snapshotWitness": {
+            "id": "1c033f7509395ce8dc0a37c27ae7dfbeacace1b9176e58a3b3aaf68a36a84360",
+            "subject": "component:file:src/archive/consumer.ts",
+            "predicate": "contains",
+            "object": "symbol:scip:f158036c60b62b0e55411ee079eb8ac476023fbbc579fc1576e3c6dd796349db",
+            "provenance": {
+              "path": "src/archive/consumer.ts",
+              "startLine": 6,
+              "endLine": 6,
+              "digest": "6cb6307518341f28b8ea758d66eae947e5cbdf49fdabb4d2659d0796a9422519",
+              "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b"
+            },
+            "extractor": {
+              "id": "scip-symbol-extractor",
+              "version": "1.0.0"
+            },
+            "authority": "unspecified"
+          }
+        },
+        {
+          "path": "test/dispatch.test.ts",
+          "category": "test",
+          "inSnapshot": true,
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "outcome": "retrieved",
+          "witnesses": [
+            {
+              "id": "db94f2ac7189b8a63617c7a40ff8380ddb68b8a71dd0c8525e81b14850e8d6fa",
+              "subject": "component:file:test/dispatch.test.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:771e1f9c62349ecc377fa8ed4a99f2daf469c741b8ca15b34623e2db902bb186",
+              "provenance": {
+                "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b",
+                "digest": "216882b74f75fc1c64e16e4b4cd1df02e4e49cd084510e04ec00d709ef1f4c4b",
+                "endLine": 5,
+                "path": "test/dispatch.test.ts",
+                "startLine": 5
+              },
+              "extractor": {
+                "id": "scip-symbol-extractor",
+                "version": "1.0.0"
+              },
+              "authority": "unspecified"
+            }
+          ]
+        }
+      ],
+      "distractions": [
+        {
+          "path": "src/refund/planner.ts",
+          "inSnapshot": true,
+          "inFirstPage": false,
+          "inExaminedPages": true
+        },
+        {
+          "path": "src/audit/consumer.ts",
+          "inSnapshot": true,
+          "inFirstPage": false,
+          "inExaminedPages": true
+        }
+      ]
+    },
+    {
+      "id": "same-name-policy",
+      "budget": {
+        "maxFacts": 60,
+        "maxDepth": 32,
+        "maxPages": 3
+      },
+      "recall": {
+        "expected": 4,
+        "firstPage": 4,
+        "examinedPages": 4,
+        "examinedFraction": 1
+      },
+      "exploration": {
+        "rankingVersion": "proximity-diversity-v1",
+        "pages": 3,
+        "factsExamined": 180,
+        "reachableFacts": 214,
+        "depthLimitReached": false,
+        "pageBudgetExhausted": true,
+        "complete": false
+      },
+      "targets": [
+        {
+          "path": "src/dispatch/planner.ts",
+          "category": "implementation",
+          "inSnapshot": true,
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "outcome": "retrieved",
+          "witnesses": [
+            {
+              "id": "e5c6a6debdd5cf560ea29e2032ab13aca917019f18048e751a6e358bbb713c6a",
+              "subject": "component:file:src/dispatch/planner.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:8a8dc5a0ba08e3d1b4a0fd207bd4a8229a4392be022d31cdba98fa8ba09716d2",
+              "provenance": {
+                "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b",
+                "digest": "336c46e8be27db84ffae305012ad487bb2af6ab4f2c1eab4f0596255dbded553",
+                "endLine": 10,
+                "path": "src/dispatch/planner.ts",
+                "startLine": 10
+              },
+              "extractor": {
+                "id": "scip-symbol-extractor",
+                "version": "1.0.0"
+              },
+              "authority": "unspecified"
+            }
+          ]
+        },
+        {
+          "path": "src/dispatch/retry.ts",
+          "category": "implementation",
+          "inSnapshot": true,
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "outcome": "retrieved",
+          "witnesses": [
+            {
+              "id": "bd858f9a691c96ec0aa6fa51ef33f5563a77f207f9dae339148ed96ba3e0cd1b",
+              "subject": "component:file:src/dispatch/retry.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:202211b969fcc9734b897f90335f304ef7b6ffa8c1fd10dd5cd06af588e65230",
+              "provenance": {
+                "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b",
+                "digest": "64d4b77cab77405879fd64807ced4578c576749a6a19be6c966f9fa4e611feb8",
+                "endLine": 3,
+                "path": "src/dispatch/retry.ts",
+                "startLine": 3
+              },
+              "extractor": {
+                "id": "scip-symbol-extractor",
+                "version": "1.0.0"
+              },
+              "authority": "unspecified"
+            }
+          ]
+        },
+        {
+          "path": "test/policy.test.ts",
+          "category": "test",
+          "inSnapshot": true,
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "outcome": "retrieved",
+          "witnesses": [
+            {
+              "id": "63a73082fc4952219adecac3483195032d4f7f75ab71286c447c1e2dd99ae75f",
+              "subject": "component:file:test/policy.test.ts",
+              "predicate": "consumes",
+              "object": "symbol:scip:202211b969fcc9734b897f90335f304ef7b6ffa8c1fd10dd5cd06af588e65230",
+              "provenance": {
+                "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b",
+                "digest": "f851cd9395caf779de7d0926d7fec6de9202d2efc61e20c256eb7eb2aa435428",
+                "endLine": 1,
+                "path": "test/policy.test.ts",
+                "startLine": 1
+              },
+              "extractor": {
+                "id": "scip-symbol-extractor",
+                "version": "1.0.0"
+              },
+              "authority": "unspecified"
+            }
+          ]
+        },
+        {
+          "path": "docs/dispatch-policy.md",
+          "category": "intent-document",
+          "inSnapshot": true,
+          "inFirstPage": true,
+          "inExaminedPages": true,
+          "outcome": "retrieved",
+          "witnesses": [
+            {
+              "id": "9c81606d79effb9e5e30239738472754112638bf0096de562ad5474b45debb38",
+              "subject": "document:docs/dispatch-policy.md",
+              "predicate": "references",
+              "object": "component:file:src/dispatch/policy.ts",
+              "provenance": {
+                "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b",
+                "digest": "da1edfbcb27f7ca451e898ad92fca9635ad53aae8dc8ab5ffefd076b11170f2b",
+                "endLine": 5,
+                "path": "docs/dispatch-policy.md",
+                "startLine": 5
+              },
+              "extractor": {
+                "id": "document-linker",
+                "version": "2.0.0"
+              },
+              "authority": "inferred",
+              "sourceAuthority": "inferred",
+              "extractionReview": "deterministic"
+            }
+          ]
+        }
+      ],
+      "distractions": [
+        {
+          "path": "src/refund/policy.ts",
+          "inSnapshot": true,
+          "inFirstPage": false,
+          "inExaminedPages": true
+        },
+        {
+          "path": "src/refund/planner.ts",
+          "inSnapshot": true,
+          "inFirstPage": false,
+          "inExaminedPages": true
+        },
+        {
+          "path": "src/audit/consumer.ts",
+          "inSnapshot": true,
+          "inFirstPage": false,
+          "inExaminedPages": true
+        }
+      ]
+    }
+  ],
+  "supplementalDiagnosis": {
+    "fullContinuation": {
+      "case": "async-submission-consumers",
+      "pages": [
+        60,
+        60,
+        60,
+        34
+      ],
+      "returned": 214,
+      "uniqueFacts": 214,
+      "archiveFactsInSnapshot": 6,
+      "archiveFactsReturned": 0,
+      "archiveSnapshotWitness": [
+        {
+          "id": "1c033f7509395ce8dc0a37c27ae7dfbeacace1b9176e58a3b3aaf68a36a84360",
+          "subject": {
+            "id": "component:file:src/archive/consumer.ts",
+            "kind": "Component",
+            "label": "src/archive/consumer.ts"
+          },
+          "predicate": "contains",
+          "object": {
+            "id": "symbol:scip:f158036c60b62b0e55411ee079eb8ac476023fbbc579fc1576e3c6dd796349db",
+            "kind": "Contract",
+            "label": "scip-typescript npm dispatch-evaluation-fixture 0.0.0 src/archive/`consumer.ts`/ArchivedDispatch#requestId.",
+            "attributes": {
+              "scipIndexDigest": "666e9cf042344aaa7ae9dd06971abcd8604c24390b1816d77b32f5b3bb0031e0"
+            }
+          },
+          "provenance": {
+            "path": "src/archive/consumer.ts",
+            "startLine": 6,
+            "endLine": 6,
+            "digest": "6cb6307518341f28b8ea758d66eae947e5cbdf49fdabb4d2659d0796a9422519",
+            "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b"
+          },
+          "extractor": {
+            "id": "scip-symbol-extractor",
+            "version": "1.0.0"
+          },
+          "authority": "unspecified"
+        }
+      ]
+    },
+    "typedPolicyFunctionDefinitions": [
+      {
+        "id": "3cb7656b7024955c35334b947685082835216b354d821b9d7dde5c2b637f176b",
+        "subject": {
+          "id": "component:file:src/dispatch/policy.ts",
+          "kind": "Component",
+          "label": "src/dispatch/policy.ts"
+        },
+        "predicate": "contains",
+        "object": {
+          "id": "symbol:scip:202211b969fcc9734b897f90335f304ef7b6ffa8c1fd10dd5cd06af588e65230",
+          "kind": "Contract",
+          "label": "scip-typescript npm dispatch-evaluation-fixture 0.0.0 src/dispatch/`policy.ts`/evaluatePolicy().",
+          "attributes": {
+            "scipIndexDigest": "666e9cf042344aaa7ae9dd06971abcd8604c24390b1816d77b32f5b3bb0031e0"
+          }
+        },
+        "provenance": {
+          "path": "src/dispatch/policy.ts",
+          "startLine": 3,
+          "endLine": 3,
+          "digest": "5674144b4d329f26b869585f5facb74683bb042298026e8994e10b698c365110",
+          "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b"
+        },
+        "extractor": {
+          "id": "scip-symbol-extractor",
+          "version": "1.0.0"
+        },
+        "authority": "unspecified"
+      },
+      {
+        "id": "9335ca5868e44573542552d39eb21d6a40d0f3a17f4096ac4a2c92d1f2c44fa4",
+        "subject": {
+          "id": "component:file:src/refund/policy.ts",
+          "kind": "Component",
+          "label": "src/refund/policy.ts"
+        },
+        "predicate": "contains",
+        "object": {
+          "id": "symbol:scip:b7778726f78efbaa98e0e8a2d036f1c3d799f49d74317be880c3f2ceda602061",
+          "kind": "Contract",
+          "label": "scip-typescript npm dispatch-evaluation-fixture 0.0.0 src/refund/`policy.ts`/evaluatePolicy().",
+          "attributes": {
+            "scipIndexDigest": "666e9cf042344aaa7ae9dd06971abcd8604c24390b1816d77b32f5b3bb0031e0"
+          }
+        },
+        "provenance": {
+          "path": "src/refund/policy.ts",
+          "startLine": 6,
+          "endLine": 6,
+          "digest": "5562943325667c9fc1a1f56a1c8b2b23dcf6c52e9a290988a1664a790d0c1631",
+          "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b"
+        },
+        "extractor": {
+          "id": "scip-symbol-extractor",
+          "version": "1.0.0"
+        },
+        "authority": "unspecified"
+      }
+    ],
+    "sharedRelativeImportWitnesses": [
+      {
+        "id": "0695791d2790b8a5f0adcdd940643f9d895afcabe9bcd4ad170cc22637ea5778",
+        "subject": {
+          "id": "component:file:src/refund/planner.ts",
+          "kind": "Component",
+          "label": "src/refund/planner.ts",
+          "attributes": {
+            "scipIndexDigest": "666e9cf042344aaa7ae9dd06971abcd8604c24390b1816d77b32f5b3bb0031e0"
+          }
+        },
+        "predicate": "consumes",
+        "object": {
+          "id": "contract:module:./policy.js",
+          "kind": "Contract",
+          "label": "./policy.js"
+        },
+        "provenance": {
+          "path": "src/refund/planner.ts",
+          "startLine": 1,
+          "endLine": 1,
+          "digest": "28b1e047dea447acd46e28e91fbfe3d7083d72e0109cc7707ed17e56df526d68",
+          "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b"
+        },
+        "extractor": {
+          "id": "repository-file-extractor",
+          "version": "1.0.0"
+        },
+        "authority": "unspecified"
+      },
+      {
+        "id": "946435fdb5e780a9932f503281f8fe6304faa62302dee4ea9331ff1bedf20adb",
+        "subject": {
+          "id": "component:file:src/dispatch/planner.ts",
+          "kind": "Component",
+          "label": "src/dispatch/planner.ts",
+          "attributes": {
+            "scipIndexDigest": "666e9cf042344aaa7ae9dd06971abcd8604c24390b1816d77b32f5b3bb0031e0"
+          }
+        },
+        "predicate": "consumes",
+        "object": {
+          "id": "contract:module:./policy.js",
+          "kind": "Contract",
+          "label": "./policy.js"
+        },
+        "provenance": {
+          "path": "src/dispatch/planner.ts",
+          "startLine": 4,
+          "endLine": 4,
+          "digest": "336c46e8be27db84ffae305012ad487bb2af6ab4f2c1eab4f0596255dbded553",
+          "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b"
+        },
+        "extractor": {
+          "id": "repository-file-extractor",
+          "version": "1.0.0"
+        },
+        "authority": "unspecified"
+      },
+      {
+        "id": "9836c9026cb6f10c28fdcfdea2148a1877b2940041df1838548c3d2701ed1027",
+        "subject": {
+          "id": "component:file:src/dispatch/retry.ts",
+          "kind": "Component",
+          "label": "src/dispatch/retry.ts",
+          "attributes": {
+            "scipIndexDigest": "666e9cf042344aaa7ae9dd06971abcd8604c24390b1816d77b32f5b3bb0031e0"
+          }
+        },
+        "predicate": "consumes",
+        "object": {
+          "id": "contract:module:./policy.js",
+          "kind": "Contract",
+          "label": "./policy.js"
+        },
+        "provenance": {
+          "path": "src/dispatch/retry.ts",
+          "startLine": 3,
+          "endLine": 3,
+          "digest": "64d4b77cab77405879fd64807ced4578c576749a6a19be6c966f9fa4e611feb8",
+          "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b"
+        },
+        "extractor": {
+          "id": "repository-file-extractor",
+          "version": "1.0.0"
+        },
+        "authority": "unspecified"
+      }
+    ],
+    "snapshotDiagnostics": [
+      {
+        "id": "89aaeceabd2b76094ab9e380edc4d55b999ff1693a26e97a11ac7d1be2a3cc9e",
+        "kind": "implementationGaps",
+        "reason": "Document reference policy.md resolves to docs/policy.md, which is not a committed file. Directory references are not expanded.",
+        "provenance": [
+          {
+            "path": "docs/dispatch-policy.md",
+            "startLine": 10,
+            "endLine": 10,
+            "digest": "da1edfbcb27f7ca451e898ad92fca9635ad53aae8dc8ab5ffefd076b11170f2b",
+            "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b"
+          }
+        ],
+        "relatedNodeIds": [
+          "document:docs/dispatch-policy.md",
+          "document:docs/policy.md"
+        ],
+        "evidenceScope": "source"
+      }
+    ],
+    "interpretation": [
+      "The archival file has local typed relationships but none of its facts is reachable in the exhausted dispatch scan. Its missing operational route is not repaired by a larger fact budget.",
+      "SCIP keeps dispatch and refund evaluatePolicy symbols distinct. The simple repository-file extractor joins their planners through the same contract:module:./policy.js identity.",
+      "A shared unrelated-domain test imports refund and audit sources, providing further broad graph connectivity. These relationships do not establish product causality.",
+      "The missing docs/policy.md reference is diagnosed with a citation and no guessed document fact."
+    ]
+  },
+  "regressions": {
+    "originalSuiteDigest": "104a3c4b46955b1bbdde3949e8784eedada271dee5245dcada2eebd578069ef7",
+    "querySourceDigestsUnchanged": {
+      "src/graph/query.ts": "ead61dfde748cd1a02c8b1a14dc729173a6b85ec3b8213af2bd5169c60b70253",
+      "src/graph/ranking.ts": "da29de6e0979bec8c3ca7f014bcfa9aa89cfbbf97d1bdb5a64d279b94e651fd5"
+    },
+    "comparisons": [
+      {
+        "label": "document-links",
+        "snapshotId": "dcef64001d8d47cd1aeb4c1434992612158a104a-graph-v3-links-2.0.0-42f885befb5ce881-4f68cb388720",
+        "contentDigest": "f0c8169f154f0a02a72105b13e8cb757a74eb99b184657a383ef2dd4f07ff417",
+        "snapshotFileSha256": "58e2a957725baab8315920729aba96a0574891f1336eab9b7f9a37f534e6c670",
+        "scoresDistractionsReachabilityAndBytesUnchanged": true
+      },
+      {
+        "label": "older-source-project",
+        "snapshotId": "eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d-graph-v2-42f885befb5ce881-4f68cb388720",
+        "contentDigest": "6f30f62900e37a6d2d266bcd3bba54941b1cab3997602eefef3320b0d0e66fc3",
+        "snapshotFileSha256": "6cfc77bf40228b0e86ab65dd5621008eb1ed7e93c8ae5c5a4c5fe25a4a281041",
+        "scoresDistractionsReachabilityAndBytesUnchanged": true
+      }
+    ]
+  },
+  "limitations": [
+    "New synthetic cases were declared after ranking v1 existed, frozen before measurement, and not used to tune ranking. This is not an independently maintained external benchmark.",
+    "Fifteen of sixteen expected candidate files appear on page one; all seven case-specific distraction labels appear only on later examined pages. Repeated labels across cases are counted separately.",
+    "File-level candidate recall does not prove a causal dependency, approved intent, passing tests, precision or safe changes.",
+    "Every scored case stops at 180 of 214 reachable facts. The diagnostic fourth page is separate and does not alter the three-page score.",
+    "The generic outcome not-retrieved-within-budget does not distinguish disconnected local definitions from a lower-ranked reachable consumer; supplemental diagnosis supplies that distinction here.",
+    "The graph contains no semantic assertions, approved intent sources or runtime references. Fixture behavior checks are separate from evidence extraction.",
+    "Live providers, browser interaction, external production repositories and larger-graph performance remain untested by this evaluation."
+  ]
+}

@@ -1,10 +1,12 @@
-# Impact retrieval on Weftlet itself
+# Impact retrieval evaluations
 
 This is an advisory, reproducible evaluation of candidate-file retrieval on the real
 repository. It is not a quality gate, a live model benchmark, or an assertion that a
 proposed change is safe. The four scenarios and their expected findings were written
 before the first run in `evaluations/weftlet/cases.json`. They are reviewable hypotheses;
 they do not approve product intent or architecture policy.
+The later dispatch evaluation below adds a separate synthetic project with new cases
+declared before measurement, while keeping the implemented ranking fixed.
 
 ## Reproduce the control
 
@@ -203,12 +205,75 @@ The report records the ranking version and query-source digests. After an orderi
 restart scans with old continuation tokens; they fail explicitly instead of silently
 applying their offset to a different order.
 
+## Prospective dispatch evaluation
+
+The dependency-free fictional Parcel Desk project, three cases and configuration were
+committed at `fa902165a1f212a6d3245c847e1ab9b64a69715b` **before the first query**. It is
+separate from Weftlet internals and the earlier pipeline fixture, but was authored after
+ranking v1 existed. It is a prospective synthetic evaluation, not an independent external
+benchmark. Production query/ranking bytes and both original case inputs remain unchanged.
+Protocol and public-safe evidence are in `evaluations/dispatch/README.md` and
+`evaluations/dispatch/baseline.json`.
+
+Real committed TypeScript indexing, document links and RDF/SHACL produced 227 facts:
+164 SCIP, 50 repository-file and 13 document-link facts. The three draft documents generated
+zero semantic assertions; no sources were approved and no runtime traces were imported.
+Repeated hydration extracted zero and reused all three artifacts, with identical snapshot
+identity/content. Fixture behavior checks passed separately; their execution is not a graph fact.
+
+| Scenario | First page | Three pages | Distractions within three pages |
+| --- | ---: | ---: | ---: |
+| Upstream request contract | 6 / 6 | 6 / 6 | 2 / 2 |
+| Asynchronous submission consumers | 5 / 6 | 5 / 6 | 2 / 2 |
+| Same-name domain policy | 4 / 4 | 4 / 4 | 3 / 3 |
+| Total | 15 / 16 | 15 / 16 | 7 / 7 |
+
+No labeled distraction appears on page one. The seven labels are case-specific judgments
+over three distinct files, not seven different files or exhaustive precision labels. Each
+scan reaches the same 214 facts and stops at the unchanged three-page budget of 180 facts.
+The source and labels were not adjusted after seeing these scores.
+
+Two findings need separate treatment:
+
+- The expected archival consumer has local definitions/test relationships but no extracted
+  route from dispatch. A supplemental scan exhausts all four pages (60/60/60/34) without
+  retrieving any of its facts. The generic scorer calls this `not-retrieved-within-budget`
+  because the file has relationships somewhere in the snapshot; here the diagnosis is a
+  disconnected operational route, not a lower-ranked reachable result. Matching topic text
+  does not establish delivery or a typed dependency.
+- SCIP gives dispatch and refund `evaluatePolicy` functions distinct identities. The simpler
+  repository-file extractor nevertheless joins their planners through the shared literal
+  `contract:module:./policy.js`, even though those relative imports name different files.
+  A test importing both refund and audit sources extends that graph connection. This explains
+  a path to irrelevant candidates; it does not establish product causality. The missing
+  `docs/policy.md` Markdown reference produces a cited diagnostic and no guessed target.
+
+Reproduce the frozen input from the toolkit checkout:
+
+```sh
+pnpm evaluate:impact --suite evaluations/dispatch/cases.json --config evaluations/dispatch/context-graph.config.json --ref fa902165a1f212a6d3245c847e1ab9b64a69715b --output .context-graph/evaluation/dispatch/report.json
+```
+
+`--suite` defaults to the original Weftlet cases. Both suite/config paths resolve from the
+toolkit checkout; case paths resolve from the configured evidence root. Evaluator and evidence
+commits are recorded separately, including when evidence is an independent Git repository.
+Only the resolved bundled no-assertion control can refresh; other provider configurations
+must use already-built evidence. Selecting a suite does not authorize a live model run.
+
+Both prior saved snapshots were rescored: document-link retrieval remains 24/24 on page
+one with one three-page distraction, and the older control remains 19/24 with one distraction.
+Their cases, reachable counts and snapshot bytes are unchanged. The new measurement adds
+evidence of limits; it does not claim a ranking improvement or broad semantic comprehension.
+
 ## Next bounded increments
 
-1. Add held-out public scenarios before further ranking tuning, including upstream contracts
-   and ambiguous consumers; retain the existing cases and noise controls as regressions.
+1. Correct generic relative-import identity so identical spellings in separate directories
+   do not join unrelated modules. Compare on the frozen dispatch input without tuning ranking
+   or removing the archival expectation; preserve existing snapshot readability.
 2. Review the explicit mappings with a consumer owner, then compare a bounded Codex extraction
    against the control when ready. Preserve inferred/unreviewed assertion labels.
+3. Evaluate an explicit source for operational routing separately from ranking. The known
+   topic-string gap must not be silently treated as complete static dependency coverage.
 
 The six-stage public fixture continues testing extraction/linkage, queues, missing links,
 ambiguous intent and inconsistent identities. The evaluator's unit tests separately check

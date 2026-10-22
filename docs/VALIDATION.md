@@ -8,6 +8,46 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## Prospective dispatch evaluation, 2026-10-22
+
+Inputs, labels and protocol were committed at `fa902165a1f212a6d3245c847e1ab9b64a69715b`
+before any queries. Production ranking remains byte-identical to `proximity-diversity-v1`.
+The [evaluation protocol](IMPACT-EVALUATION.md#prospective-dispatch-evaluation) and
+`evaluations/dispatch/baseline.json` record the public-safe measurements and provenance.
+
+Linux cloud, Node 24.19.0, pnpm 10.18.2:
+
+- Real SCIP/document/RDF/SHACL hydration produced **227 facts**, with zero model assertions,
+  approved intent sources or runtime references. Repeat hydration extracted zero and reused
+  three control artifacts, retaining snapshot identity/content digest. Fixture TypeScript
+  checking and four exported behavior checks passed separately.
+- All three cases use the existing 60-fact/three-page/depth-32 budget. Candidate recall is
+  **15/16 on page one and within three pages**. No labeled distraction appears on page one;
+  **7/7 case-specific distraction labels** appear within three pages. These are synthetic
+  candidate-file measurements, not a quality gate or exhaustive precision result.
+- Supplemental full continuation returned 214 unique facts across four pages, with no
+  archival-file fact. Its local relationships exist but the expected operational route is
+  disconnected. SCIP distinguishes the two domain policy functions; cited generic import
+  witnesses show the cross-domain `./policy.js` connection. The intentionally unresolved
+  Markdown reference has a diagnostic and no guessed target.
+- Original Weftlet snapshots, suite, reachable counts, recall and distraction scores remain
+  unchanged. Both saved snapshot files match their recorded SHA-256 digests. All 79 original
+  imported source paths and source hashes are preserved.
+- Focused evaluator checks pass with a real independent Git repository and an unrelated cwd:
+  selected suite/config, separate evaluator/evidence commits, real indexing/document links,
+  saved-only scoring, immutable snapshot content, failed-report preservation, missing-snapshot
+  refusal and live-provider refresh refusal. Boundary tests also reject impostor modules and
+  repository/suite/configuration/draft mismatches. Fixture result scores are not CI thresholds.
+- The full publication gate passed **203 deterministic tests** (1 core + 202 toolkit),
+  one optional OML skip, build, 12 advisory architecture findings, inventory, licenses and
+  fresh packed-consumer installation/indexing/RDF/SHACL/MCP checks. Actionlint passed without
+  shellcheck; strict TypeScript checking of the evaluator also passed.
+
+Hosted Ubuntu/Windows outcomes are recorded with the implementation PR.
+No ranking/source-extraction change, live model call, browser result, authentication result
+or npm publication is part of this increment. Broader real-project and semantic-quality
+validation remain separate.
+
 ## Impact ranking, 2026-10-22
 
 [ADR 012](ADR-012-impact-ranking.md) describes query ordering by weighted proximity and
