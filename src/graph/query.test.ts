@@ -79,6 +79,32 @@ describe('impact scan facade', () => {
     expect(mcp).toEqual(direct);
     expect(mcp.facts).toHaveLength(200);
     expect(mcp.facts[0]?.provenance.commitSha).toBe(sha);
+    const request = { capabilities: ['search'], maxFacts: 17 };
+    const first = await service.scan(request);
+    const version = first.exploration?.rankingVersion;
+    expect(version).toBe('proximity-diversity-v1');
+    expect(first.markdown).toContain(`Ranking: ${version}`);
+    let page = first;
+    const collected = [...first.facts];
+    let pages = 1;
+    while (page.exploration?.continuation) {
+      if (++pages > 20) throw new Error('Pagination did not terminate');
+      page = await service.scan({ ...request, continuation: page.exploration.continuation });
+      expect(page.exploration?.rankingVersion).toBe(version);
+      collected.push(...page.facts);
+    }
+    expect(collected).toHaveLength(snapshot.facts.length);
+    expect(new Set(collected.map((fact) => fact.id))).toEqual(new Set(snapshot.facts.map((fact) => fact.id)));
+    expect(collected.slice(0, 200)).toEqual(direct.facts);
+    const token = JSON.parse(Buffer.from(first.exploration!.continuation!, 'base64url').toString('utf8'));
+    for (const ranking of [undefined, 'old-ordering']) {
+      const continuation = Buffer.from(JSON.stringify({ ...token, ranking })).toString('base64url');
+      await expect(service.scan({ ...request, continuation })).rejects.toThrow('restart the scan');
+    }
+    await expect(service.scan({ ...request, task: 'different query', continuation: first.exploration!.continuation }))
+      .rejects.toThrow('does not match');
+    await expect(service.scan({ ...request, continuation: Buffer.from('null').toString('base64url') }))
+      .rejects.toThrow('Invalid continuation');
     await expect(service.scan({ maxFacts: 0 })).rejects.toThrow(
       'maxFacts must be a positive integer',
     );

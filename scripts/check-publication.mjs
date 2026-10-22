@@ -82,6 +82,7 @@ try {
         'dist/interfaces/cli.js', 'dist/interfaces/mcp.js', 'dist/extraction/static.js',
         'dist/extraction/scip-project.js', 'dist/configuration/scip-project.js',
         'dist/extraction/document.js', 'dist/extraction/document-references.js',
+        'dist/graph/ranking.js',
         'runtime-check.mjs', 'runtime-check.d.mts',
         'examples/generic-typescript/context-graph.config.json',
         'examples/generic-typescript/ontology/build.gradle',
@@ -232,7 +233,7 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { ScipSymbolExtractor, ScipTypeScriptIndexer } from ${JSON.stringify(staticModule)};
 import { linkSemanticDocuments } from ${JSON.stringify(new URL('document.js', staticModule).href)};
-import { renderContextPackVisualization, RdfEvidenceGraph, CG } from ${JSON.stringify(toolkitModule)};
+import { renderContextPackVisualization, RdfEvidenceGraph, CG, SnapshotImpactQueryService } from ${JSON.stringify(toolkitModule)};
 
 const root = process.cwd();
 const context = {
@@ -280,10 +281,23 @@ if (documents.diagnostics.length || documents.facts.length !== 2 ||
   throw new Error('Installed Markdown linker did not preserve targets and citations');
 }
 const facts = [...sourceFacts, ...documents.facts];
-const graph = new RdfEvidenceGraph({ manifest: { schemaVersion:1, repositoryId:'publication-smoke',ref:'HEAD',commitSha:context.commitSha,snapshotId:context.snapshotId,contentDigest:index.digest,generatedAt:'2026-01-01',ontologyVersion:'rdf-v1',extractorVersions:{},semanticModel:'none',semanticPromptVersion:'none',semanticArtifactKeys:[],scipIndexDigest:index.digest,rdfDigest:'' }, facts, invariants:[],runtimeEvidence:[],unresolved:[] });
+const snapshot = { manifest: { schemaVersion:1, repositoryId:'publication-smoke',ref:'HEAD',commitSha:context.commitSha,snapshotId:context.snapshotId,contentDigest:index.digest,generatedAt:'2026-01-01',ontologyVersion:'rdf-v1',extractorVersions:{},semanticModel:'none',semanticPromptVersion:'none',semanticArtifactKeys:[],scipIndexDigest:index.digest,rdfDigest:'' }, facts, invariants:[],runtimeEvidence:[],unresolved:[] };
+const graph = new RdfEvidenceGraph(snapshot);
 if (!(await graph.validate()).conforms) throw new Error('Installed SHACL validation failed');
 const selected = await graph.select('SELECT ?record WHERE { ?record <' + CG + 'authority> ?authority }');
 if (selected.rows.length !== facts.length || (await graph.facts()).length !== facts.length) throw new Error('Installed RDF projection/query mismatch');
+const query = new SnapshotImpactQueryService({ read: async () => snapshot, readHead: async () => snapshot,
+  write: async () => {}, updateHead: async () => {} }, 'default');
+let page = await query.scan({ changedFiles: ['src/contract.ts'], maxFacts: 2 });
+const returned = [...page.facts];
+while (page.exploration?.continuation) {
+  if (returned.length >= facts.length) throw new Error('Installed continuation did not terminate');
+  page = await query.scan({ changedFiles: ['src/contract.ts'], maxFacts: 2, continuation: page.exploration.continuation });
+  returned.push(...page.facts);
+}
+if (!page.exploration?.rankingVersion || new Set(returned.map((fact) => fact.id)).size !== facts.length || returned.length !== facts.length) {
+  throw new Error('Installed ranked query lost or repeated reachable evidence');
+}
 const pack = {
   snapshot: { snapshotId: context.snapshotId, commitSha: context.commitSha, contentDigest: index.digest },
   capabilities: [],

@@ -1,0 +1,477 @@
+{
+  "schemaVersion": 1,
+  "status": "advisory-fixed-snapshot-ranking-comparison",
+  "measuredAt": "2026-10-22T20:23:27.733Z",
+  "implementationCommit": "2e4a3bbc55bd3a15cf619f56827963a699a5b56b",
+  "rankingVersion": "proximity-diversity-v1",
+  "suiteDigest": "104a3c4b46955b1bbdde3949e8784eedada271dee5245dcada2eebd578069ef7",
+  "runtime": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "querySourceDigests": {
+    "src/graph/query.ts": "ead61dfde748cd1a02c8b1a14dc729173a6b85ec3b8213af2bd5169c60b70253",
+    "src/graph/ranking.ts": "da29de6e0979bec8c3ca7f014bcfa9aa89cfbbf97d1bdb5a64d279b94e651fd5"
+  },
+  "configurationFile": "evaluations/weftlet/source-project.config.json",
+  "hydration": "none: both comparisons query existing immutable evidence",
+  "modelCalls": 0,
+  "comparisons": [
+    {
+      "label": "document-links",
+      "evidenceCommit": "dcef64001d8d47cd1aeb4c1434992612158a104a",
+      "snapshotId": "dcef64001d8d47cd1aeb4c1434992612158a104a-graph-v3-links-2.0.0-42f885befb5ce881-4f68cb388720",
+      "contentDigest": "f0c8169f154f0a02a72105b13e8cb757a74eb99b184657a383ef2dd4f07ff417",
+      "snapshotFileSha256": "58e2a957725baab8315920729aba96a0574891f1336eab9b7f9a37f534e6c670",
+      "snapshotBytesUnchanged": true,
+      "configurationDigest": "42f885befb5ce881fcf1dafd8a215ed5e45171930cbecae0787238680e98faf8",
+      "reportDigest": "89f14142a8f252ab62c01e7cdd5e93354582fc5020fce135cf2acd467d73c9bc",
+      "coverage": {
+        "totalFacts": 3648,
+        "extractorCounts": {
+          "scip-symbol-extractor": 3065,
+          "repository-file-extractor": 550,
+          "document-linker": 33
+        },
+        "semanticAssertions": 0,
+        "runtimeReferences": 0,
+        "approvedIntentSources": []
+      },
+      "results": [
+        {
+          "id": "atomic-publication",
+          "budget": {
+            "maxFacts": 60,
+            "maxDepth": 32,
+            "maxPages": 3
+          },
+          "previousRecall": {
+            "expected": 6,
+            "firstPage": 6,
+            "examinedPages": 6,
+            "examinedFraction": 1
+          },
+          "rankedRecall": {
+            "expected": 6,
+            "firstPage": 6,
+            "examinedPages": 6,
+            "examinedFraction": 1
+          },
+          "reachableFacts": 3648,
+          "factsExamined": 180,
+          "complete": false,
+          "depthLimitReached": false,
+          "previousDistractions": [
+            {
+              "path": "src/extraction/telemetry.ts",
+              "inSnapshot": true,
+              "inFirstPage": false,
+              "inExaminedPages": false
+            }
+          ],
+          "rankedDistractions": [
+            {
+              "path": "src/extraction/telemetry.ts",
+              "inSnapshot": true,
+              "inFirstPage": false,
+              "inExaminedPages": true
+            }
+          ],
+          "remainingTargets": [],
+          "improvedTargetWitnesses": []
+        },
+        {
+          "id": "impact-query",
+          "budget": {
+            "maxFacts": 60,
+            "maxDepth": 32,
+            "maxPages": 3
+          },
+          "previousRecall": {
+            "expected": 6,
+            "firstPage": 5,
+            "examinedPages": 6,
+            "examinedFraction": 1
+          },
+          "rankedRecall": {
+            "expected": 6,
+            "firstPage": 6,
+            "examinedPages": 6,
+            "examinedFraction": 1
+          },
+          "reachableFacts": 3648,
+          "factsExamined": 180,
+          "complete": false,
+          "depthLimitReached": false,
+          "previousDistractions": [
+            {
+              "path": "src/extraction/codex-command.ts",
+              "inSnapshot": true,
+              "inFirstPage": false,
+              "inExaminedPages": true
+            }
+          ],
+          "rankedDistractions": [
+            {
+              "path": "src/extraction/codex-command.ts",
+              "inSnapshot": true,
+              "inFirstPage": false,
+              "inExaminedPages": false
+            }
+          ],
+          "remainingTargets": [],
+          "improvedTargetWitnesses": [
+            {
+              "path": "src/graph/query.test.ts",
+              "witness": {
+                "id": "96fbbc570ea78eb82858bdc9f8df597d20f155f493a708c97a209f5eea6e2143",
+                "subject": "component:file:src/graph/query.test.ts",
+                "predicate": "consumes",
+                "object": "symbol:scip:cf8457a9a5641a025dbe2d8a7a4b9a10c37caf5b4bbddcb9909fe2398ab2f730",
+                "provenance": {
+                  "commitSha": "dcef64001d8d47cd1aeb4c1434992612158a104a",
+                  "digest": "e0030981026a6643d8032174f37a0a41b17724ee6a86dae55e6b12c51f5de77f",
+                  "endLine": 10,
+                  "path": "src/graph/query.test.ts",
+                  "startLine": 10
+                },
+                "extractor": {
+                  "id": "scip-symbol-extractor",
+                  "version": "1.0.0"
+                },
+                "authority": "unspecified"
+              }
+            }
+          ]
+        },
+        {
+          "id": "codex-launcher",
+          "budget": {
+            "maxFacts": 60,
+            "maxDepth": 32,
+            "maxPages": 3
+          },
+          "previousRecall": {
+            "expected": 6,
+            "firstPage": 5,
+            "examinedPages": 6,
+            "examinedFraction": 1
+          },
+          "rankedRecall": {
+            "expected": 6,
+            "firstPage": 6,
+            "examinedPages": 6,
+            "examinedFraction": 1
+          },
+          "reachableFacts": 3648,
+          "factsExamined": 180,
+          "complete": false,
+          "depthLimitReached": false,
+          "previousDistractions": [
+            {
+              "path": "src/visualization/viewer-interaction.ts",
+              "inSnapshot": true,
+              "inFirstPage": false,
+              "inExaminedPages": true
+            }
+          ],
+          "rankedDistractions": [
+            {
+              "path": "src/visualization/viewer-interaction.ts",
+              "inSnapshot": true,
+              "inFirstPage": false,
+              "inExaminedPages": false
+            }
+          ],
+          "remainingTargets": [],
+          "improvedTargetWitnesses": [
+            {
+              "path": "src/interfaces/doctor.ts",
+              "witness": {
+                "id": "b4f01bea270b2b0b63499f60a785c4f91066de39c8324cc3d381a63636c37f59",
+                "subject": "component:file:src/interfaces/doctor.ts",
+                "predicate": "consumes",
+                "object": "symbol:scip:6743c7343500fa4d08a0f7997799f2f93a2dcaa787ddafdab6e530c4f67c8a14",
+                "provenance": {
+                  "commitSha": "dcef64001d8d47cd1aeb4c1434992612158a104a",
+                  "digest": "d98e5ca3daf00d2b4e8dda9b24aff14ef2b295a54d5da60bbe07cdeb48b2d310",
+                  "endLine": 20,
+                  "path": "src/interfaces/doctor.ts",
+                  "startLine": 20
+                },
+                "extractor": {
+                  "id": "scip-symbol-extractor",
+                  "version": "1.0.0"
+                },
+                "authority": "unspecified"
+              }
+            }
+          ]
+        },
+        {
+          "id": "working-content",
+          "budget": {
+            "maxFacts": 60,
+            "maxDepth": 32,
+            "maxPages": 3
+          },
+          "previousRecall": {
+            "expected": 6,
+            "firstPage": 6,
+            "examinedPages": 6,
+            "examinedFraction": 1
+          },
+          "rankedRecall": {
+            "expected": 6,
+            "firstPage": 6,
+            "examinedPages": 6,
+            "examinedFraction": 1
+          },
+          "reachableFacts": 3648,
+          "factsExamined": 180,
+          "complete": false,
+          "depthLimitReached": false,
+          "previousDistractions": [
+            {
+              "path": "src/extraction/codex-command.ts",
+              "inSnapshot": true,
+              "inFirstPage": true,
+              "inExaminedPages": true
+            }
+          ],
+          "rankedDistractions": [
+            {
+              "path": "src/extraction/codex-command.ts",
+              "inSnapshot": true,
+              "inFirstPage": false,
+              "inExaminedPages": false
+            }
+          ],
+          "remainingTargets": [],
+          "improvedTargetWitnesses": []
+        }
+      ]
+    },
+    {
+      "label": "older-source-project",
+      "evidenceCommit": "eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d",
+      "snapshotId": "eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d-graph-v2-42f885befb5ce881-4f68cb388720",
+      "contentDigest": "6f30f62900e37a6d2d266bcd3bba54941b1cab3997602eefef3320b0d0e66fc3",
+      "snapshotFileSha256": "6cfc77bf40228b0e86ab65dd5621008eb1ed7e93c8ae5c5a4c5fe25a4a281041",
+      "snapshotBytesUnchanged": true,
+      "configurationDigest": "42f885befb5ce881fcf1dafd8a215ed5e45171930cbecae0787238680e98faf8",
+      "reportDigest": "80fdf8e35996892bbf113751f65ce5a3dc6b7845e555a1c7beb67ca8e47dc0e6",
+      "coverage": {
+        "totalFacts": 3490,
+        "extractorCounts": {
+          "scip-symbol-extractor": 2970,
+          "repository-file-extractor": 520
+        },
+        "semanticAssertions": 0,
+        "runtimeReferences": 0,
+        "approvedIntentSources": []
+      },
+      "results": [
+        {
+          "id": "atomic-publication",
+          "budget": {
+            "maxFacts": 60,
+            "maxDepth": 32,
+            "maxPages": 3
+          },
+          "previousRecall": {
+            "expected": 6,
+            "firstPage": 3,
+            "examinedPages": 5,
+            "examinedFraction": 0.8333333333333334
+          },
+          "rankedRecall": {
+            "expected": 6,
+            "firstPage": 5,
+            "examinedPages": 5,
+            "examinedFraction": 0.8333333333333334
+          },
+          "reachableFacts": 3490,
+          "factsExamined": 180,
+          "complete": false,
+          "depthLimitReached": false,
+          "previousDistractions": [],
+          "rankedDistractions": [
+            {
+              "path": "src/extraction/telemetry.ts",
+              "inSnapshot": true,
+              "inFirstPage": false,
+              "inExaminedPages": true
+            }
+          ],
+          "remainingTargets": [
+            {
+              "path": "docs/ADR-002-saved-evidence.md",
+              "outcome": "no-extracted-relationship"
+            }
+          ],
+          "improvedTargetWitnesses": []
+        },
+        {
+          "id": "impact-query",
+          "budget": {
+            "maxFacts": 60,
+            "maxDepth": 32,
+            "maxPages": 3
+          },
+          "previousRecall": {
+            "expected": 6,
+            "firstPage": 4,
+            "examinedPages": 4,
+            "examinedFraction": 0.6666666666666666
+          },
+          "rankedRecall": {
+            "expected": 6,
+            "firstPage": 5,
+            "examinedPages": 5,
+            "examinedFraction": 0.8333333333333334
+          },
+          "reachableFacts": 3490,
+          "factsExamined": 180,
+          "complete": false,
+          "depthLimitReached": false,
+          "previousDistractions": [],
+          "rankedDistractions": [
+            {
+              "path": "src/extraction/codex-command.ts",
+              "inSnapshot": true,
+              "inFirstPage": false,
+              "inExaminedPages": false
+            }
+          ],
+          "remainingTargets": [
+            {
+              "path": "docs/ADR-004-rdf-query-path.md",
+              "outcome": "no-extracted-relationship"
+            }
+          ],
+          "improvedTargetWitnesses": [
+            {
+              "path": "src/interfaces/mcp.ts",
+              "witness": {
+                "id": "cfe8c566b2d30f65bf5bda142bf81b7f2fbee890b373b9a2ec73d8124202d233",
+                "subject": "component:file:src/interfaces/mcp.ts",
+                "predicate": "consumes",
+                "object": "symbol:scip:5453ba85fb661934733934af700c1d39c7e7b50195b8817ac6d8f51c795f6df0",
+                "provenance": {
+                  "commitSha": "eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d",
+                  "digest": "1859d7802a1ee5179ebcad0f799cd42a3fa6e0c614273a19ea7df3d9f7fd4024",
+                  "endLine": 12,
+                  "path": "src/interfaces/mcp.ts",
+                  "startLine": 12
+                },
+                "extractor": {
+                  "id": "scip-symbol-extractor",
+                  "version": "1.0.0"
+                },
+                "authority": "unspecified"
+              }
+            }
+          ]
+        },
+        {
+          "id": "codex-launcher",
+          "budget": {
+            "maxFacts": 60,
+            "maxDepth": 32,
+            "maxPages": 3
+          },
+          "previousRecall": {
+            "expected": 6,
+            "firstPage": 3,
+            "examinedPages": 4,
+            "examinedFraction": 0.6666666666666666
+          },
+          "rankedRecall": {
+            "expected": 6,
+            "firstPage": 4,
+            "examinedPages": 4,
+            "examinedFraction": 0.6666666666666666
+          },
+          "reachableFacts": 3490,
+          "factsExamined": 180,
+          "complete": false,
+          "depthLimitReached": false,
+          "previousDistractions": [],
+          "rankedDistractions": [
+            {
+              "path": "src/visualization/viewer-interaction.ts",
+              "inSnapshot": true,
+              "inFirstPage": false,
+              "inExaminedPages": false
+            }
+          ],
+          "remainingTargets": [
+            {
+              "path": "docs/PROVIDERS.md",
+              "outcome": "no-extracted-relationship"
+            },
+            {
+              "path": "docs/ADR-006-provider-boundaries.md",
+              "outcome": "no-extracted-relationship"
+            }
+          ],
+          "improvedTargetWitnesses": []
+        },
+        {
+          "id": "working-content",
+          "budget": {
+            "maxFacts": 60,
+            "maxDepth": 32,
+            "maxPages": 3
+          },
+          "previousRecall": {
+            "expected": 6,
+            "firstPage": 5,
+            "examinedPages": 5,
+            "examinedFraction": 0.8333333333333334
+          },
+          "rankedRecall": {
+            "expected": 6,
+            "firstPage": 5,
+            "examinedPages": 5,
+            "examinedFraction": 0.8333333333333334
+          },
+          "reachableFacts": 3490,
+          "factsExamined": 180,
+          "complete": false,
+          "depthLimitReached": false,
+          "previousDistractions": [],
+          "rankedDistractions": [
+            {
+              "path": "src/extraction/codex-command.ts",
+              "inSnapshot": true,
+              "inFirstPage": false,
+              "inExaminedPages": false
+            }
+          ],
+          "remainingTargets": [
+            {
+              "path": "docs/ADR-003-draft-overlays.md",
+              "outcome": "no-extracted-relationship"
+            }
+          ],
+          "improvedTargetWitnesses": []
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Expected paths are reviewable hypotheses, not exhaustive labels or approved product policy.",
+    "Recall measures candidate file relationship retrieval, not a proven dependency path or whether a proposed change is safe.",
+    "Unjudged results are not false positives. Distraction controls measure query noise, not false graph assertions.",
+    "Presence of a test file does not prove that behavior was tested or that the test passed.",
+    "Missing relationships are gaps in this extraction/configuration, not proof of missing implementation.",
+    "A successful evaluation command means measurement completed; it is not a quality or merge gate.",
+    "Only four pre-existing scenarios in one repository were measured; this does not establish generalization or exhaustive precision.",
+    "Telemetry is a new three-page distraction for atomic-publication. The older control goes from zero to one labeled distractions even as retrieval improves.",
+    "Every case remains truncated after 180 facts. All reachable facts are retained for continuation, not all returned on these pages.",
+    "Ranking heuristics change order, not evidence authority, confidence, provenance, scope or current-diff eligibility."
+  ]
+}

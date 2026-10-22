@@ -145,6 +145,11 @@ pending re-extraction. Queries compare captured file digests with current workin
 report subsequent edits separately from captured and excluded changes. Older overlays without
 capture metadata have unknown freshness. Historical or draft evidence cannot validate a current diff.
 
+Impact queries [rank nearby consumers and varied evidence sources](docs/ADR-012-impact-ranking.md)
+ahead of repeated detail and shared-import context. Ranking changes ordering, not saved facts or
+the reachable scope. Responses identify the ranking version; after a ranking upgrade, restart
+scans whose old continuation tokens are rejected. No snapshot refresh is needed for new ordering.
+
 ## Evidence limits
 
 Approved owner documents govern intent. Code describes implementation; tests describe what

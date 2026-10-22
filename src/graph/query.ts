@@ -13,6 +13,7 @@ import type {
   SnapshotStore,
 } from "@weftlet/core";
 import { diagnosticSummary, selectDiagnostics } from "./diagnostics.js";
+import { factSearchText, IMPACT_RANKING_VERSION, rankImpactFacts } from './ranking.js';
 
 export const DEFAULT_CONTEXT_PACK_FACTS = 60;
 export const MAX_CONTEXT_PACK_FACTS = 200;
@@ -120,23 +121,6 @@ function focusTerms(values: readonly (string | undefined)[]): readonly string[] 
   ];
 }
 
-function factSearchText(fact: GraphFact): string {
-  return [
-    fact.subject.id,
-    fact.subject.label,
-    fact.predicate,
-    fact.object.id,
-    fact.object.label,
-    fact.provenance.path,
-  ]
-    .join(' ')
-    .toLowerCase();
-}
-
-function semanticPriority(fact: GraphFact): number {
-  return /codex-cli|document-linker/.test(fact.extractor.id) ? 0 : 1;
-}
-
 function boundedFactLimit(value: number | undefined): number {
   if (value === undefined) return DEFAULT_CONTEXT_PACK_FACTS;
   if (!Number.isInteger(value) || value < 1) {
@@ -153,6 +137,7 @@ export class MarkdownContextPackRenderer implements ContextPackRenderer {
       `Snapshot: \`${pack.snapshot.snapshotId}\` (${pack.snapshot.commitSha})`,
       `Configuration: ${pack.snapshot.configurationDigest ?? 'legacy/unknown'}; scope: ${pack.snapshot.scope?.join(', ') ?? 'legacy/unknown'}`,
       ...(pack.exploration ? [
+        `Ranking: ${pack.exploration.rankingVersion ?? 'legacy/unknown'}`,
         `Relationships returned: ${pack.exploration.returned}/${pack.exploration.reachableFacts}; truncated: ${pack.exploration.truncated}; depth limit reached: ${pack.exploration.depthLimitReached}`,
         ...(pack.exploration.continuation ? [`Continuation: ${pack.exploration.continuation}`] : []),
       ] : []),
@@ -248,7 +233,6 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
     const directTerms = anchorTerms.length > 0 ? anchorTerms : focus;
     const direct = snapshot.facts.filter((fact) => this.matches(fact, directTerms));
     const ranked = new Map(direct.map((fact) => [fact.id, fact]));
-    const distance = new Map(direct.map((fact) => [fact.id, 0]));
     let frontier = new Set(
       direct.flatMap((fact) =>
         [fact.subject, fact.object]
@@ -262,7 +246,6 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
       for (const fact of snapshot.facts) {
         if (!frontier.has(fact.subject.id) && !frontier.has(fact.object.id)) continue;
         ranked.set(fact.id, fact);
-        if (!distance.has(fact.id)) distance.set(fact.id, depth + 1);
         for (const node of [fact.subject, fact.object]) {
           if (node.kind !== 'Project' && !visitedNodes.has(node.id)) next.add(node.id);
         }
@@ -270,28 +253,26 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
       for (const node of next) visitedNodes.add(node);
       frontier = next;
     }
-    const ordered = [...ranked.values()].sort((left, right) => {
-      const leftText = factSearchText(left);
-      const rightText = factSearchText(right);
-      const leftFocus = focus.filter((term) => leftText.includes(term)).length;
-      const rightFocus = focus.filter((term) => rightText.includes(term)).length;
-      return (
-        rightFocus - leftFocus ||
-        semanticPriority(left) - semanticPriority(right) ||
-        (distance.get(left.id) ?? 4) - (distance.get(right.id) ?? 4) ||
-        left.id.localeCompare(right.id)
-      );
-    });
-    const allBalanced = [
-      ...selectBalancedFacts(ordered, ordered.length).facts,
-      ...ordered.filter((fact) => contextPackLaneForFact(fact) === undefined),
-    ];
+    const tiers = new Map<number, GraphFact[]>();
+    for (const { fact, score } of rankImpactFacts([...ranked.values()], direct, directTerms, focus)) {
+      const tier = tiers.get(score) ?? [];
+      tier.push(fact); tiers.set(score, tier);
+    }
+    // Balance evidence lanes among similarly ranked facts, not across unrelated distance tiers.
+    const allBalanced = [...tiers.values()].flatMap((tier) => [
+      ...selectBalancedFacts(tier, tier.length).facts,
+      ...tier.filter((fact) => contextPackLaneForFact(fact) === undefined),
+    ]);
     const { continuation: _continuation, snapshotId: _snapshotId, ...query } = request;
-    const queryDigest = sha256(stableJson(query));
+    const queryDigest = sha256(stableJson({ ranking: IMPACT_RANKING_VERSION, query }));
     let offset = 0;
     if (request.continuation) {
       if (request.continuation.length > 2048) throw new Error('Invalid continuation');
       const token = JSON.parse(Buffer.from(request.continuation, 'base64url').toString('utf8'));
+      if (!token || typeof token !== 'object' || Array.isArray(token)) throw new Error('Invalid continuation');
+      if (token.ranking !== IMPACT_RANKING_VERSION) {
+        throw new Error('Continuation uses a different ranking version; restart the scan without continuation');
+      }
       if (token.snapshot !== snapshot.manifest.snapshotId ||
           token.digest !== snapshot.manifest.contentDigest || token.query !== queryDigest ||
           !Number.isInteger(token.offset) || token.offset < 0 || token.offset > allBalanced.length) {
@@ -304,7 +285,7 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
     const nextOffset = offset + facts.length;
     const continuation = nextOffset < allBalanced.length ? Buffer.from(JSON.stringify({
       snapshot: snapshot.manifest.snapshotId, digest: snapshot.manifest.contentDigest,
-      query: queryDigest, offset: nextOffset,
+      query: queryDigest, ranking: IMPACT_RANKING_VERSION, offset: nextOffset,
     })).toString('base64url') : undefined;
     const capabilities = [
       ...new Map(
@@ -402,6 +383,7 @@ export class SnapshotImpactQueryService implements ImpactQueryService {
       },
       diagnostics: selectDiagnostics(snapshot, request, facts, focus, queryDiagnostics),
       exploration: {
+        rankingVersion: IMPACT_RANKING_VERSION,
         returned: facts.length, reachableFacts: allBalanced.length, maxDepth,
         depthLimitReached: frontier.size > 0, truncated: Boolean(continuation) || frontier.size > 0,
         continuation,

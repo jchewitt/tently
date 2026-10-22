@@ -87,4 +87,13 @@ describe('impact evaluation measurements', () => {
     expect(() => validateSuite({ ...suite, cases: [item, item] }, paths)).toThrow('duplicate');
     expect(() => validateSuite({ ...suite, budget: { ...budget, maxFacts: 201 } }, paths)).toThrow('budget');
   });
+
+  it('rejects an ordering policy change between pages', async () => {
+    const first = pack([snapshot.facts[0]!], 'next');
+    const second = pack([snapshot.facts[1]!]);
+    await expect(scoreImpactCase(pages(
+      { ...first, exploration: { ...first.exploration!, rankingVersion: 'one' } },
+      { ...second, exploration: { ...second.exploration!, rankingVersion: 'two' } },
+    ), snapshot, item, budget)).rejects.toThrow('ranking version changed');
+  });
 });

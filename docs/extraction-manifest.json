@@ -150,7 +150,7 @@
       "destinationPath": "packages/core/src/core.ts",
       "sourceSha256": "cb3f4eb7bfe9f458494607406664445a276aad37235930a043d400ea9211ed16",
       "modified": true,
-      "destinationSha256": "64a30913c01ff2f3e112a6bcafbc142cb91fc5482f01b2aa90fae9382252dbfa"
+      "destinationSha256": "0287d0640f2ff078da19be1439d02fcab22998262562d4af7b5f26ddca0839f4"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/index.ts",
@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "3426c910baaaa474f909a8558bdfebb33013d99be17c6b214ba5f1b2cb621ab1"
+      "destinationSha256": "7e718f972403ab14e6756b4146f146e5e9ec32668f8bf699748b3d502679be94"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -388,14 +388,14 @@
       "destinationPath": "src/graph/query.test.ts",
       "sourceSha256": "ba07c52566da979fcbb451b0c0c99b466521993cb49415ff8b35df2b01d4ecaf",
       "modified": true,
-      "destinationSha256": "e0030981026a6643d8032174f37a0a41b17724ee6a86dae55e6b12c51f5de77f"
+      "destinationSha256": "68d7405765dec5975370f79caaf8708db42dd3dd464a7ec9c3919c796ee81b79"
     },
     {
       "sourcePath": "tools/context-graph/src/query.ts",
       "destinationPath": "src/graph/query.ts",
       "sourceSha256": "4d67f87ca660cefe9686fb5b775f86a997a25d539819ea81d321c8bd1e0aaa39",
       "modified": true,
-      "destinationSha256": "93e813d2e70d09522418e07f9ffeb36d71795c026099a8b57559b0c10b150a76"
+      "destinationSha256": "ead61dfde748cd1a02c8b1a14dc729173a6b85ec3b8213af2bd5169c60b70253"
     },
     {
       "sourcePath": "tools/context-graph/src/request.test.ts",
@@ -582,6 +582,7 @@
     ".changeset/committed-source-indexing.md",
     ".changeset/config.json",
     ".changeset/impact-evaluation-baseline.md",
+    ".changeset/proximity-impact-ranking.md",
     ".changeset/release-plan.json",
     ".changeset/windows-consumer-reliability.md",
     ".github/workflows/check.yml",
@@ -608,6 +609,7 @@
     "docs/ADR-009-release-automation.md",
     "docs/ADR-010-committed-source-indexing.md",
     "docs/ADR-011-explicit-document-links.md",
+    "docs/ADR-012-impact-ranking.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/ENVIRONMENT-VALIDATION.md",
     "docs/IMPACT-EVALUATION.md",
@@ -630,6 +632,7 @@
     "evaluations/weftlet/context-graph.config.json",
     "evaluations/weftlet/document-links-baseline.json",
     "evaluations/weftlet/document-only.mjs",
+    "evaluations/weftlet/ranking-baseline.json",
     "evaluations/weftlet/source-project-baseline.json",
     "evaluations/weftlet/source-project.config.json",
     "examples/generic-typescript/context-graph.oml.config.json",
@@ -711,6 +714,8 @@
     "src/governance/governance.test.ts",
     "src/governance/governance.ts",
     "src/graph/authority.ts",
+    "src/graph/ranking.test.ts",
+    "src/graph/ranking.ts",
     "src/graph/rdf.ts",
     "src/infrastructure/module-resolution.ts",
     "src/interfaces/doctor.ts",

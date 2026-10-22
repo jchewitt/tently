@@ -43,10 +43,17 @@ adds test/workspace indexing and improves the same cases to 15/24 first-page and
 three-page candidates, with typed relationships from 33 test files. [Explicit document linkage](ADR-011-explicit-document-links.md) now resolves cited Markdown
 references against committed files. With new contributor source mappings, a separately recorded
 input returns 22/24 first-page and 24/24 three-page candidates; three labeled distractions also
-appear. The old-source control remains 15/24 and 18/24. Broad query reachability and live semantic
-quality remain gaps; explicit navigation links do not establish either.
+appear. The old-source control remains 15/24 and 18/24 for that ordering.
+[Query ranking](ADR-012-impact-ranking.md) was measured against those exact saved snapshots
+without hydration: the document-link input improves to 24/24 on page one, with labeled distractions
+reduced from three to one within three pages. The older control improves to 19/24 on page
+one, but its distraction count worsens from zero to one. Missing document relationships stay
+missing, and all reachable facts remain available through versioned continuation. See the
+[fixed-input comparison](IMPACT-EVALUATION.md#fixed-snapshot-ranking-comparison).
+Broad query reachability and live semantic quality remain gaps; these four cases do not
+establish generalization or exhaustive precision.
 Next work should be separate, reviewed increments:
-improve query ranking against the fixed cases and distraction controls; review explicit mappings
+add held-out public cases before further ranking tuning; review explicit mappings
 and run a bounded live semantic comparison when the maintainer is ready;
 retain the passing hosted Ubuntu CI gate; validate fresh-cloud
 restoration; resolve the cloud-specific live provider block; add browser
