@@ -33,7 +33,7 @@ describe('relative module request identities', () => {
 
   it('keeps out-of-root and opaque requests importer-local rather than guessing loader behavior', () => {
     for (const specifier of ['../../../outside.js', './policy.js?raw', './policy.js#x',
-      './policy%2Ejs', './nested\\policy.js', './policy\u0000.js']) {
+      './policy%2Ejs', './nested\\policy.js', './policy\u0000.js', './policy\u007f.js', './policy\u0085.js']) {
       const a = moduleRequestNode('src/a.ts', specifier);
       const b = moduleRequestNode('src/b.ts', specifier);
       expect(a.id).not.toBe(b.id);

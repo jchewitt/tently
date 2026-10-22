@@ -11,7 +11,7 @@ export function moduleRequestNode(importer: string, specifier: string): GraphNod
   // Git paths use POSIX separators on every host. Do not interpret loader suffixes, escapes,
   // encoded paths or requests outside this repository as canonical local destinations.
   const location = posix.normalize(posix.join(posix.dirname(importer), specifier));
-  const opaque = /[\\%?#\x00-\x1f]/.test(specifier) || importer.includes('\\') ||
+  const opaque = /[\\%?#\x00-\x1f\x7f-\x9f]/.test(specifier) || importer.includes('\\') ||
     location === '..' || location.startsWith('../') || posix.isAbsolute(location);
   if (opaque) return {
     id: `contract:module:./?${sha256(stableJson({ importer, specifier }))}`,
