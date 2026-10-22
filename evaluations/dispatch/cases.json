@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "repositoryId": "example/dispatch-evaluation",
+  "status": "Prospective synthetic evaluation hypotheses, frozen before measurement; not approved product intent or CI policy",
+  "budget": { "maxFacts": 60, "maxDepth": 32, "maxPages": 3 },
+  "cases": [
+    {
+      "id": "upstream-request-contract",
+      "task": "Change the dispatch request contract while preserving submission, planning, retries and request propagation.",
+      "changedFiles": ["src/contracts/dispatch-request.ts"],
+      "expected": [
+        { "path": "src/api/dispatch.ts", "category": "implementation", "reason": "The submission API accepts and publishes the shared request type." },
+        { "path": "src/dispatch/planner.ts", "category": "implementation", "reason": "Planning consumes request fields and selects an execution lane." },
+        { "path": "src/dispatch/retry.ts", "category": "implementation", "reason": "Retries must preserve the same request contract and policy decisions." },
+        { "path": "src/contracts/dispatch-plan.ts", "category": "contract", "reason": "The downstream plan embeds the original request type." },
+        { "path": "test/dispatch.test.ts", "category": "test", "reason": "Exercises urgent submission, asynchronous planning/execution and rejected input." },
+        { "path": "docs/dispatch-contract.md", "category": "intent-document", "reason": "Draft product intent describes the request fields and their downstream consumers." }
+      ],
+      "distractions": ["src/refund/policy.ts", "src/audit/consumer.ts"]
+    },
+    {
+      "id": "async-submission-consumers",
+      "task": "Change dispatch submission while identifying downstream planning, execution, outcomes and archival consumers across asynchronous boundaries.",
+      "changedFiles": ["src/api/dispatch.ts"],
+      "expected": [
+        { "path": "src/contracts/dispatch-request.ts", "category": "contract", "reason": "The asynchronous boundary carries the shared dispatch request." },
+        { "path": "src/dispatch/planner.ts", "category": "implementation", "reason": "The planner subscribes to requests without a direct call from the API." },
+        { "path": "src/dispatch/executor.ts", "category": "implementation", "reason": "The executor consumes plans produced from submitted requests and emits completion." },
+        { "path": "src/dispatch/outcomes.ts", "category": "implementation", "reason": "The projection consumes typed receipts downstream of execution." },
+        { "path": "src/archive/consumer.ts", "category": "implementation", "reason": "An independently compiled archival consumer subscribes to the completion topic by string; its missing static route is an intentional extraction challenge." },
+        { "path": "test/dispatch.test.ts", "category": "test", "reason": "Checks typed stages and topic emission, but does not establish delivery to the independent archival service." }
+      ],
+      "distractions": ["src/refund/planner.ts", "src/audit/consumer.ts"]
+    },
+    {
+      "id": "same-name-policy",
+      "task": "Change dispatch priority policy while locating its planner, retry path and checks without confusing the unrelated refund policy.",
+      "changedFiles": ["src/dispatch/policy.ts"],
+      "expected": [
+        { "path": "src/dispatch/planner.ts", "category": "implementation", "reason": "The dispatch planner calls this domain's evaluatePolicy implementation." },
+        { "path": "src/dispatch/retry.ts", "category": "implementation", "reason": "The retry path calls the dispatch policy before republishing." },
+        { "path": "test/policy.test.ts", "category": "test", "reason": "Checks the ordinary lane and policy handling for retries." },
+        { "path": "docs/dispatch-policy.md", "category": "intent-document", "reason": "Draft dispatch intent links the correct domain implementation and records a deliberately unresolved handoff link." }
+      ],
+      "distractions": ["src/refund/policy.ts", "src/refund/planner.ts", "src/audit/consumer.ts"]
+    }
+  ]
+}
