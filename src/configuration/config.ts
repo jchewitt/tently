@@ -2,6 +2,7 @@
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
+import { assertScipSourceProject, assertSourceProjectInvocation, type ScipSourceProject } from './scip-project.js';
 
 export interface ContextGraphConfig {
   readonly schemaVersion: 1;
@@ -41,6 +42,7 @@ export interface ContextGraphConfig {
     readonly version: string;
     readonly command: string;
     readonly args: readonly string[];
+    readonly sourceProject?: ScipSourceProject;
   };
   readonly ontology: {
     readonly backend?: 'rdf' | 'opencaesar';
@@ -306,6 +308,10 @@ function validateConfig(value: unknown, absolutePath: string): asserts value is 
       'scip.args must be an array of strings',
       absolutePath,
     );
+    if (value.scip.sourceProject !== undefined) {
+      assertScipSourceProject(value.scip.sourceProject);
+      assertSourceProjectInvocation(value.scip.command as string, value.scip.args as string[]);
+    }
   }
 
   requireConfig(isRecord(value.ontology), 'ontology must be an object', absolutePath);

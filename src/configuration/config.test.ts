@@ -44,6 +44,27 @@ function withoutPath(path: string): object {
 }
 
 describe('loadConfig', () => {
+  it('accepts an explicit source project and rejects escaping paths, wildcard aliases and incompatible launchers', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'context-graph-config-scip-'));
+    const path = join(root, 'config.json');
+    const scip = { version: '0.4.0', command: 'bundled-scip-typescript', args: ['index', '--no-global-caches'],
+      sourceProject: { include: ['src/**/*.ts', 'tests/**/*.ts'], aliases: { '@fixture/core': 'packages/core/index.ts' } } };
+    await writeFile(path, JSON.stringify({ ...validConfig, scip }));
+    await expect(loadConfig(path)).resolves.toMatchObject({ config: { scip } });
+    for (const project of [null, {}, { include: [] }, { include: ['../outside.ts'] }, { include: ['/outside.ts'] },
+      { include: ['C:/outside.ts'] }, { include: ['src\\outside.ts'] }, { include: ['src/**/*.ts'], compilerOptions: {} },
+      { include: ['src/**/*.ts'], aliases: { '@fixture/*': 'src/index.ts' } },
+      { include: ['src/**/*.ts'], aliases: { '@fixture/core': '../outside.ts' } },
+      { include: ['src/**/*.ts'], aliases: { '@fixture/core': 'src/*.ts' } }]) {
+      await writeFile(path, JSON.stringify({ ...validConfig, scip: { ...scip, sourceProject: project } }));
+      await expect(loadConfig(path)).rejects.toThrow('scip.sourceProject');
+    }
+    for (const changed of [{ command: 'custom-indexer' }, { args: ['index', '--infer-tsconfig'] }]) {
+      await writeFile(path, JSON.stringify({ ...validConfig, scip: { ...scip, ...changed } }));
+      await expect(loadConfig(path)).rejects.toThrow('scip.sourceProject requires');
+    }
+  });
+
   it('accepts explicit auth modes and rejects inline credentials or invalid key references', async () => {
     const root = await mkdtemp(join(tmpdir(), 'context-graph-config-auth-'));
     const path = join(root, 'config.json');

@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "6aa819a74fea8b161396b3a8c52e8e86ea2db856bc10ffbfdebaf22fa0af2cfe"
+      "destinationSha256": "96921a7cb483e7cfefcba3fea4042f42583c90aa7f433055221d896ad9340525"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -248,14 +248,14 @@
       "destinationPath": "src/configuration/config.test.ts",
       "sourceSha256": "70bcda6d6b48ff6fa03223c9420fe3e0e3e32c688e0a14f11034515e0707dee4",
       "modified": true,
-      "destinationSha256": "ae67cb42f86dbd72d09eac20a0755080bf9394e849dc4fdfdfe0a43b0296c6b2"
+      "destinationSha256": "ecc951094cdf745793ee368c3d5670252d04c69f8e7ef9cc9c28c855f87c0155"
     },
     {
       "sourcePath": "tools/context-graph/src/config.ts",
       "destinationPath": "src/configuration/config.ts",
       "sourceSha256": "e9ee8cf2134d274aa6f6a21545959fbec97e958181d9032c073293f28e04d6ca",
       "modified": true,
-      "destinationSha256": "ce6550967829b74147909121735c4dccf70982c3f9ee9ddc860b4f63535d5de0"
+      "destinationSha256": "23a0790c86fdf75ba9773ae098e83958c7ed56e021f000cc5a8dc4cb64faacc4"
     },
     {
       "sourcePath": "tools/context-graph/src/core.ts",
@@ -318,7 +318,7 @@
       "destinationPath": "src/application/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
       "modified": true,
-      "destinationSha256": "c95592ccb8626e8d3629f35d24e51d9d99be698c8ae270c794df47e4b3a46d14"
+      "destinationSha256": "9179d7893ff88a520e6f3ce7eb133c0c0a883cfcba1dc0a07226f09992011236"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",
@@ -479,7 +479,7 @@
       "destinationPath": "src/extraction/static.ts",
       "sourceSha256": "f8dcff3e10361314c06911dc7cec1e2cb0f8d9af68a6c61a30b2a741c5c3a385",
       "modified": true,
-      "destinationSha256": "39ada50a57e2130d27c22eb18531c3feb7160004b198eb5904950227e57012df"
+      "destinationSha256": "73d853b79aa58dde180c9278ba03ca82e17c74b751b683909b9254d093130d28"
     },
     {
       "sourcePath": "tools/context-graph/src/storage.ts",
@@ -578,6 +578,7 @@
   ],
   "authoredPaths": [
     ".changeset/README.md",
+    ".changeset/committed-source-indexing.md",
     ".changeset/config.json",
     ".changeset/impact-evaluation-baseline.md",
     ".changeset/release-plan.json",
@@ -604,6 +605,7 @@
     "docs/ADR-007-toolkit-modules.md",
     "docs/ADR-008-weftlet-packages.md",
     "docs/ADR-009-release-automation.md",
+    "docs/ADR-010-committed-source-indexing.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/ENVIRONMENT-VALIDATION.md",
     "docs/IMPACT-EVALUATION.md",
@@ -625,6 +627,8 @@
     "evaluations/weftlet/cases.json",
     "evaluations/weftlet/context-graph.config.json",
     "evaluations/weftlet/document-only.mjs",
+    "evaluations/weftlet/source-project-baseline.json",
+    "evaluations/weftlet/source-project.config.json",
     "examples/generic-typescript/context-graph.oml.config.json",
     "examples/pipeline/context-graph.config.json",
     "examples/pipeline/docs/admission.md",
@@ -688,12 +692,15 @@
     "src/application/overlay.ts",
     "src/application/saved-evidence.ts",
     "src/cli.ts",
+    "src/configuration/scip-project.ts",
     "src/extraction/codex-auth.test.ts",
     "src/extraction/codex-auth.ts",
     "src/extraction/codex-command.test.ts",
     "src/extraction/codex-command.ts",
     "src/extraction/providers.test.ts",
     "src/extraction/providers.ts",
+    "src/extraction/scip-project.test.ts",
+    "src/extraction/scip-project.ts",
     "src/extraction/semantic-process.test.ts",
     "src/extraction/semantic-process.ts",
     "src/governance/governance.test.ts",

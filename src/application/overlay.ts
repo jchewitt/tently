@@ -3,6 +3,7 @@ import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { promisify } from 'node:util';
 import type { ContextGraphConfig } from "../configuration/config.js";
+import { scipSourcePatterns } from '../configuration/scip-project.js';
 import type { ExtractionContext, GraphSnapshot } from "@weftlet/core";
 import { GitRepository } from "../repository/git.js";
 import { withCommittedTree } from "../repository/committed-tree.js";
@@ -37,7 +38,7 @@ export async function buildWorkingOverlay(
   if (changed.length > 500) throw new Error('Overlay exceeds the 500 changed-path bound');
   const captured: { path: string; content: Buffer | null }[] = [];
   const roots = [...config.codeRoots, ...config.semanticSources, ...config.evidenceRoots,
-    ...config.contractPatterns];
+    ...config.contractPatterns, ...scipSourcePatterns(config.scip.sourceProject)];
   const excluded: string[] = [];
   for (const path of changed) {
     if (!inWorkingScope(path, roots)) {

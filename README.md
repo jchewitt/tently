@@ -100,6 +100,9 @@ Copy `examples/generic-typescript` into a separate repository, or adapt its
 `context-graph.config.json` beside your own sources. Paths resolve relative to that configuration.
 Configure semantic source selection, TypeScript roots/indexer arguments, contract aliases,
 evidence roots, runtime evidence, storage and optional adapter explicitly.
+For tests excluded by the build config or workspace packages whose outputs are absent from
+committed archives, configure an [explicit TypeScript source project](docs/ADR-010-committed-source-indexing.md)
+with selected files and local package aliases.
 
 Install the locally packed core and toolkit tarballs together. The installed commands are
 `weftlet`, `weftlet-mcp`, and the compatible `context-graph` / `context-graph-mcp` aliases. For example, after preparing a release:

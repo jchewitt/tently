@@ -38,9 +38,12 @@ repository inventory and licenses; hosted Ubuntu passed the full 178-test public
 Browser and live authentication checks remain deferred. An advisory [self-repository impact
 evaluation](IMPACT-EVALUATION.md) now measures four realistic changes with real SCIP/RDF/SHACL
 and zero model assertions: 13/24 expected candidate files on the first page, 16/24 within
-three pages. Test/workspace indexing, prose linkage and broad query reachability remain gaps;
-live semantic quality is not established by this control. Next work should be separate, reviewed increments:
-improve test/workspace evidence and repeat the fixed cases; run a bounded live semantic comparison;
+three pages. The opt-in [committed source-project increment](ADR-010-committed-source-indexing.md)
+adds test/workspace indexing and improves the same cases to 15/24 first-page and 18/24
+three-page candidates, with typed relationships from 33 test files. Prose linkage and broad
+query reachability remain gaps; live semantic quality is not established by either control.
+Next work should be separate, reviewed increments:
+review explicit intent mappings and run a bounded live semantic comparison; improve query ranking;
 retain the passing hosted Ubuntu CI gate; validate fresh-cloud
 restoration; resolve the cloud-specific live provider block; add browser
 interaction/accessibility tests; benchmark larger RDF graphs; evaluate a second real provider.

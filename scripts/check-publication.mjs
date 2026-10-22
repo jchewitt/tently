@@ -80,6 +80,7 @@ try {
       for (const asset of [
         'dist/cli.js', 'dist/mcp.js',
         'dist/interfaces/cli.js', 'dist/interfaces/mcp.js', 'dist/extraction/static.js',
+        'dist/extraction/scip-project.js', 'dist/configuration/scip-project.js',
         'runtime-check.mjs', 'runtime-check.d.mts',
         'examples/generic-typescript/context-graph.config.json',
         'examples/generic-typescript/ontology/build.gradle',
@@ -166,6 +167,7 @@ try {
   }
   const consumer = join(destination, 'consumer');
   await mkdir(join(consumer, 'src'), { recursive: true });
+  await mkdir(join(consumer, 'test'), { recursive: true });
   const fileDependency = (path) => `file:${path.replaceAll('\\', '/')}`;
   await Promise.all([
     writeFile(join(consumer, '.gitignore'), 'node_modules/\n.context-graph/\n'),
@@ -207,6 +209,7 @@ try {
       )}\n`,
     ),
     writeFile(join(consumer, 'src', 'contract.ts'), 'export interface Greeting { text: string }\n'),
+    writeFile(join(consumer, 'test', 'contract.test.ts'), "import type { Greeting } from '@fixture/contracts';\nexport const tested: Greeting = { text: 'test' };\n"),
     writeFile(
       join(consumer, 'src', 'consumer.ts'),
       "import type { Greeting } from './contract.js';\nexport const greeting: Greeting = { text: 'hello' };\n",
@@ -253,6 +256,16 @@ const repository = {
 const facts = await new ScipSymbolExtractor(repository, index).extract(context);
 if (!index.digest || facts.length < 2) {
   throw new Error('Installed toolkit did not index and parse the SCIP fixture');
+}
+const sourceIndex = await new ScipTypeScriptIndexer({ version: '0.4.0', command: 'bundled-scip-typescript',
+  args: ['index', '--no-global-caches'], sourceProject: { include: ['src/**/*.ts', 'test/**/*.ts'],
+    aliases: { '@fixture/contracts': 'src/contract.ts' } } }, join(root, '.context-graph'))
+  .index({ ...context, snapshotId: 'publication-source-project' });
+const sourceFacts = await new ScipSymbolExtractor(repository, sourceIndex).extract(context);
+const definition = sourceFacts.find((fact) => fact.predicate === 'contains' && fact.object.label.includes('Greeting#'));
+if (!definition || !sourceFacts.some((fact) => fact.provenance.path === 'test/contract.test.ts' &&
+    fact.predicate === 'consumes' && fact.object.id === definition.object.id)) {
+  throw new Error('Installed source project did not link an excluded test through its local package alias');
 }
 const graph = new RdfEvidenceGraph({ manifest: { schemaVersion:1, repositoryId:'publication-smoke',ref:'HEAD',commitSha:context.commitSha,snapshotId:context.snapshotId,contentDigest:index.digest,generatedAt:'2026-01-01',ontologyVersion:'rdf-v1',extractorVersions:{},semanticModel:'none',semanticPromptVersion:'none',semanticArtifactKeys:[],scipIndexDigest:index.digest,rdfDigest:'' }, facts, invariants:[],runtimeEvidence:[],unresolved:[] });
 if (!(await graph.validate()).conforms) throw new Error('Installed SHACL validation failed');

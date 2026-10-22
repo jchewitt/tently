@@ -1,5 +1,6 @@
 // Modified for standalone extraction; see docs/extraction-manifest.json.
 import type { ContextGraphConfig } from "../configuration/config.js";
+import { scipSourcePatterns } from '../configuration/scip-project.js';
 import type {
   ExtractionContext,
   FactExtractor,
@@ -123,6 +124,7 @@ export class ContextGraphHydrator {
         ...config.codeRoots,
         ...config.evidenceRoots,
         ...contractPatternRoots(config.contractPatterns),
+        ...contractPatternRoots(scipSourcePatterns(config.scip.sourceProject)),
       ]),
     ];
     const delta = await repository.delta(baseSha, commitSha, allRoots);

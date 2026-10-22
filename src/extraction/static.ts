@@ -8,7 +8,9 @@ import { pathToFileURL } from 'node:url';
 
 import type { ContextGraphConfig } from "../configuration/config.js";
 import type { ExtractionContext, FactExtractor, GraphFact } from "@weftlet/core";
-import type { GitRepository } from "../repository/git.js";
+import { GitRepository } from "../repository/git.js";
+import { assertScipSourceProject, assertSourceProjectInvocation } from '../configuration/scip-project.js';
+import { prepareScipSourceProject } from './scip-project.js';
 import { matchesRepositoryGlob } from "../repository/glob.js";
 import { runProcess } from "../infrastructure/process.js";
 import { sha256, stableJson } from "../infrastructure/util.js";
@@ -31,6 +33,10 @@ export class ScipTypeScriptIndexer implements StaticIndexer {
   ) {}
 
   async index(context: ExtractionContext): Promise<ScipIndexResult> {
+    if (this.config.sourceProject !== undefined) {
+      assertScipSourceProject(this.config.sourceProject);
+      assertSourceProjectInvocation(this.config.command, this.config.args);
+    }
     const require = createRequire(import.meta.url);
     const destination = join(this.storageRoot, 'scip', `${context.snapshotId}.scip`);
     await mkdir(join(this.storageRoot, 'scip'), { recursive: true });
@@ -47,7 +53,9 @@ export class ScipTypeScriptIndexer implements StaticIndexer {
           ]
         : this.config.args;
     await withCommittedTree(context.repositoryRoot, context.commitSha, async (worktreeRoot) => {
-      await runProcess(command, args, worktreeRoot, {
+      const project = this.config.sourceProject ? await prepareScipSourceProject(worktreeRoot, this.config.sourceProject,
+        await new GitRepository(context.repositoryRoot).listAllFilesAt(context.commitSha)) : undefined;
+      await runProcess(command, project ? [...args, project] : args, worktreeRoot, {
         ...process.env,
         NODE_OPTIONS: process.env.NODE_OPTIONS ?? '--max-old-space-size=8192',
       });

@@ -14,7 +14,7 @@ import { ScipSymbolExtractor, ScipTypeScriptIndexer } from "../extraction/static
 import { SnapshotImpactQueryService } from "../graph/query.js";
 import { SavedEvidenceQueryService } from "./saved-evidence.js";
 
-it('replaces code relationships across edits, deletes and renames without advancing committed evidence', async () => {
+it.each([false, true])('replaces edits/deletes/renames without advancing committed evidence (source project=%s)', async (sourceProject) => {
   const root = await mkdtemp(join(tmpdir(), 'overlay-fixture-'));
   const execute = promisify(execFile);
   const git = (...args: string[]) => execute('git', args, { cwd: root });
@@ -30,6 +30,10 @@ it('replaces code relationships across edits, deletes and renames without advanc
   const config: ContextGraphConfig = JSON.parse(await readFile(
     new URL("../../examples/generic-typescript/context-graph.config.json", import.meta.url), 'utf8',
   ));
+  if (sourceProject) Object.assign(config, { codeRoots: [], evidenceRoots: [], scip: {
+    version: '0.4.0', command: 'bundled-scip-typescript', args: ['index', '--no-global-caches'],
+    sourceProject: { include: ['src/**/*.ts'], aliases: {} },
+  } });
   const repository = new GitRepository(root);
   const sha = await repository.resolveRef('HEAD');
   const storage = join(root, '.context-graph');
