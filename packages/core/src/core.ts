@@ -243,6 +243,8 @@ export interface ContextPack {
   readonly diagnostics: DiagnosticReport;
   readonly markdown: string;
   readonly exploration?: {
+    /** Ordering policy for this query; independent of the immutable snapshot's assembly version. */
+    readonly rankingVersion?: string;
     readonly returned: number;
     readonly reachableFacts: number;
     readonly maxDepth: number;

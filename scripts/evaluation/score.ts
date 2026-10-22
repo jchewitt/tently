@@ -70,6 +70,9 @@ export async function scoreImpactCase(
     if (page.snapshot.snapshotId !== snapshot.manifest.snapshotId ||
         page.snapshot.contentDigest !== snapshot.manifest.contentDigest ||
         page.snapshot.commitSha !== snapshot.manifest.commitSha) throw new Error('Evaluation snapshot changed between pages');
+    if (page.exploration?.rankingVersion !== first.exploration?.rankingVersion) {
+      throw new Error('Evaluation ranking version changed between pages');
+    }
     for (const fact of page.facts) {
       if (ids.has(fact.id)) throw new Error('Evaluation continuation repeated a fact');
       ids.add(fact.id); facts.push(fact);
@@ -97,7 +100,8 @@ export async function scoreImpactCase(
     id: item.id, task: item.task, changedFiles: item.changedFiles, budget,
     recall: { expected: targets.length, firstPage: targets.filter((target) => target.inFirstPage).length,
       examinedPages: retrieved, examinedFraction: retrieved / targets.length },
-    exploration: { pages, factsExamined: facts.length, reachableFacts: first.exploration?.reachableFacts,
+    exploration: { rankingVersion: first.exploration?.rankingVersion,
+      pages, factsExamined: facts.length, reachableFacts: first.exploration?.reachableFacts,
       depthLimitReached, pageBudgetExhausted: Boolean(page.exploration?.continuation),
       complete: page.exploration !== undefined && !depthLimitReached && !page.exploration.truncated,
       continuation: page.exploration?.continuation },

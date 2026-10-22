@@ -11,7 +11,7 @@ import { scoreImpactCase, validateSuite, type EvaluationSuite } from './score.js
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const evaluatorSources = ['scripts/evaluation/run.ts', 'scripts/evaluation/score.ts',
-  'evaluations/weftlet/document-only.mjs'];
+  'evaluations/weftlet/document-only.mjs', 'src/graph/query.ts', 'src/graph/ranking.ts'];
 const { values } = parseArgs({ options: {
   ref: { type: 'string', default: 'HEAD' }, snapshot: { type: 'string' },
   output: { type: 'string', default: '.context-graph/evaluation/weftlet/report.json' },
