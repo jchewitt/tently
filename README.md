@@ -150,6 +150,11 @@ ahead of repeated detail and shared-import context. Ranking changes ordering, no
 the reachable scope. Responses identify the ranking version; after a ranking upgrade, restart
 scans whose old continuation tokens are rejected. No snapshot refresh is needed for new ordering.
 
+[Relative import evidence](docs/ADR-013-relative-module-requests.md) now scopes module requests
+to the importing directory. An explicit refresh applies this extraction fix; saved snapshots
+keep their original facts. These requests remain unresolved evidence, while SCIP supplies
+typed-symbol links. Matching queue topic strings alone does not establish a downstream route.
+
 ## Evidence limits
 
 Approved owner documents govern intent. Code describes implementation; tests describe what

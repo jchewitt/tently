@@ -16,6 +16,7 @@ import { contractPatternRoots } from "../repository/glob.js";
 import type { OntologyCompiler } from "../extraction/ontology.js";
 import type { SemanticHydrator } from "../extraction/semantic.js";
 import type { ScipIndexResult, StaticIndexer } from "../extraction/static.js";
+import { repositoryFileExtractorIdentity } from '../extraction/static.js';
 import { sha256, stableJson } from "../infrastructure/util.js";
 import { documentLinkerIdentity, linkSemanticDocuments } from "../extraction/document.js";
 import { runtimeEvidenceFacts } from "../extraction/runtime-evidence.js";
@@ -145,7 +146,7 @@ export class ContextGraphHydrator {
         : undefined;
     const configurationDigest = sha256(stableJson(config));
     const scopeDigest = sha256(stableJson(selectedSemanticSources)).slice(0, 12);
-    const effectiveSuffix = ['graph-v3', `links-${documentLinkerIdentity.version}`,
+    const effectiveSuffix = ['graph-v4', `links-${documentLinkerIdentity.version}`, `files-${repositoryFileExtractorIdentity.version}`,
       configurationDigest.slice(0, 16), scopeDigest, baseSuffix, runtimeSuffix].filter(Boolean).join('-');
     const snapshotId = effectiveSuffix ? `${commitSha}-${effectiveSuffix}` : commitSha;
     const context: ExtractionContext = {
@@ -298,7 +299,7 @@ export class ContextGraphHydrator {
         scope: selectedSemanticSources,
         ontologyVersion: config.semantic.ontologyVersion,
         extractorVersions: {
-          assembly: 'standalone-graph-v3',
+          assembly: 'standalone-graph-v4',
           [documentLinkerIdentity.id]: documentLinkerIdentity.version,
           semantic: config.semantic.extractorVersion,
           scip: scip.version,

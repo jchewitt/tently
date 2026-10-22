@@ -265,15 +265,50 @@ one with one three-page distraction, and the older control remains 19/24 with on
 Their cases, reachable counts and snapshot bytes are unchanged. The new measurement adds
 evidence of limits; it does not claim a ranking improvement or broad semantic comprehension.
 
+## Fixed-input relative import correction
+
+[ADR 013](ADR-013-relative-module-requests.md) corrects generic request identity without
+changing ranking or guessing resolved implementation files. The two `./policy.js` imports
+now identify `./src/dispatch/policy.js` and `./src/refund/policy.js` separately. Equivalent
+relative spellings requesting the same location share canonical metadata. Bare imports keep
+their existing identities; opaque requests remain importer-local.
+
+Implementation `26c47d5b55f9390fe38b4928d1a8274eaf893583` refreshed the same committed inputs,
+using the same configuration, labels, ranking and 60-fact/three-page/depth-32 budget.
+The original records remain frozen; the comparison and cited witnesses are recorded in
+`evaluations/dispatch/relative-imports-baseline.json`.
+
+| Input | First-page candidates, before → after | Three-page candidates | Three-page distractions, before → after |
+| --- | ---: | ---: | ---: |
+| Dispatch | 15/16 → 15/16 | 15/16 → 15/16 | 7/7 → 0/7 |
+| Weftlet document links | 24/24 → 24/24 | 24/24 → 24/24 | 1/4 → 1/4 |
+
+Neither input returns a labeled distraction on page one. Dispatch reachability falls from
+214 to 183 facts for each case. Supplemental continuation exhausts 60/60/60/3 facts with no
+refund/audit distraction, while the archival consumer remains disconnected. Its six local
+facts are still present; correcting module identity does not establish topic-string routing.
+The missing `docs/policy.md` reference still has a diagnostic. Weftlet reachability remains
+3,648 facts with 180 returned per case; telemetry remains a later-page distraction.
+
+Hydration preserves fact counts (227 dispatch; 3,648 Weftlet) and all SCIP/document fact
+fields except the containing snapshot ID. It reuses three and six semantic control artifacts
+respectively, with zero extraction/model calls. A repeated dispatch refresh preserves snapshot
+identity/content and reuses all three again. All three legacy saved graphs retain their byte
+hashes, original scores and reachability when queried without hydration.
+
+New graph-v4/file-v2 identities keep corrected evidence distinct from old snapshots; draft
+overlay publication also binds the extractor version. Explicitly refresh to obtain the new
+facts. Saved queries do not silently repair old evidence. These synthetic/self-repository
+cases measure candidate retrieval and labeled distractions, not exhaustive precision,
+operational delivery, approved intent or safety of the current diff.
+
 ## Next bounded increments
 
-1. Correct generic relative-import identity so identical spellings in separate directories
-   do not join unrelated modules. Compare on the frozen dispatch input without tuning ranking
-   or removing the archival expectation; preserve existing snapshot readability.
+1. Evaluate an explicit source for operational routing separately from ranking. Preserve the
+   frozen dispatch control and its archival expectation; matching topic text alone must not
+   become a claim of delivery or complete static dependency coverage.
 2. Review the explicit mappings with a consumer owner, then compare a bounded Codex extraction
    against the control when ready. Preserve inferred/unreviewed assertion labels.
-3. Evaluate an explicit source for operational routing separately from ranking. The known
-   topic-string gap must not be silently treated as complete static dependency coverage.
 
 The six-stage public fixture continues testing extraction/linkage, queues, missing links,
 ambiguous intent and inconsistent identities. The evaluator's unit tests separately check

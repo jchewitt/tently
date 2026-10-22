@@ -1,0 +1,565 @@
+{
+  "schemaVersion": 1,
+  "status": "advisory-fixed-input-extraction-comparison",
+  "implementationCommit": "26c47d5b55f9390fe38b4928d1a8274eaf893583",
+  "measuredAt": "2026-10-22T21:15:45.131Z",
+  "runtime": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "rankingVersion": "proximity-diversity-v1",
+  "protocol": {
+    "originalDispatchRecord": "evaluations/dispatch/baseline.json",
+    "originalWeftletRecord": "evaluations/weftlet/ranking-baseline.json",
+    "frozenInputsAndEvaluatorDigestsPreserved": true,
+    "maxFacts": 60,
+    "maxPages": 3,
+    "maxDepth": 32,
+    "modelCalls": 0
+  },
+  "implementationSourceDigests": {
+    "src/extraction/module-request.ts": "c917ea002741fd48831a8ab84fc308036b49ee9f3e06f0a310d4bc1ad5c8d80a",
+    "src/extraction/static.ts": "94190f11651b21372b2c3a834e30cde5d333893bfad0b66755e5f698608d2fdb",
+    "src/application/hydrator.ts": "71113d92ef63363047c0b10d1354e5266b48153f42371cc98472b5bbf605dbb8",
+    "src/application/overlay.ts": "ae48ae5c7681e42ac06734101b40eaf34bbf20ce73e0fd36a2107e6406e49525",
+    "src/graph/query.ts": "ead61dfde748cd1a02c8b1a14dc729173a6b85ec3b8213af2bd5169c60b70253",
+    "src/graph/ranking.ts": "da29de6e0979bec8c3ca7f014bcfa9aa89cfbbf97d1bdb5a64d279b94e651fd5"
+  },
+  "comparisons": [
+    {
+      "label": "dispatch",
+      "evidenceCommit": "fa902165a1f212a6d3245c847e1ab9b64a69715b",
+      "suiteDigest": "3f41615755b80e3bd561f5b28c3677bf95e6a94eead5571e9b1ec882a3d8dc34",
+      "configurationDigest": "3f17b3a8ad39bbd638b7032d3a5e5f95119a8d5d4d564e82a67768b4093fd0aa",
+      "before": {
+        "snapshotId": "fa902165a1f212a6d3245c847e1ab9b64a69715b-graph-v3-links-2.0.0-3f17b3a8ad39bbd6-f5177df64ec0",
+        "contentDigest": "60cbaaf9b9c98fa778199730cfcddf4e52245655448fe4ae16d779b7f7c8c75c",
+        "snapshotFileSha256": "267e2dea2ea98026d8345347f5c9d3030efbb757a6751a52e5a720795e8a1519",
+        "summary": {
+          "expected": 16,
+          "firstPage": 15,
+          "threePages": 15,
+          "distractionLabels": 7,
+          "firstPageDistractions": 0,
+          "threePageDistractions": 7
+        }
+      },
+      "after": {
+        "snapshotId": "fa902165a1f212a6d3245c847e1ab9b64a69715b-graph-v4-links-2.0.0-files-2.0.0-3f17b3a8ad39bbd6-f5177df64ec0",
+        "contentDigest": "28ecf62b15dce70d9c39e2aacfae2c759a028a6e65a5fbb2a698697fea6c2860",
+        "snapshotFileSha256": "37f943661b51696030ccc9ed918243d70e8c5d53f67c29f9b4945247776c8ca5",
+        "reportDigest": "8a21ebd0cc87fd15875019c49b7bbcd797449cc09937b9a0cc51136a74dd3123",
+        "summary": {
+          "expected": 16,
+          "firstPage": 15,
+          "threePages": 15,
+          "distractionLabels": 7,
+          "firstPageDistractions": 0,
+          "threePageDistractions": 0
+        },
+        "hydration": {
+          "extracted": 0,
+          "reused": 3
+        },
+        "coverage": {
+          "totalFacts": 227,
+          "extractorCounts": {
+            "scip-symbol-extractor": 164,
+            "repository-file-extractor": 50,
+            "document-linker": 13
+          },
+          "semanticAssertions": 0,
+          "runtimeReferences": 0,
+          "approvedIntentSources": []
+        },
+        "results": [
+          {
+            "id": "upstream-request-contract",
+            "budget": {
+              "maxFacts": 60,
+              "maxDepth": 32,
+              "maxPages": 3
+            },
+            "recall": {
+              "expected": 6,
+              "firstPage": 6,
+              "examinedPages": 6,
+              "examinedFraction": 1
+            },
+            "exploration": {
+              "rankingVersion": "proximity-diversity-v1",
+              "pages": 3,
+              "factsExamined": 180,
+              "reachableFacts": 183,
+              "depthLimitReached": false,
+              "pageBudgetExhausted": true,
+              "complete": false
+            },
+            "missingTargets": [],
+            "distractions": [
+              {
+                "path": "src/refund/policy.ts",
+                "inSnapshot": true,
+                "inFirstPage": false,
+                "inExaminedPages": false
+              },
+              {
+                "path": "src/audit/consumer.ts",
+                "inSnapshot": true,
+                "inFirstPage": false,
+                "inExaminedPages": false
+              }
+            ]
+          },
+          {
+            "id": "async-submission-consumers",
+            "budget": {
+              "maxFacts": 60,
+              "maxDepth": 32,
+              "maxPages": 3
+            },
+            "recall": {
+              "expected": 6,
+              "firstPage": 5,
+              "examinedPages": 5,
+              "examinedFraction": 0.8333333333333334
+            },
+            "exploration": {
+              "rankingVersion": "proximity-diversity-v1",
+              "pages": 3,
+              "factsExamined": 180,
+              "reachableFacts": 183,
+              "depthLimitReached": false,
+              "pageBudgetExhausted": true,
+              "complete": false
+            },
+            "missingTargets": [
+              {
+                "path": "src/archive/consumer.ts",
+                "outcome": "not-retrieved-within-budget"
+              }
+            ],
+            "distractions": [
+              {
+                "path": "src/refund/planner.ts",
+                "inSnapshot": true,
+                "inFirstPage": false,
+                "inExaminedPages": false
+              },
+              {
+                "path": "src/audit/consumer.ts",
+                "inSnapshot": true,
+                "inFirstPage": false,
+                "inExaminedPages": false
+              }
+            ]
+          },
+          {
+            "id": "same-name-policy",
+            "budget": {
+              "maxFacts": 60,
+              "maxDepth": 32,
+              "maxPages": 3
+            },
+            "recall": {
+              "expected": 4,
+              "firstPage": 4,
+              "examinedPages": 4,
+              "examinedFraction": 1
+            },
+            "exploration": {
+              "rankingVersion": "proximity-diversity-v1",
+              "pages": 3,
+              "factsExamined": 180,
+              "reachableFacts": 183,
+              "depthLimitReached": false,
+              "pageBudgetExhausted": true,
+              "complete": false
+            },
+            "missingTargets": [],
+            "distractions": [
+              {
+                "path": "src/refund/policy.ts",
+                "inSnapshot": true,
+                "inFirstPage": false,
+                "inExaminedPages": false
+              },
+              {
+                "path": "src/refund/planner.ts",
+                "inSnapshot": true,
+                "inFirstPage": false,
+                "inExaminedPages": false
+              },
+              {
+                "path": "src/audit/consumer.ts",
+                "inSnapshot": true,
+                "inFirstPage": false,
+                "inExaminedPages": false
+              }
+            ]
+          }
+        ]
+      },
+      "scipAndDocumentFactsUnchangedExceptContainingSnapshotId": true,
+      "legacySnapshotBytesUnchanged": true
+    },
+    {
+      "label": "weftlet-document-links",
+      "evidenceCommit": "dcef64001d8d47cd1aeb4c1434992612158a104a",
+      "suiteDigest": "104a3c4b46955b1bbdde3949e8784eedada271dee5245dcada2eebd578069ef7",
+      "configurationDigest": "42f885befb5ce881fcf1dafd8a215ed5e45171930cbecae0787238680e98faf8",
+      "before": {
+        "snapshotId": "dcef64001d8d47cd1aeb4c1434992612158a104a-graph-v3-links-2.0.0-42f885befb5ce881-4f68cb388720",
+        "contentDigest": "f0c8169f154f0a02a72105b13e8cb757a74eb99b184657a383ef2dd4f07ff417",
+        "snapshotFileSha256": "58e2a957725baab8315920729aba96a0574891f1336eab9b7f9a37f534e6c670",
+        "summary": {
+          "expected": 24,
+          "firstPage": 24,
+          "threePages": 24,
+          "distractionLabels": 4,
+          "firstPageDistractions": 0,
+          "threePageDistractions": 1
+        }
+      },
+      "after": {
+        "snapshotId": "dcef64001d8d47cd1aeb4c1434992612158a104a-graph-v4-links-2.0.0-files-2.0.0-42f885befb5ce881-4f68cb388720",
+        "contentDigest": "3d01e7429e054312e5985ad3a3abad3fde6d516118d0a229881212f19f5945df",
+        "snapshotFileSha256": "7eb6722068ed446964cf70690662522432d6c7a74e12a190d4a2febdc242f37a",
+        "reportDigest": "67f5a19cd3d785348b52f1f45be79e08b4aaf8a5f4417a23be6f097af797cd95",
+        "summary": {
+          "expected": 24,
+          "firstPage": 24,
+          "threePages": 24,
+          "distractionLabels": 4,
+          "firstPageDistractions": 0,
+          "threePageDistractions": 1
+        },
+        "hydration": {
+          "extracted": 0,
+          "reused": 6
+        },
+        "coverage": {
+          "totalFacts": 3648,
+          "extractorCounts": {
+            "scip-symbol-extractor": 3065,
+            "repository-file-extractor": 550,
+            "document-linker": 33
+          },
+          "semanticAssertions": 0,
+          "runtimeReferences": 0,
+          "approvedIntentSources": []
+        },
+        "results": [
+          {
+            "id": "atomic-publication",
+            "budget": {
+              "maxFacts": 60,
+              "maxDepth": 32,
+              "maxPages": 3
+            },
+            "recall": {
+              "expected": 6,
+              "firstPage": 6,
+              "examinedPages": 6,
+              "examinedFraction": 1
+            },
+            "exploration": {
+              "rankingVersion": "proximity-diversity-v1",
+              "pages": 3,
+              "factsExamined": 180,
+              "reachableFacts": 3648,
+              "depthLimitReached": false,
+              "pageBudgetExhausted": true,
+              "complete": false
+            },
+            "missingTargets": [],
+            "distractions": [
+              {
+                "path": "src/extraction/telemetry.ts",
+                "inSnapshot": true,
+                "inFirstPage": false,
+                "inExaminedPages": true
+              }
+            ]
+          },
+          {
+            "id": "impact-query",
+            "budget": {
+              "maxFacts": 60,
+              "maxDepth": 32,
+              "maxPages": 3
+            },
+            "recall": {
+              "expected": 6,
+              "firstPage": 6,
+              "examinedPages": 6,
+              "examinedFraction": 1
+            },
+            "exploration": {
+              "rankingVersion": "proximity-diversity-v1",
+              "pages": 3,
+              "factsExamined": 180,
+              "reachableFacts": 3648,
+              "depthLimitReached": false,
+              "pageBudgetExhausted": true,
+              "complete": false
+            },
+            "missingTargets": [],
+            "distractions": [
+              {
+                "path": "src/extraction/codex-command.ts",
+                "inSnapshot": true,
+                "inFirstPage": false,
+                "inExaminedPages": false
+              }
+            ]
+          },
+          {
+            "id": "codex-launcher",
+            "budget": {
+              "maxFacts": 60,
+              "maxDepth": 32,
+              "maxPages": 3
+            },
+            "recall": {
+              "expected": 6,
+              "firstPage": 6,
+              "examinedPages": 6,
+              "examinedFraction": 1
+            },
+            "exploration": {
+              "rankingVersion": "proximity-diversity-v1",
+              "pages": 3,
+              "factsExamined": 180,
+              "reachableFacts": 3648,
+              "depthLimitReached": false,
+              "pageBudgetExhausted": true,
+              "complete": false
+            },
+            "missingTargets": [],
+            "distractions": [
+              {
+                "path": "src/visualization/viewer-interaction.ts",
+                "inSnapshot": true,
+                "inFirstPage": false,
+                "inExaminedPages": false
+              }
+            ]
+          },
+          {
+            "id": "working-content",
+            "budget": {
+              "maxFacts": 60,
+              "maxDepth": 32,
+              "maxPages": 3
+            },
+            "recall": {
+              "expected": 6,
+              "firstPage": 6,
+              "examinedPages": 6,
+              "examinedFraction": 1
+            },
+            "exploration": {
+              "rankingVersion": "proximity-diversity-v1",
+              "pages": 3,
+              "factsExamined": 180,
+              "reachableFacts": 3648,
+              "depthLimitReached": false,
+              "pageBudgetExhausted": true,
+              "complete": false
+            },
+            "missingTargets": [],
+            "distractions": [
+              {
+                "path": "src/extraction/codex-command.ts",
+                "inSnapshot": true,
+                "inFirstPage": false,
+                "inExaminedPages": false
+              }
+            ]
+          }
+        ]
+      },
+      "scipAndDocumentFactsUnchangedExceptContainingSnapshotId": true,
+      "legacySnapshotBytesUnchanged": true
+    }
+  ],
+  "dispatchRepeat": {
+    "hydration": {
+      "extracted": 0,
+      "reused": 3
+    },
+    "snapshotIdentityAndContentUnchanged": true
+  },
+  "supplementalDispatchDiagnosis": {
+    "snapshotId": "fa902165a1f212a6d3245c847e1ab9b64a69715b-graph-v4-links-2.0.0-files-2.0.0-3f17b3a8ad39bbd6-f5177df64ec0",
+    "contentDigest": "28ecf62b15dce70d9c39e2aacfae2c759a028a6e65a5fbb2a698697fea6c2860",
+    "fullContinuation": {
+      "case": "async-submission-consumers",
+      "pages": [
+        60,
+        60,
+        60,
+        3
+      ],
+      "returned": 183,
+      "uniqueFacts": 183,
+      "archiveFactsInSnapshot": 6,
+      "archiveFactsReturned": 0,
+      "distractionsReturned": 0
+    },
+    "unchanged": {
+      "comparison": "All fact fields except containing snapshotId",
+      "scipFacts": 164,
+      "documentFacts": 13,
+      "scipIndexDigest": true
+    },
+    "policyRequestWitnesses": [
+      {
+        "id": "3e50776a3c5b020d71f196e3ec3ff114e07002f5c46272e536a6fc5dad28e5fc",
+        "subject": {
+          "id": "component:file:src/dispatch/planner.ts",
+          "kind": "Component",
+          "label": "src/dispatch/planner.ts",
+          "attributes": {
+            "scipIndexDigest": "666e9cf042344aaa7ae9dd06971abcd8604c24390b1816d77b32f5b3bb0031e0"
+          }
+        },
+        "predicate": "consumes",
+        "object": {
+          "id": "contract:module:./src%2Fdispatch%2Fpolicy.js",
+          "kind": "Contract",
+          "label": "./src/dispatch/policy.js",
+          "attributes": {
+            "identityScope": "repository-relative-request",
+            "resolution": "unresolved"
+          }
+        },
+        "provenance": {
+          "path": "src/dispatch/planner.ts",
+          "startLine": 4,
+          "endLine": 4,
+          "digest": "336c46e8be27db84ffae305012ad487bb2af6ab4f2c1eab4f0596255dbded553",
+          "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b"
+        },
+        "extractor": {
+          "id": "repository-file-extractor",
+          "version": "2.0.0"
+        },
+        "confidence": 1,
+        "snapshotId": "fa902165a1f212a6d3245c847e1ab9b64a69715b-graph-v4-links-2.0.0-files-2.0.0-3f17b3a8ad39bbd6-f5177df64ec0"
+      },
+      {
+        "id": "7e40929e1f3a49a99d77e3943e862b10e6a5cae2e7e88ee3b9d8aca93a47c100",
+        "subject": {
+          "id": "component:file:src/refund/planner.ts",
+          "kind": "Component",
+          "label": "src/refund/planner.ts",
+          "attributes": {
+            "scipIndexDigest": "666e9cf042344aaa7ae9dd06971abcd8604c24390b1816d77b32f5b3bb0031e0"
+          }
+        },
+        "predicate": "consumes",
+        "object": {
+          "id": "contract:module:./src%2Frefund%2Fpolicy.js",
+          "kind": "Contract",
+          "label": "./src/refund/policy.js",
+          "attributes": {
+            "identityScope": "repository-relative-request",
+            "resolution": "unresolved"
+          }
+        },
+        "provenance": {
+          "path": "src/refund/planner.ts",
+          "startLine": 1,
+          "endLine": 1,
+          "digest": "28b1e047dea447acd46e28e91fbfe3d7083d72e0109cc7707ed17e56df526d68",
+          "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b"
+        },
+        "extractor": {
+          "id": "repository-file-extractor",
+          "version": "2.0.0"
+        },
+        "confidence": 1,
+        "snapshotId": "fa902165a1f212a6d3245c847e1ab9b64a69715b-graph-v4-links-2.0.0-files-2.0.0-3f17b3a8ad39bbd6-f5177df64ec0"
+      }
+    ],
+    "snapshotDiagnostics": [
+      {
+        "id": "89aaeceabd2b76094ab9e380edc4d55b999ff1693a26e97a11ac7d1be2a3cc9e",
+        "kind": "implementationGaps",
+        "reason": "Document reference policy.md resolves to docs/policy.md, which is not a committed file. Directory references are not expanded.",
+        "provenance": [
+          {
+            "path": "docs/dispatch-policy.md",
+            "startLine": 10,
+            "endLine": 10,
+            "digest": "da1edfbcb27f7ca451e898ad92fca9635ad53aae8dc8ab5ffefd076b11170f2b",
+            "commitSha": "fa902165a1f212a6d3245c847e1ab9b64a69715b"
+          }
+        ],
+        "relatedNodeIds": [
+          "document:docs/dispatch-policy.md",
+          "document:docs/policy.md"
+        ],
+        "evidenceScope": "source"
+      }
+    ]
+  },
+  "savedEvidenceRegressions": [
+    {
+      "label": "dispatch",
+      "snapshotId": "fa902165a1f212a6d3245c847e1ab9b64a69715b-graph-v3-links-2.0.0-3f17b3a8ad39bbd6-f5177df64ec0",
+      "snapshotFileSha256": "267e2dea2ea98026d8345347f5c9d3030efbb757a6751a52e5a720795e8a1519",
+      "summary": {
+        "expected": 16,
+        "firstPage": 15,
+        "threePages": 15,
+        "distractionLabels": 7,
+        "firstPageDistractions": 0,
+        "threePageDistractions": 7
+      },
+      "savedOnly": true,
+      "metricsAndBytesUnchanged": true
+    },
+    {
+      "label": "weftlet-document-links",
+      "snapshotId": "dcef64001d8d47cd1aeb4c1434992612158a104a-graph-v3-links-2.0.0-42f885befb5ce881-4f68cb388720",
+      "snapshotFileSha256": "58e2a957725baab8315920729aba96a0574891f1336eab9b7f9a37f534e6c670",
+      "summary": {
+        "expected": 24,
+        "firstPage": 24,
+        "threePages": 24,
+        "distractionLabels": 4,
+        "firstPageDistractions": 0,
+        "threePageDistractions": 1
+      },
+      "savedOnly": true,
+      "metricsAndBytesUnchanged": true
+    },
+    {
+      "label": "weftlet-older-source",
+      "snapshotId": "eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d-graph-v2-42f885befb5ce881-4f68cb388720",
+      "snapshotFileSha256": "6cfc77bf40228b0e86ab65dd5621008eb1ed7e93c8ae5c5a4c5fe25a4a281041",
+      "summary": {
+        "expected": 24,
+        "firstPage": 19,
+        "threePages": 19,
+        "distractionLabels": 4,
+        "firstPageDistractions": 0,
+        "threePageDistractions": 1
+      },
+      "savedOnly": true,
+      "metricsAndBytesUnchanged": true
+    }
+  ],
+  "limitations": [
+    "Synthetic dispatch cases and self-repository Weftlet cases are not an independent external benchmark or an exhaustive precision measure.",
+    "Candidate-file recall does not prove causality, current-diff validity or safe merging.",
+    "Relative requests identify lexical requested locations, not resolved/existing implementation files. Bare imports retain their existing identity.",
+    "The archival consumer still has no extracted operational route; all 183 reachable facts were examined separately without finding it.",
+    "The extraction comparison preserves SCIP/document fact fields except the containing snapshotId; newly versioned generic file facts intentionally have new IDs.",
+    "No semantic model assertions, approved intent sources or runtime references were added. Browser and live authentication validation remain separate."
+  ]
+}
