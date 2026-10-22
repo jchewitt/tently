@@ -11,6 +11,7 @@ import type { ExtractionContext, FactExtractor, GraphFact } from "@weftlet/core"
 import { GitRepository } from "../repository/git.js";
 import { assertScipSourceProject, assertSourceProjectInvocation } from '../configuration/scip-project.js';
 import { prepareScipSourceProject } from './scip-project.js';
+import { moduleRequestNode } from './module-request.js';
 import { matchesRepositoryGlob } from "../repository/glob.js";
 import { runProcess } from "../infrastructure/process.js";
 import { sha256, stableJson } from "../infrastructure/util.js";
@@ -238,8 +239,10 @@ export class ScipSymbolExtractor implements FactExtractor {
   }
 }
 
+export const repositoryFileExtractorIdentity = { id: 'repository-file-extractor', version: '2.0.0' } as const;
+
 export class RepositoryFileExtractor implements FactExtractor {
-  readonly identity = { id: 'repository-file-extractor', version: '1.0.0' };
+  readonly identity = repositoryFileExtractorIdentity;
 
   constructor(
     private readonly repository: GitRepository,
@@ -275,7 +278,7 @@ export class RepositoryFileExtractor implements FactExtractor {
         commitSha: context.commitSha,
       };
       facts.push({
-        id: sha256(stableJson({ project, component, provenance })),
+        id: sha256(stableJson({ project, component, provenance, extractor: this.identity })),
         subject: project,
         predicate: 'contains',
         object: component,
@@ -288,14 +291,10 @@ export class RepositoryFileExtractor implements FactExtractor {
       for (const [index, line] of lines.entries()) {
         const imported = line.match(/(?:from\s+|import\s*\()['"]([^'"]+)['"]/)?.[1];
         if (!imported) continue;
-        const contract = {
-          id: `contract:module:${imported}`,
-          kind: 'Contract' as const,
-          label: imported,
-        };
+        const contract = moduleRequestNode(path, imported);
         const importProvenance = { ...provenance, startLine: index + 1, endLine: index + 1 };
         facts.push({
-          id: sha256(stableJson({ component, imported, importProvenance })),
+          id: sha256(stableJson({ component, module: contract.id, importProvenance, extractor: this.identity })),
           subject: component,
           predicate: 'consumes',
           object: contract,

@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "7e718f972403ab14e6756b4146f146e5e9ec32668f8bf699748b3d502679be94"
+      "destinationSha256": "97348657bed913168f3066963fc59f86eb6b7d06e86a66f1c0bc31be026c3778"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -311,14 +311,14 @@
       "destinationPath": "src/application/hydrator.test.ts",
       "sourceSha256": "95f20a526fe69ce3a506ef01da1c20827e09d631a34126e781a07979cc43de07",
       "modified": true,
-      "destinationSha256": "e9d66af02991f4c1f2f366b7c389af2da34f48f996f02d9acd8e19448bebc658"
+      "destinationSha256": "bbd264bf4224632f3e0fea81718910fab4dd5f8e79680faccf61059219bf9dde"
     },
     {
       "sourcePath": "tools/context-graph/src/hydrator.ts",
       "destinationPath": "src/application/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
       "modified": true,
-      "destinationSha256": "149dbd8b7e466c6bedccdce47f514fd1a89f6c0331cc7351db5b3382b9855071"
+      "destinationSha256": "71113d92ef63363047c0b10d1354e5266b48153f42371cc98472b5bbf605dbb8"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",
@@ -479,7 +479,7 @@
       "destinationPath": "src/extraction/static.ts",
       "sourceSha256": "f8dcff3e10361314c06911dc7cec1e2cb0f8d9af68a6c61a30b2a741c5c3a385",
       "modified": true,
-      "destinationSha256": "73d853b79aa58dde180c9278ba03ca82e17c74b751b683909b9254d093130d28"
+      "destinationSha256": "94190f11651b21372b2c3a834e30cde5d333893bfad0b66755e5f698608d2fdb"
     },
     {
       "sourcePath": "tools/context-graph/src/storage.ts",
@@ -583,6 +583,7 @@
     ".changeset/config.json",
     ".changeset/impact-evaluation-baseline.md",
     ".changeset/proximity-impact-ranking.md",
+    ".changeset/relative-module-requests.md",
     ".changeset/release-plan.json",
     ".changeset/windows-consumer-reliability.md",
     ".github/workflows/check.yml",
@@ -610,6 +611,7 @@
     "docs/ADR-010-committed-source-indexing.md",
     "docs/ADR-011-explicit-document-links.md",
     "docs/ADR-012-impact-ranking.md",
+    "docs/ADR-013-relative-module-requests.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/ENVIRONMENT-VALIDATION.md",
     "docs/IMPACT-EVALUATION.md",
@@ -736,6 +738,8 @@
     "src/extraction/codex-command.ts",
     "src/extraction/document-references.ts",
     "src/extraction/document.test.ts",
+    "src/extraction/module-request.test.ts",
+    "src/extraction/module-request.ts",
     "src/extraction/providers.test.ts",
     "src/extraction/providers.ts",
     "src/extraction/scip-project.test.ts",

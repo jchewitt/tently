@@ -46,7 +46,7 @@ it.each([false, true])('replaces edits/deletes/renames without advancing committ
     manifest: {
       schemaVersion: 1, repositoryId: config.repositoryId, ref: 'HEAD', commitSha: sha,
       snapshotId: sha, configurationDigest: sha256(stableJson(config)), contentDigest: 'base',
-      ontologyVersion: '1', extractorVersions: {}, semanticModel: 'test',
+      ontologyVersion: '1', extractorVersions: { 'repository-file-extractor': '1.0.0', 'fixture-source': 'original' }, semanticModel: 'test',
       semanticPromptVersion: '1', generatedAt: '', semanticArtifactKeys: [],
       scipIndexDigest: '', rdfDigest: '',
     },
@@ -61,8 +61,40 @@ it.each([false, true])('replaces edits/deletes/renames without advancing committ
   expect(first.facts.every((fact) => fact.authority === 'draft')).toBe(true);
   expect(first.facts.some((fact) => fact.provenance.path === 'src/input.ts')).toBe(false);
   expect(first.facts.some((fact) => fact.provenance.path === 'src/contract.ts')).toBe(true);
+  expect(first.manifest.extractorVersions).toEqual({
+    'repository-file-extractor': '2.0.0', 'fixture-source': 'original',
+  });
+  if (!sourceProject) {
+    const imports = first.facts.filter((fact) => fact.extractor.id === 'repository-file-extractor' &&
+      fact.predicate === 'consumes');
+    expect(imports).toHaveLength(1);
+    expect(imports[0]?.extractor.version).toBe('2.0.0');
+    expect(imports[0]?.object).toMatchObject({ id: 'contract:module:./src%2Fcontract',
+      attributes: { identityScope: 'repository-relative-request', resolution: 'unresolved' } });
+  }
+  // Simulate the prior publication identity for these exact captured bytes. The old snapshot
+  // must coexist with a current extraction, including when the base advertises version 1.
+  const priorOverlayId = `${sha}-overlay-${sha256(base.manifest.contentDigest + first.manifest.overlayDigest).slice(0, 32)}`;
+  expect(first.manifest.snapshotId).not.toBe(priorOverlayId);
+  expect(first.manifest.overlayDigest).toBe(sha256(stableJson({ version: 2, ...first.manifest.overlayCapture })));
+  const priorOverlay: GraphSnapshot = { ...first,
+    manifest: { ...first.manifest, snapshotId: priorOverlayId, contentDigest: 'prior-overlay',
+      extractorVersions: { ...base.manifest.extractorVersions } },
+    facts: first.facts.map((fact) => {
+      const priorFact = { ...fact, snapshotId: priorOverlayId };
+      if (fact.extractor.id !== 'repository-file-extractor') return priorFact;
+      return { ...priorFact, extractor: { ...fact.extractor, version: '1.0.0' },
+        ...(fact.predicate === 'consumes'
+          ? { object: { ...fact.object, id: 'contract:module:./contract', label: './contract' } } : {}) };
+    }),
+  };
+  await store.write(priorOverlay);
   const queries = new SavedEvidenceQueryService(new SnapshotImpactQueryService(store, 'default'),
     repository, sha256(stableJson(config)));
+  const priorPack = await queries.scan({ snapshotId: priorOverlayId });
+  expect(priorPack.snapshot.snapshotId).toBe(priorOverlayId);
+  if (!sourceProject) expect(priorPack.facts.some((fact) => fact.extractor.version === '1.0.0' &&
+    fact.object.id === 'contract:module:./contract')).toBe(true);
   const scan = () => queries.scan({ snapshotId: first.manifest.snapshotId });
   expect((await scan()).evidenceState).toMatchObject({
     stale: false, overlayFreshness: 'current', excludedWorkingChanges: [],
@@ -90,6 +122,8 @@ it.each([false, true])('replaces edits/deletes/renames without advancing committ
   });
   const repeated = await buildWorkingOverlay(repository, config, store, storage, sha, 'agent-b');
   expect(repeated.manifest.snapshotId).toBe(first.manifest.snapshotId);
+  expect(repeated.manifest.contentDigest).toBe(first.manifest.contentDigest);
+  expect(await store.read(priorOverlayId)).toEqual(priorOverlay);
   await rm(join(root, 'src/consumer.ts'));
   const deleted = await buildWorkingOverlay(repository, config, store, storage, sha);
   expect(deleted.manifest.overlayDigest).not.toBe(first.manifest.overlayDigest);

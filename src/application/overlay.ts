@@ -8,7 +8,8 @@ import type { ExtractionContext, GraphSnapshot } from "@weftlet/core";
 import { GitRepository } from "../repository/git.js";
 import { withCommittedTree } from "../repository/committed-tree.js";
 import { FileSnapshotStore } from "../storage/storage.js";
-import { RepositoryContractExtractor, RepositoryFileExtractor, ScipSymbolExtractor, ScipTypeScriptIndexer } from "../extraction/static.js";
+import { RepositoryContractExtractor, RepositoryFileExtractor, ScipSymbolExtractor, ScipTypeScriptIndexer,
+  repositoryFileExtractorIdentity } from "../extraction/static.js";
 import { sha256, stableJson } from "../infrastructure/util.js";
 import { contextPackEvidenceAuthority } from "../graph/query.js";
 import { inWorkingScope, readWorkingContent } from "../repository/working-content.js";
@@ -53,7 +54,12 @@ export async function buildWorkingOverlay(
     sourcePatterns: roots, excludedPaths: excluded,
   };
   const overlayDigest = sha256(stableJson({ version: 2, ...overlayCapture }));
-  const snapshotId = `${head}-overlay-${sha256(base.manifest.contentDigest + overlayDigest).slice(0, 32)}`;
+  // Capture identity describes the same working bytes across extractor upgrades. Publication
+  // identity also binds the extractor so rebuilding an old base cannot replace an old overlay.
+  const snapshotId = `${head}-overlay-${sha256(stableJson({
+    baseContentDigest: base.manifest.contentDigest, overlayDigest,
+    repositoryFileExtractor: repositoryFileExtractorIdentity,
+  })).slice(0, 32)}`;
   const affected = new Set(captured.map((file) => file.path));
   const facts = await withCommittedTree(repository.root, head, async (root) => {
     for (const file of captured) {
@@ -104,6 +110,8 @@ export async function buildWorkingOverlay(
     ...base,
     manifest: {
       ...base.manifest, snapshotId, baseSha: head, overlayDigest, overlayCapture,
+      extractorVersions: { ...base.manifest.extractorVersions,
+        [repositoryFileExtractorIdentity.id]: repositoryFileExtractorIdentity.version },
       generatedAt: new Date().toISOString(), contentDigest: sha256(stableJson(allFacts)),
     },
     facts: allFacts,

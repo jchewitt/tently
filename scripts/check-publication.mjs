@@ -81,7 +81,7 @@ try {
         'dist/cli.js', 'dist/mcp.js',
         'dist/interfaces/cli.js', 'dist/interfaces/mcp.js', 'dist/extraction/static.js',
         'dist/extraction/scip-project.js', 'dist/configuration/scip-project.js',
-        'dist/extraction/document.js', 'dist/extraction/document-references.js',
+        'dist/extraction/document.js', 'dist/extraction/document-references.js', 'dist/extraction/module-request.js',
         'dist/graph/ranking.js',
         'runtime-check.mjs', 'runtime-check.d.mts',
         'examples/generic-typescript/context-graph.config.json',
@@ -231,7 +231,7 @@ try {
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { ScipSymbolExtractor, ScipTypeScriptIndexer } from ${JSON.stringify(staticModule)};
+import { ScipSymbolExtractor, ScipTypeScriptIndexer, RepositoryFileExtractor } from ${JSON.stringify(staticModule)};
 import { linkSemanticDocuments } from ${JSON.stringify(new URL('document.js', staticModule).href)};
 import { renderContextPackVisualization, RdfEvidenceGraph, CG, SnapshotImpactQueryService } from ${JSON.stringify(toolkitModule)};
 
@@ -280,7 +280,14 @@ if (documents.diagnostics.length || documents.facts.length !== 2 ||
     !documents.facts.some((fact) => fact.object.kind === 'Evidence' && fact.provenance.startLine === 2)) {
   throw new Error('Installed Markdown linker did not preserve targets and citations');
 }
-const facts = [...sourceFacts, ...documents.facts];
+const fileFacts = await new RepositoryFileExtractor({ ...repository,
+  listFilesAt: async () => ['src/consumer.ts'] }, ['src'], sourceIndex.digest).extract(context);
+const moduleRequest = fileFacts.find((fact) => fact.predicate === 'consumes');
+if (moduleRequest?.object.id !== 'contract:module:./src%2Fcontract.js' ||
+    moduleRequest.object.attributes?.resolution !== 'unresolved' || moduleRequest.extractor.version !== '2.0.0') {
+  throw new Error('Installed file extractor did not preserve repository-relative request identity');
+}
+const facts = [...sourceFacts, ...documents.facts, ...fileFacts];
 const snapshot = { manifest: { schemaVersion:1, repositoryId:'publication-smoke',ref:'HEAD',commitSha:context.commitSha,snapshotId:context.snapshotId,contentDigest:index.digest,generatedAt:'2026-01-01',ontologyVersion:'rdf-v1',extractorVersions:{},semanticModel:'none',semanticPromptVersion:'none',semanticArtifactKeys:[],scipIndexDigest:index.digest,rdfDigest:'' }, facts, invariants:[],runtimeEvidence:[],unresolved:[] };
 const graph = new RdfEvidenceGraph(snapshot);
 if (!(await graph.validate()).conforms) throw new Error('Installed SHACL validation failed');
