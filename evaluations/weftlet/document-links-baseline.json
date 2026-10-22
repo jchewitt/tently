@@ -1,0 +1,320 @@
+{
+  "schemaVersion": 1,
+  "status": "advisory-explicit-links-not-a-quality-pass",
+  "measuredAt": "2026-10-22T18:14:08.581Z",
+  "implementationCommit": "90726be3751cf23de7f1cdd595d1e9ddb151b139",
+  "evidenceCommit": "dcef64001d8d47cd1aeb4c1434992612158a104a",
+  "configurationFile": "evaluations/weftlet/source-project.config.json",
+  "configurationDigest": "42f885befb5ce881fcf1dafd8a215ed5e45171930cbecae0787238680e98faf8",
+  "suiteDigest": "104a3c4b46955b1bbdde3949e8784eedada271dee5245dcada2eebd578069ef7",
+  "snapshotId": "dcef64001d8d47cd1aeb4c1434992612158a104a-graph-v3-links-2.0.0-42f885befb5ce881-4f68cb388720",
+  "contentDigest": "f0c8169f154f0a02a72105b13e8cb757a74eb99b184657a383ef2dd4f07ff417",
+  "scipIndexDigest": "0a0546fe5bb12cdb6303de0926e87a80905b3cd503a27734f37f4306f3416539",
+  "extractorVersions": {
+    "assembly": "standalone-graph-v3",
+    "document-linker": "2.0.0",
+    "semantic": "1.1.0",
+    "scip": "0.4.0",
+    "ontology": "rdf-record-v1",
+    "repository-file-extractor": "1.0.0",
+    "repository-contract-extractor": "1.1.0",
+    "scip-symbol-extractor": "1.0.0"
+  },
+  "runtime": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "reportDigest": "2100052d6ad9836ecbe252a36d1984e595edd0abc31c03cc4f1c32043f1483ea",
+  "hydration": {
+    "extracted": 0,
+    "reused": 6
+  },
+  "savedV2Evidence": {
+    "snapshotId": "eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d-graph-v2-42f885befb5ce881-4f68cb388720",
+    "contentDigest": "6f30f62900e37a6d2d266bcd3bba54941b1cab3997602eefef3320b0d0e66fc3",
+    "rescoredWithoutHydration": true,
+    "originalDigestAndScoresUnchanged": true
+  },
+  "oldSourceControl": {
+    "implementationCommit": "90726be3751cf23de7f1cdd595d1e9ddb151b139",
+    "evidenceCommit": "eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d",
+    "snapshotId": "eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d-graph-v3-links-2.0.0-42f885befb5ce881-4f68cb388720",
+    "contentDigest": "a7a3b00b5f5598d7cafbf22471ea3ff5c2bad7d528e9524a6a134303d73f62d8",
+    "totalFacts": 3492,
+    "extractorCounts": {
+      "scip-symbol-extractor": 2970,
+      "repository-file-extractor": 520,
+      "document-linker": 2
+    },
+    "hydration": {
+      "extracted": 0,
+      "reused": 6
+    },
+    "firstPage": 15,
+    "threePages": 18
+  },
+  "coverage": {
+    "totalFacts": 3648,
+    "extractorCounts": {
+      "scip-symbol-extractor": 3065,
+      "repository-file-extractor": 550,
+      "document-linker": 33
+    },
+    "semanticAssertions": 0,
+    "modelCalls": 0,
+    "approvedIntentSources": [],
+    "runtimeReferences": 0,
+    "linkDiagnostics": 0
+  },
+  "results": [
+    {
+      "id": "atomic-publication",
+      "budget": {
+        "maxFacts": 60,
+        "maxDepth": 32,
+        "maxPages": 3
+      },
+      "recall": {
+        "expected": 6,
+        "firstPage": 6,
+        "examinedPages": 6,
+        "examinedFraction": 1
+      },
+      "reachableFacts": 3648,
+      "factsExamined": 180,
+      "complete": false,
+      "depthLimitReached": false,
+      "remainingTargets": [],
+      "documentWitnesses": [
+        {
+          "path": "docs/ADR-002-saved-evidence.md",
+          "inFirstPage": true,
+          "witness": {
+            "id": "b67d3a8ecaefe0a5cdfc1f831349c60474560e1a83d2e4dc449559123b23c1e8",
+            "subject": "document:docs/ADR-002-saved-evidence.md",
+            "predicate": "references",
+            "object": "component:file:src/storage/atomic-rename.ts",
+            "provenance": {
+              "commitSha": "dcef64001d8d47cd1aeb4c1434992612158a104a",
+              "digest": "7c71fd36b308f5b97fda4457f4ceb577b9f1ef74073faf1e15f60475a4b4f8ea",
+              "endLine": 17,
+              "path": "docs/ADR-002-saved-evidence.md",
+              "startLine": 17
+            },
+            "extractor": {
+              "id": "document-linker",
+              "version": "2.0.0"
+            },
+            "authority": "inferred",
+            "sourceAuthority": "inferred",
+            "extractionReview": "deterministic"
+          }
+        }
+      ],
+      "distractionControls": [
+        {
+          "path": "src/extraction/telemetry.ts",
+          "inSnapshot": true,
+          "inFirstPage": false,
+          "inExaminedPages": false
+        }
+      ]
+    },
+    {
+      "id": "impact-query",
+      "budget": {
+        "maxFacts": 60,
+        "maxDepth": 32,
+        "maxPages": 3
+      },
+      "recall": {
+        "expected": 6,
+        "firstPage": 5,
+        "examinedPages": 6,
+        "examinedFraction": 1
+      },
+      "reachableFacts": 3648,
+      "factsExamined": 180,
+      "complete": false,
+      "depthLimitReached": false,
+      "remainingTargets": [],
+      "documentWitnesses": [
+        {
+          "path": "docs/ADR-004-rdf-query-path.md",
+          "inFirstPage": true,
+          "witness": {
+            "id": "8703816853d85cc6d867553164ec47f9f200544fbb2eb1e0b6f358ca672e8437",
+            "subject": "document:docs/ADR-004-rdf-query-path.md",
+            "predicate": "references",
+            "object": "component:file:src/visualization/visualization.ts",
+            "provenance": {
+              "commitSha": "dcef64001d8d47cd1aeb4c1434992612158a104a",
+              "digest": "d2d8ad9d456e5da8d0cdc4920997e0b36a05652d7d798d32f428ee71adf52630",
+              "endLine": 26,
+              "path": "docs/ADR-004-rdf-query-path.md",
+              "startLine": 26
+            },
+            "extractor": {
+              "id": "document-linker",
+              "version": "2.0.0"
+            },
+            "authority": "inferred",
+            "sourceAuthority": "inferred",
+            "extractionReview": "deterministic"
+          }
+        }
+      ],
+      "distractionControls": [
+        {
+          "path": "src/extraction/codex-command.ts",
+          "inSnapshot": true,
+          "inFirstPage": false,
+          "inExaminedPages": true
+        }
+      ]
+    },
+    {
+      "id": "codex-launcher",
+      "budget": {
+        "maxFacts": 60,
+        "maxDepth": 32,
+        "maxPages": 3
+      },
+      "recall": {
+        "expected": 6,
+        "firstPage": 5,
+        "examinedPages": 6,
+        "examinedFraction": 1
+      },
+      "reachableFacts": 3648,
+      "factsExamined": 180,
+      "complete": false,
+      "depthLimitReached": false,
+      "remainingTargets": [],
+      "documentWitnesses": [
+        {
+          "path": "docs/PROVIDERS.md",
+          "inFirstPage": true,
+          "witness": {
+            "id": "f4d2b9be8755a36824b8b096a59d0b85dc58477c2fa51c3ad2e853172e46467e",
+            "subject": "document:docs/PROVIDERS.md",
+            "predicate": "references",
+            "object": "component:file:src/extraction/codex-command.ts",
+            "provenance": {
+              "commitSha": "dcef64001d8d47cd1aeb4c1434992612158a104a",
+              "digest": "4621720cb957a6e08d3828f23126dbd586ab7784590c2a0b72fea47dbf048ed6",
+              "endLine": 8,
+              "path": "docs/PROVIDERS.md",
+              "startLine": 8
+            },
+            "extractor": {
+              "id": "document-linker",
+              "version": "2.0.0"
+            },
+            "authority": "inferred",
+            "sourceAuthority": "inferred",
+            "extractionReview": "deterministic"
+          }
+        },
+        {
+          "path": "docs/ADR-006-provider-boundaries.md",
+          "inFirstPage": true,
+          "witness": {
+            "id": "8c54ad093c044c5902e8df14bed07fb77275143ade706f0eae9b47fdd23c033e",
+            "subject": "document:docs/ADR-006-provider-boundaries.md",
+            "predicate": "references",
+            "object": "component:file:src/extraction/codex-command.ts",
+            "provenance": {
+              "commitSha": "dcef64001d8d47cd1aeb4c1434992612158a104a",
+              "digest": "f705859946045f2d2bbad8f2fb6b2347b702f7f97d9eb19a1f6f536bb20cbf66",
+              "endLine": 13,
+              "path": "docs/ADR-006-provider-boundaries.md",
+              "startLine": 13
+            },
+            "extractor": {
+              "id": "document-linker",
+              "version": "2.0.0"
+            },
+            "authority": "inferred",
+            "sourceAuthority": "inferred",
+            "extractionReview": "deterministic"
+          }
+        }
+      ],
+      "distractionControls": [
+        {
+          "path": "src/visualization/viewer-interaction.ts",
+          "inSnapshot": true,
+          "inFirstPage": false,
+          "inExaminedPages": true
+        }
+      ]
+    },
+    {
+      "id": "working-content",
+      "budget": {
+        "maxFacts": 60,
+        "maxDepth": 32,
+        "maxPages": 3
+      },
+      "recall": {
+        "expected": 6,
+        "firstPage": 6,
+        "examinedPages": 6,
+        "examinedFraction": 1
+      },
+      "reachableFacts": 3648,
+      "factsExamined": 180,
+      "complete": false,
+      "depthLimitReached": false,
+      "remainingTargets": [],
+      "documentWitnesses": [
+        {
+          "path": "docs/ADR-003-draft-overlays.md",
+          "inFirstPage": true,
+          "witness": {
+            "id": "5191ea54f6a067ec686c1bc5ec8117c6e0f16071694ef4672911a05922fda48b",
+            "subject": "document:docs/ADR-003-draft-overlays.md",
+            "predicate": "references",
+            "object": "component:file:src/repository/working-content.ts",
+            "provenance": {
+              "commitSha": "dcef64001d8d47cd1aeb4c1434992612158a104a",
+              "digest": "3a08b614248e3d2b308aa06e6d2fe409c60b059d21553ae318fb90e43fa5cb72",
+              "endLine": 9,
+              "path": "docs/ADR-003-draft-overlays.md",
+              "startLine": 9
+            },
+            "extractor": {
+              "id": "document-linker",
+              "version": "2.0.0"
+            },
+            "authority": "inferred",
+            "sourceAuthority": "inferred",
+            "extractionReview": "deterministic"
+          }
+        }
+      ],
+      "distractionControls": [
+        {
+          "path": "src/extraction/codex-command.ts",
+          "inSnapshot": true,
+          "inFirstPage": true,
+          "inExaminedPages": true
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Expected paths are reviewable hypotheses, not exhaustive labels or approved product policy.",
+    "Recall measures candidate file relationship retrieval, not a proven dependency path or whether a proposed change is safe.",
+    "Unjudged results are not false positives. Distraction controls measure query noise, not false graph assertions.",
+    "Presence of a test file does not prove that behavior was tested or that the test passed.",
+    "Missing relationships are gaps in this extraction/configuration, not proof of missing implementation.",
+    "A successful evaluation command means measurement completed; it is not a quality or merge gate.",
+    "New document mappings change the evidence input, which also includes preceding source-indexing work. This is not an isolated ranking or model-quality comparison.",
+    "Commit-dependent fact identities can affect tie-breaking. Expected paths and budgets are unchanged; query ranking code was not changed.",
+    "Three of four labeled distractions appear within the examined pages; one is on the first page. No precision or complete product-awareness claim is made.",
+    "Document references remain inferred and deterministically extracted; no source approval or assertion approval is inferred."
+  ]
+}

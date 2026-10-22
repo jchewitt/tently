@@ -628,6 +628,7 @@
     "evaluations/weftlet/baseline.json",
     "evaluations/weftlet/cases.json",
     "evaluations/weftlet/context-graph.config.json",
+    "evaluations/weftlet/document-links-baseline.json",
     "evaluations/weftlet/document-only.mjs",
     "evaluations/weftlet/source-project-baseline.json",
     "evaluations/weftlet/source-project.config.json",
