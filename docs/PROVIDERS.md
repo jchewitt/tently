@@ -4,6 +4,12 @@ Codex CLI is the shipped model adapter. The module extension contract is tested 
 providers; no additional CLI or API integration is advertised as working. An arbitrary executable
 is not compatible merely because it accepts stdin.
 
+For contributors, [provider dispatch](../src/extraction/providers.ts) enforces this contract.
+[Codex discovery](../src/extraction/codex-command.ts), [authentication](../src/extraction/codex-auth.ts)
+and [semantic hydration](../src/extraction/semantic.ts) implement the shipped adapter;
+[setup diagnostics](../src/interfaces/doctor.ts) probe its readiness. These source references
+identify the implementation, not an approval of every extracted assertion or a live test result.
+
 `SemanticExtractor` has a stable `identity` and
 `extract(source, context, {signal, timeoutMs}) -> {parsed, rawModelOutput}`.
 The exported `SemanticOutput`, `semanticOutputSchema` and `assertSemanticOutput` define structured
