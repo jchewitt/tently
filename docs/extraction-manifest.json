@@ -24,7 +24,7 @@
       "destinationPath": "THIRD_PARTY_NOTICES.md",
       "sourceSha256": "c98c42f3c3c74f4c4f38f45b785ea15de439ad6471d82040d13100b36616b01e",
       "modified": true,
-      "destinationSha256": "1c8bb26c7385fef7d391db9c89797b6f45bf6c5b102d7e832295783eb6c28d1a"
+      "destinationSha256": "cd1b40a873371c1fb20599ae8dc5d1131ea4ba650c1f4151415e2cb038339d8d"
     },
     {
       "sourcePath": "tools/context-graph/action/action.yml",
@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "02e7dc9e9fd31e1dfc67a2d3aefc64fb8f684bb60730d286b362ea0de367b7ec"
+      "destinationSha256": "0f4b671d7ef81f74886fbf37f0d50c21c6863af1203ece18e3da01dd8c0b910f"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "96921a7cb483e7cfefcba3fea4042f42583c90aa7f433055221d896ad9340525"
+      "destinationSha256": "3426c910baaaa474f909a8558bdfebb33013d99be17c6b214ba5f1b2cb621ab1"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -206,7 +206,7 @@
       "destinationPath": "src/application/agent-context.test.ts",
       "sourceSha256": "cb87b9b7e18ae5d8ba39d4ebf1d45556479d6efb3ffa75276bc6164ee2bf30f1",
       "modified": true,
-      "destinationSha256": "f1ed006615ae0d07fb924c60fccad90a3f8cd4e5f12898d4a07db0a5fa65e7d5"
+      "destinationSha256": "1b9990a0ef2003cd1b1449258626933e1bb620f5624182f34dbd93eb9ceedf8d"
     },
     {
       "sourcePath": "tools/context-graph/src/agent-context.ts",
@@ -283,7 +283,7 @@
       "destinationPath": "src/extraction/document.ts",
       "sourceSha256": "62a2da37d8cc0637b192b7e70ae7a0dce72244d335da9df0e0ad9b0eb7c4e1f1",
       "modified": true,
-      "destinationSha256": "819372a1ba01ed2204e2ed620d4afefb03ab8b7431e77e02f2b61bc605807124"
+      "destinationSha256": "de198e73b3b2c828c99bb35c806461dba06526df9ae94592926d26346fbefe79"
     },
     {
       "sourcePath": "tools/context-graph/src/git.test.ts",
@@ -311,14 +311,14 @@
       "destinationPath": "src/application/hydrator.test.ts",
       "sourceSha256": "95f20a526fe69ce3a506ef01da1c20827e09d631a34126e781a07979cc43de07",
       "modified": true,
-      "destinationSha256": "83ca72d394d9eac8eef5dbc9438c7914442dbad3bbaa07c33f1e756e6d11fd39"
+      "destinationSha256": "07c1532a58de3cd43561bd7d79fe4edfec2bfa6fa33d6ab8e2c0f65b4ff37205"
     },
     {
       "sourcePath": "tools/context-graph/src/hydrator.ts",
       "destinationPath": "src/application/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
       "modified": true,
-      "destinationSha256": "9179d7893ff88a520e6f3ce7eb133c0c0a883cfcba1dc0a07226f09992011236"
+      "destinationSha256": "34c94bd7a8b570f7c61048cc16918eb692899c65b25d5f17f00605793ab1994b"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",
@@ -578,6 +578,7 @@
   ],
   "authoredPaths": [
     ".changeset/README.md",
+    ".changeset/cited-document-links.md",
     ".changeset/committed-source-indexing.md",
     ".changeset/config.json",
     ".changeset/impact-evaluation-baseline.md",
@@ -606,6 +607,7 @@
     "docs/ADR-008-weftlet-packages.md",
     "docs/ADR-009-release-automation.md",
     "docs/ADR-010-committed-source-indexing.md",
+    "docs/ADR-011-explicit-document-links.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/ENVIRONMENT-VALIDATION.md",
     "docs/IMPACT-EVALUATION.md",
@@ -697,6 +699,8 @@
     "src/extraction/codex-auth.ts",
     "src/extraction/codex-command.test.ts",
     "src/extraction/codex-command.ts",
+    "src/extraction/document-references.ts",
+    "src/extraction/document.test.ts",
     "src/extraction/providers.test.ts",
     "src/extraction/providers.ts",
     "src/extraction/scip-project.test.ts",

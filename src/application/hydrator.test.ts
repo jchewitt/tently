@@ -58,7 +58,7 @@ describe('commit-keyed hydration', () => {
     await mkdir(join(root, 'src'), { recursive: true });
     await writeFile(
       join(root, 'docs', 'capability.md'),
-      'semantic-id: capability:search\n# Search Capability\nWorker implements search.\n',
+      'semantic-id: capability:search\n# Search Capability\nWorker implements search.\n[Implementation](../src/search.ts)\n',
     );
     await writeFile(join(root, 'src', 'search.ts'), 'export const search = () => "ok";\n');
     await git(root, 'init');
@@ -178,12 +178,27 @@ describe('commit-keyed hydration', () => {
     expect(await snapshotStore.readHead('default')).toBeUndefined();
     dockerReady = true;
     const first = await hydrator.hydrate({ ref: 'HEAD', headName: 'default' });
+    expect(first.snapshot.manifest.extractorVersions).toMatchObject({
+      assembly: 'standalone-graph-v3', 'document-linker': '2.0.0',
+    });
+    expect(first.snapshot.facts.some((fact) => fact.predicate === 'references' &&
+      fact.object.id === 'component:file:src/search.ts' && fact.provenance.startLine === 4)).toBe(true);
+    // A previous assembly's saved evidence must remain addressable during a new refresh.
+    const legacyId = first.snapshot.manifest.snapshotId.replace('-graph-v3-', '-graph-v2-');
+    expect(legacyId).not.toBe(first.snapshot.manifest.snapshotId);
+    const legacy = { ...first.snapshot, manifest: { ...first.snapshot.manifest,
+      snapshotId: legacyId, extractorVersions: { assembly: 'standalone-graph-v2' } },
+      facts: first.snapshot.facts.map((fact) => ({ ...fact, snapshotId: legacyId })) };
+    await snapshotStore.write(legacy);
+    await snapshotStore.updateHead('default', legacyId);
     expect(first.snapshot.runtimeEvidence.map((evidence) => evidence.traceId)).toEqual([
       'accepted-trace',
     ]);
     const repeated = await hydrator.hydrate({ ref: 'HEAD', headName: 'default' });
     expect(repeated.snapshot.manifest.contentDigest).toBe(first.snapshot.manifest.contentDigest);
     expect(repeated.semanticReused).toBe(1);
+    expect(await snapshotStore.read(legacyId)).toEqual(legacy);
+    expect((await snapshotStore.readHead('default'))?.manifest.snapshotId).toBe(first.snapshot.manifest.snapshotId);
     expect(extractionCalls).toBe(1);
     dockerReady = false;
     await expect(hydrator.hydrate({ ref: 'HEAD', headName: 'default' })).rejects.toThrow('Docker');
@@ -241,6 +256,15 @@ describe('commit-keyed hydration', () => {
     expect(
       renamed.snapshot.facts.some((fact) => fact.provenance.path === 'docs/search-capability.md'),
     ).toBe(true);
+
+    await git(root, 'rm', 'src/search.ts');
+    await git(root, 'commit', '-m', 'delete linked implementation');
+    const missingTarget = await hydrator.hydrate({ ref: 'HEAD', headName: 'default' });
+    expect(missingTarget.semanticReused).toBe(1);
+    expect(missingTarget.snapshot.facts.some((fact) => fact.object.id === 'component:file:src/search.ts')).toBe(false);
+    expect(missingTarget.snapshot.diagnostics?.some((item) => item.reason.includes('not a committed file') &&
+      item.provenance[0]?.path === 'docs/search-capability.md')).toBe(true);
+    expect(await snapshotStore.read(renamed.snapshot.manifest.snapshotId)).toEqual(renamed.snapshot);
 
     await git(root, 'rm', 'docs/search-capability.md');
     await git(root, 'commit', '-m', 'delete capability doc');

@@ -17,7 +17,7 @@ import type { OntologyCompiler } from "../extraction/ontology.js";
 import type { SemanticHydrator } from "../extraction/semantic.js";
 import type { ScipIndexResult, StaticIndexer } from "../extraction/static.js";
 import { sha256, stableJson } from "../infrastructure/util.js";
-import { linkSemanticDocuments } from "../extraction/document.js";
+import { documentLinkerIdentity, linkSemanticDocuments } from "../extraction/document.js";
 import { runtimeEvidenceFacts } from "../extraction/runtime-evidence.js";
 import { matchesRepositoryGlob } from "../repository/glob.js";
 import { RdfEvidenceGraph } from "../graph/rdf.js";
@@ -145,7 +145,7 @@ export class ContextGraphHydrator {
         : undefined;
     const configurationDigest = sha256(stableJson(config));
     const scopeDigest = sha256(stableJson(selectedSemanticSources)).slice(0, 12);
-    const effectiveSuffix = ['graph-v2', configurationDigest.slice(0, 16), scopeDigest, baseSuffix, runtimeSuffix].filter(Boolean).join('-');
+    const effectiveSuffix = ['graph-v3', configurationDigest.slice(0, 16), scopeDigest, baseSuffix, runtimeSuffix].filter(Boolean).join('-');
     const snapshotId = effectiveSuffix ? `${commitSha}-${effectiveSuffix}` : commitSha;
     const context: ExtractionContext = {
       repositoryRoot: repository.root,
@@ -237,13 +237,16 @@ export class ContextGraphHydrator {
         });
       }
     }
-    const documentFacts = linkSemanticDocuments(context, hydrated, trackedPaths);
+    const documents = linkSemanticDocuments(context, hydrated, trackedPaths,
+      sources.filter((source) => config.approvedIntentSources?.some((pattern) =>
+        matchesRepositoryGlob(source.path, pattern))).map((source) => source.path));
+    diagnostics.push(...documents.diagnostics);
     options.signal?.throwIfAborted();
     options.onProgress?.({ phase: 'compile-semantic-rdf' });
     const ontology = await this.dependencies.ontologyCompiler.compile(snapshotId, artifacts, context);
     const runtimeEvidence = runtimeRevision.references;
     const runtimeFacts = runtimeEvidenceFacts(context, runtimeEvidence);
-    const facts = [...semanticFacts, ...documentFacts, ...extractorFacts, ...runtimeFacts].sort(
+    const facts = [...semanticFacts, ...documents.facts, ...extractorFacts, ...runtimeFacts].sort(
       (left, right) => left.id.localeCompare(right.id),
     );
     const invariants = (
@@ -294,7 +297,8 @@ export class ContextGraphHydrator {
         scope: selectedSemanticSources,
         ontologyVersion: config.semantic.ontologyVersion,
         extractorVersions: {
-          assembly: 'standalone-graph-v2',
+          assembly: 'standalone-graph-v3',
+          [documentLinkerIdentity.id]: documentLinkerIdentity.version,
           semantic: config.semantic.extractorVersion,
           scip: scip.version,
           ontology: config.ontology.toolVersion,

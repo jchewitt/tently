@@ -81,6 +81,7 @@ try {
         'dist/cli.js', 'dist/mcp.js',
         'dist/interfaces/cli.js', 'dist/interfaces/mcp.js', 'dist/extraction/static.js',
         'dist/extraction/scip-project.js', 'dist/configuration/scip-project.js',
+        'dist/extraction/document.js', 'dist/extraction/document-references.js',
         'runtime-check.mjs', 'runtime-check.d.mts',
         'examples/generic-typescript/context-graph.config.json',
         'examples/generic-typescript/ontology/build.gradle',
@@ -209,6 +210,7 @@ try {
       )}\n`,
     ),
     writeFile(join(consumer, 'src', 'contract.ts'), 'export interface Greeting { text: string }\n'),
+    writeFile(join(consumer, 'intent.md'), '# Greeting\nSee [implementation](src/consumer.ts) and [checks](test/contract.test.ts).\n'),
     writeFile(join(consumer, 'test', 'contract.test.ts'), "import type { Greeting } from '@fixture/contracts';\nexport const tested: Greeting = { text: 'test' };\n"),
     writeFile(
       join(consumer, 'src', 'consumer.ts'),
@@ -225,9 +227,11 @@ try {
   await writeFile(
     join(consumer, 'smoke.mjs'),
     `import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { ScipSymbolExtractor, ScipTypeScriptIndexer } from ${JSON.stringify(staticModule)};
+import { linkSemanticDocuments } from ${JSON.stringify(new URL('document.js', staticModule).href)};
 import { renderContextPackVisualization, RdfEvidenceGraph, CG } from ${JSON.stringify(toolkitModule)};
 
 const root = process.cwd();
@@ -253,8 +257,8 @@ const repository = {
   readFileAt: async (_commitSha, path) => readFile(join(root, path), 'utf8'),
   listFilesAt: async () => [],
 };
-const facts = await new ScipSymbolExtractor(repository, index).extract(context);
-if (!index.digest || facts.length < 2) {
+const defaultFacts = await new ScipSymbolExtractor(repository, index).extract(context);
+if (!index.digest || defaultFacts.length < 2) {
   throw new Error('Installed toolkit did not index and parse the SCIP fixture');
 }
 const sourceIndex = await new ScipTypeScriptIndexer({ version: '0.4.0', command: 'bundled-scip-typescript',
@@ -267,6 +271,15 @@ if (!definition || !sourceFacts.some((fact) => fact.provenance.path === 'test/co
     fact.predicate === 'consumes' && fact.object.id === definition.object.id)) {
   throw new Error('Installed source project did not link an excluded test through its local package alias');
 }
+const content = execFileSync('git', ['show', context.commitSha + ':intent.md'], { encoding: 'utf8' });
+const documents = linkSemanticDocuments(context, [{ source: { path: 'intent.md', content,
+  digest: createHash('sha256').update(content).digest('hex'), stableSemanticId: 'greeting' }, artifact: { facts: [] } }],
+  ['src/consumer.ts', 'test/contract.test.ts']);
+if (documents.diagnostics.length || documents.facts.length !== 2 ||
+    !documents.facts.some((fact) => fact.object.kind === 'Evidence' && fact.provenance.startLine === 2)) {
+  throw new Error('Installed Markdown linker did not preserve targets and citations');
+}
+const facts = [...sourceFacts, ...documents.facts];
 const graph = new RdfEvidenceGraph({ manifest: { schemaVersion:1, repositoryId:'publication-smoke',ref:'HEAD',commitSha:context.commitSha,snapshotId:context.snapshotId,contentDigest:index.digest,generatedAt:'2026-01-01',ontologyVersion:'rdf-v1',extractorVersions:{},semanticModel:'none',semanticPromptVersion:'none',semanticArtifactKeys:[],scipIndexDigest:index.digest,rdfDigest:'' }, facts, invariants:[],runtimeEvidence:[],unresolved:[] });
 if (!(await graph.validate()).conforms) throw new Error('Installed SHACL validation failed');
 const selected = await graph.select('SELECT ?record WHERE { ?record <' + CG + 'authority> ?authority }');
