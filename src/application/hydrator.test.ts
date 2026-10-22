@@ -184,7 +184,7 @@ describe('commit-keyed hydration', () => {
     expect(first.snapshot.facts.some((fact) => fact.predicate === 'references' &&
       fact.object.id === 'component:file:src/search.ts' && fact.provenance.startLine === 4)).toBe(true);
     // A previous assembly's saved evidence must remain addressable during a new refresh.
-    const legacyId = first.snapshot.manifest.snapshotId.replace('-graph-v3-', '-graph-v2-');
+    const legacyId = first.snapshot.manifest.snapshotId.replace('-graph-v3-links-2.0.0-', '-graph-v2-');
     expect(legacyId).not.toBe(first.snapshot.manifest.snapshotId);
     const legacy = { ...first.snapshot, manifest: { ...first.snapshot.manifest,
       snapshotId: legacyId, extractorVersions: { assembly: 'standalone-graph-v2' } },

@@ -67,6 +67,9 @@ describe('committed document references', () => {
       'src/fake.ts',
       '```',
       '<!-- src/fake.ts -->',
+      'RDF/SHACL and deleted/renamed are prose, not links.',
+      '`@weftlet/toolkit@0.1.0` and `node_modules/.bin` describe installation.',
+      'Examples include src/missing.ts; only explicit Markdown destinations diagnose missing targets.',
     ].join('\n'), ['src/fake.ts', 'docs/src/fake.ts']);
     expect(result).toEqual({ facts: [], diagnostics: [] });
   });

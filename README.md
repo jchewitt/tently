@@ -104,6 +104,17 @@ For tests excluded by the build config or workspace packages whose outputs are a
 committed archives, configure an [explicit TypeScript source project](docs/ADR-010-committed-source-indexing.md)
 with selected files and local package aliases.
 
+In a selected document such as `docs/intent.md`, link a responsibility to its sources:
+
+```md
+Committed snapshots stay queryable during edits. See [snapshot storage](../src/storage.ts)
+and [lifecycle checks](../tests/storage.test.ts).
+```
+
+[Explicit document links](docs/ADR-011-explicit-document-links.md) resolve against the recorded
+commit and retain source-line citations. Missing files produce diagnostics; directory mentions
+are not expanded. A reference does not approve intent or establish that a linked test passed.
+
 Install the locally packed core and toolkit tarballs together. The installed commands are
 `weftlet`, `weftlet-mcp`, and the compatible `context-graph` / `context-graph-mcp` aliases. For example, after preparing a release:
 

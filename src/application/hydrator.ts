@@ -145,7 +145,8 @@ export class ContextGraphHydrator {
         : undefined;
     const configurationDigest = sha256(stableJson(config));
     const scopeDigest = sha256(stableJson(selectedSemanticSources)).slice(0, 12);
-    const effectiveSuffix = ['graph-v3', configurationDigest.slice(0, 16), scopeDigest, baseSuffix, runtimeSuffix].filter(Boolean).join('-');
+    const effectiveSuffix = ['graph-v3', `links-${documentLinkerIdentity.version}`,
+      configurationDigest.slice(0, 16), scopeDigest, baseSuffix, runtimeSuffix].filter(Boolean).join('-');
     const snapshotId = effectiveSuffix ? `${commitSha}-${effectiveSuffix}` : commitSha;
     const context: ExtractionContext = {
       repositoryRoot: repository.root,

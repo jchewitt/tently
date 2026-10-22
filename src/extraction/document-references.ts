@@ -88,6 +88,9 @@ export function resolveDocumentReference(
     return { kind: 'missing', reason: `Repository link escapes the repository: ${target}` };
   }
   if (tracked.has(path)) return { kind: 'resolved', path };
+  // Slash-separated prose (RDF/SHACL), package names and example paths are not declarations
+  // of missing repository files. Only an explicit Markdown destination requests link validation.
+  if (reference.relativeTo === 'repository') return { kind: 'ignored' };
   return { kind: 'missing', path,
     reason: `Document reference ${target} resolves to ${path}, which is not a committed file. Directory references are not expanded.` };
 }

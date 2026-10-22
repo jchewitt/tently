@@ -51,7 +51,7 @@ const config: ContextGraphConfig = {
 };
 
 describe('agent context preparation', () => {
-  it('reports directory mentions without asserting relationships to every descendant', () => {
+  it('does not expand directory mentions into relationships to every descendant', () => {
     const commitSha = '7'.repeat(40);
     const source: SemanticSource = {
       stableSemanticId: 'doc:owner',
@@ -78,8 +78,7 @@ describe('agent context preparation', () => {
     );
 
     expect(result.facts).toEqual([]);
-    expect(result.diagnostics).toHaveLength(2);
-    expect(result.diagnostics.every((item) => item.reason.includes('Directory references are not expanded'))).toBe(true);
+    expect(result.diagnostics).toEqual([]);
   });
 
   it('selects philosophy, the owner doc, linked docs, and validation evidence', async () => {

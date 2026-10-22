@@ -206,7 +206,7 @@
       "destinationPath": "src/application/agent-context.test.ts",
       "sourceSha256": "cb87b9b7e18ae5d8ba39d4ebf1d45556479d6efb3ffa75276bc6164ee2bf30f1",
       "modified": true,
-      "destinationSha256": "1b9990a0ef2003cd1b1449258626933e1bb620f5624182f34dbd93eb9ceedf8d"
+      "destinationSha256": "c72ba1d20d1ad85ee295a7041e85a99cf973b6114eff21524d808997929e3184"
     },
     {
       "sourcePath": "tools/context-graph/src/agent-context.ts",
@@ -311,14 +311,14 @@
       "destinationPath": "src/application/hydrator.test.ts",
       "sourceSha256": "95f20a526fe69ce3a506ef01da1c20827e09d631a34126e781a07979cc43de07",
       "modified": true,
-      "destinationSha256": "07c1532a58de3cd43561bd7d79fe4edfec2bfa6fa33d6ab8e2c0f65b4ff37205"
+      "destinationSha256": "e9d66af02991f4c1f2f366b7c389af2da34f48f996f02d9acd8e19448bebc658"
     },
     {
       "sourcePath": "tools/context-graph/src/hydrator.ts",
       "destinationPath": "src/application/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
       "modified": true,
-      "destinationSha256": "34c94bd7a8b570f7c61048cc16918eb692899c65b25d5f17f00605793ab1994b"
+      "destinationSha256": "149dbd8b7e466c6bedccdce47f514fd1a89f6c0331cc7351db5b3382b9855071"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",

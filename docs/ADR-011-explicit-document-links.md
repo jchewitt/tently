@@ -14,8 +14,10 @@ For compatibility, literal slash-separated paths in prose and single paths in in
 resolve from the repository root. `./` and `../` make a literal path document-relative.
 Use Markdown links for spaces or punctuation in paths. There is no basename search, implicit
 root fallback, extension guessing, directory expansion, remote fetch or active-checkout lookup.
-A stale link, directory or path escaping the repository produces a cited `implementationGaps`
-diagnostic, not a relationship to a guessed target. Diagnostics describe extraction gaps;
+A stale Markdown link, linked directory or path escaping the repository produces a cited
+`implementationGaps` diagnostic, not a relationship to a guessed target. Unresolved literal
+mentions are ignored: slash-separated prose, package names and examples are not missing-file
+declarations. Use Markdown links when targets need validation. Diagnostics describe extraction gaps;
 this increment does not turn them into hard policy gates. Links to a document verify only
 that its file exists, not that it was selected for semantic extraction.
 
@@ -33,8 +35,8 @@ Only explicit `approvedIntentSources` configuration sets `sourceAuthority: decla
 for links; source approval never approves a model assertion. The Weftlet evaluation continues
 to configure zero approved sources and zero model assertions.
 
-Snapshot assembly advances from `graph-v2` to `graph-v3` and records the linker version in the
-manifest. Refreshes create a different immutable identity; saved v2 snapshots remain readable
+Snapshot assembly advances from `graph-v2` to `graph-v3-links-2.0.0` and binds the linker version
+in both identity and manifest. Refreshes create a different immutable identity; saved v2 snapshots remain readable
 without a provider and are not rewritten. Semantic cache keys are unchanged because model
 extraction is unchanged. Existing overlays conservatively invalidate document references to
 changed/deleted targets and changed prose; they do not invent new approved mappings.
