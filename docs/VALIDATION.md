@@ -8,6 +8,49 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## Relative module request identities, 2026-10-22
+
+[ADR 013](ADR-013-relative-module-requests.md) scopes generic relative imports to the
+importing directory. Implementation `26c47d5b55f9390fe38b4928d1a8274eaf893583` was measured
+against the frozen dispatch input and the existing Weftlet document-link input. Cases,
+configuration, budgets, evaluator and ranking bytes are unchanged. The public-safe record
+is `evaluations/dispatch/relative-imports-baseline.json`.
+
+Linux cloud, Node 24.19.0, pnpm 10.18.2:
+
+- Dispatch retains **15/16 expected candidates** on page one and within three pages.
+  Three-page labeled distractions fall from **7/7 to 0/7**; page one remains 0/7.
+  The reachable component shrinks from 214 to 183 facts. Full continuation returns all
+  183 unique facts (60/60/60/3), with no refund/audit distraction or archival consumer.
+  The archival file still has six local facts but no extracted operational route.
+- The Weftlet input retains **24/24 first-page and three-page candidates**, with 0/4
+  first-page and 1/4 three-page distractions. All scans still reach 3,648 facts and stop
+  at 180; telemetry remains a later-page distraction for atomic publication. These results
+  do not establish exhaustive precision or broader semantic quality.
+- Real SCIP/document/RDF/SHACL hydration retains 227 dispatch and 3,648 Weftlet facts.
+  SCIP and document facts match their prior versions in every field except containing
+  snapshot ID. Dispatch reused three semantic control artifacts and Weftlet reused six,
+  extracting zero. A repeated dispatch refresh preserves identity/content and reuses all
+  three again. No model calls, approved sources or runtime observations were added.
+- Snapshot assembly v4 and file extractor v2 coexist with old saved evidence. Draft
+  overlay publication identity also binds the extractor version, while capture-v2 digests
+  remain compatible. Tests cover old/new overlay coexistence, immutable committed heads,
+  repeated draft identity, rename/delete behavior and manifest versions.
+- The full publication gate passed **208 deterministic tests** (1 core + 207 toolkit),
+  one optional OML skip, build, 12 advisory architecture findings, inventory, licenses and
+  fresh packed-consumer installation. The installed smoke exercises the new relative-request
+  module alongside actual SCIP, RDF/SHACL, continuation, visualization and MCP checks.
+  Actionlint passed without shellcheck.
+- Independent review verified all 27 frozen dispatch input hashes, six evaluator hashes,
+  three legacy saved-snapshot byte hashes and their original scores/reachability. All 79
+  imported source paths/source hashes are preserved. Code review found no blockers; its
+  control-character coverage observation was corrected before the final full gate.
+
+Hosted Ubuntu/Windows results are attached to the implementation PR. Corrected extraction
+requires an explicit refresh; saved queries keep their original facts and do not rebuild.
+Browser interaction, live authentication and broader semantic quality remain separate.
+No npm publication is part of this increment.
+
 ## Prospective dispatch evaluation, 2026-10-22
 
 Inputs, labels and protocol were committed at `fa902165a1f212a6d3245c847e1ab9b64a69715b`

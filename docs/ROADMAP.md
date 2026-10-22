@@ -58,9 +58,14 @@ adds three frozen synthetic cases outside Weftlet internals. Unchanged ranking r
 Full continuation confirms the topic-string archival consumer is disconnected, while generic
 relative-import identity joins distinct domain modules. No cases or ranking were tuned after
 measurement. Original saved-snapshot results remain unchanged.
+[Relative module request identity](ADR-013-relative-module-requests.md) now scopes imports
+to their requesting directory. On those same frozen inputs, dispatch retains 15/16 candidates
+while three-page distractions fall from 7/7 to 0/7; Weftlet retains 24/24 first-page candidates
+and one later-page distraction. Refreshes and overlays have versioned identities, and old
+snapshots remain readable with their original facts. The archival routing gap remains.
 Next work should be separate, reviewed increments:
-correct generic relative-import identity against these frozen cases; evaluate explicit
-operational routing evidence separately; review explicit mappings
+evaluate explicit operational routing evidence against the unchanged dispatch control;
+review explicit mappings
 and run a bounded live semantic comparison when the maintainer is ready;
 retain the passing hosted Ubuntu CI gate; validate fresh-cloud
 restoration; resolve the cloud-specific live provider block; add browser
