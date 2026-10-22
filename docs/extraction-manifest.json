@@ -627,6 +627,7 @@
     "evaluations/weftlet/cases.json",
     "evaluations/weftlet/context-graph.config.json",
     "evaluations/weftlet/document-only.mjs",
+    "evaluations/weftlet/source-project-baseline.json",
     "evaluations/weftlet/source-project.config.json",
     "examples/generic-typescript/context-graph.oml.config.json",
     "examples/pipeline/context-graph.config.json",

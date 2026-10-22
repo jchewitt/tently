@@ -8,6 +8,41 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## Committed source-project indexing, 2026-10-22
+
+[ADR 010](ADR-010-committed-source-indexing.md) records the opt-in profile and its limits.
+Toolkit implementation `1c2c699` was evaluated against the same evidence commit
+`eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d`, unchanged case labels and query budgets.
+`evaluations/weftlet/source-project-baseline.json` records the full implementation SHA,
+snapshot/configuration/index digests, scores, remaining misses and source coverage.
+
+Linux cloud, Node 24.19.0, pnpm 10.18.2:
+
+- First-page candidate retrieval improved from 13/24 to 15/24; three-page retrieval
+  improved from 16/24 to 18/24. Typed SCIP relationships now cover 33 test files, including
+  the lifecycle test, and link the shared core contract. Five expected intent documents
+  remain unlinked and the MCP file remains outside the query budget.
+- The new graph has 3,490 facts (2,970 SCIP and 520 repository-file facts). Repeated
+  hydration reused all six document-control artifacts with identical snapshot identity
+  and content digest `6f30f62900e37a6d2d266bcd3bba54941b1cab3997602eefef3320b0d0e66fc3`.
+  Rerunning the original profile preserved its prior snapshot, digest and scores.
+- Real SCIP regression fixtures prove committed contract/test linkage through a workspace
+  re-export, ignored/dirty-source isolation, repeat digest stability, rename/delete
+  replacement, and capture of draft changes outside ordinary code/evidence roots.
+  Invalid scopes/aliases fail before SCIP. Missing alias-definition selection was caught
+  during development; both entry points and definition files must be explicitly selected.
+- The full publication gate passed: 187 deterministic tests (1 core + 186 toolkit),
+  one optional OML skip, builds, 12 advisory architecture findings, inventory and licenses.
+  Fresh packed-consumer checks now also exercise a source alias and a test excluded by
+  its build config, along with the existing npx/RDF/SHACL/viewer-output/MCP checks.
+- Workflow syntax passed actionlint. All 79 original source import paths/hashes remain
+  unchanged. The Windows workflow includes the new real-indexing and overlay regressions;
+  hosted outcomes are attached to the implementation PR.
+
+No dependency installation in evidence archives, live model run, runtime observation,
+owner approval, browser interaction or new authentication result is claimed. This mode
+does not inherit build compiler settings or establish complete external dependency resolution.
+
 ## Self-repository impact evaluation, 2026-10-21
 
 The [evaluation protocol](IMPACT-EVALUATION.md) and public-safe

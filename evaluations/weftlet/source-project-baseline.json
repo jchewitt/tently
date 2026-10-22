@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 1,
+  "status": "advisory-control-not-a-quality-pass",
+  "measuredAt": "2026-10-22T16:08:10.078Z",
+  "implementationCommit": "1c2c699c077bf379f88461c6eddbafe6576b7e8b",
+  "evidenceCommit": "eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d",
+  "suiteDigest": "104a3c4b46955b1bbdde3949e8784eedada271dee5245dcada2eebd578069ef7",
+  "configurationFile": "evaluations/weftlet/source-project.config.json",
+  "configurationDigest": "42f885befb5ce881fcf1dafd8a215ed5e45171930cbecae0787238680e98faf8",
+  "snapshotId": "eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d-graph-v2-42f885befb5ce881-4f68cb388720",
+  "contentDigest": "6f30f62900e37a6d2d266bcd3bba54941b1cab3997602eefef3320b0d0e66fc3",
+  "scipIndexDigest": "0991e8c2fee3d802ddb774f243aa77e582bf1314d1c9eb3e23df3a2ceb58920b",
+  "runtime": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "reportDigest": "cd284bcd7ebcdca3149f87e4e62db9ed82ad32d390fc5e87a4260b386ec34010",
+  "baseline": {
+    "snapshotId": "eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d-graph-v2-f2ea3640346913de-4f68cb388720",
+    "contentDigest": "5b4003c527b0f797d45814679326c59da995bc677d0706768a9d9b1b21aedb4f",
+    "unchangedOnControlRerun": true
+  },
+  "repeatHydration": {
+    "extracted": 0,
+    "reused": 6
+  },
+  "snapshotIdentityAndContentUnchangedOnRepeat": true,
+  "coverage": {
+    "totalFacts": 3490,
+    "extractorCounts": {
+      "scip-symbol-extractor": 2970,
+      "repository-file-extractor": 520
+    },
+    "scipTestPaths": [
+      "packages/core/src/util.test.ts",
+      "src/application/agent-context.test.ts",
+      "src/application/application.test.ts",
+      "src/application/hydrator.test.ts",
+      "src/application/overlay.test.ts",
+      "src/application/snapshot-checks.test.ts",
+      "src/configuration/config.test.ts",
+      "src/extraction/codex-auth.test.ts",
+      "src/extraction/codex-command.test.ts",
+      "src/extraction/ontology.test.ts",
+      "src/extraction/providers.test.ts",
+      "src/extraction/runtime-evidence.test.ts",
+      "src/extraction/semantic-citations.test.ts",
+      "src/extraction/semantic-process.test.ts",
+      "src/extraction/semantic.test.ts",
+      "src/extraction/static.test.ts",
+      "src/extraction/telemetry.test.ts",
+      "src/governance/governance.test.ts",
+      "src/graph/diagnostics.test.ts",
+      "src/graph/query.test.ts",
+      "src/interfaces/init.test.ts",
+      "src/interfaces/request.test.ts",
+      "src/repository/git.test.ts",
+      "src/repository/working-content.test.ts",
+      "src/storage/atomic-rename.test.ts",
+      "src/visualization/visualization.test.ts",
+      "tests/architecture.test.ts",
+      "tests/module-boundaries.test.ts",
+      "tests/ontology.integration.test.ts",
+      "tests/portable-fixture.test.ts",
+      "tests/rdf-ontology.test.ts",
+      "tests/rdf.test.ts",
+      "tests/snapshot-lifecycle.test.ts"
+    ],
+    "semanticAssertions": 0,
+    "modelCalls": 0,
+    "runtimeReferences": 0,
+    "approvedIntentSources": []
+  },
+  "results": [
+    {
+      "id": "atomic-publication",
+      "budget": {
+        "maxFacts": 60,
+        "maxDepth": 32,
+        "maxPages": 3
+      },
+      "originalRecall": {
+        "expected": 6,
+        "firstPage": 3,
+        "examinedPages": 4,
+        "examinedFraction": 0.6666666666666666
+      },
+      "sourceProjectRecall": {
+        "expected": 6,
+        "firstPage": 3,
+        "examinedPages": 5,
+        "examinedFraction": 0.8333333333333334
+      },
+      "reachableFacts": 3490,
+      "factsExamined": 180,
+      "complete": false,
+      "depthLimitReached": false,
+      "remainingTargets": [
+        {
+          "path": "docs/ADR-002-saved-evidence.md",
+          "outcome": "no-extracted-relationship"
+        }
+      ],
+      "recoveredTargets": [
+        "tests/snapshot-lifecycle.test.ts"
+      ],
+      "distractionControlsReturned": []
+    },
+    {
+      "id": "impact-query",
+      "budget": {
+        "maxFacts": 60,
+        "maxDepth": 32,
+        "maxPages": 3
+      },
+      "originalRecall": {
+        "expected": 6,
+        "firstPage": 2,
+        "examinedPages": 3,
+        "examinedFraction": 0.5
+      },
+      "sourceProjectRecall": {
+        "expected": 6,
+        "firstPage": 4,
+        "examinedPages": 4,
+        "examinedFraction": 0.6666666666666666
+      },
+      "reachableFacts": 3490,
+      "factsExamined": 180,
+      "complete": false,
+      "depthLimitReached": false,
+      "remainingTargets": [
+        {
+          "path": "src/interfaces/mcp.ts",
+          "outcome": "not-retrieved-within-budget"
+        },
+        {
+          "path": "docs/ADR-004-rdf-query-path.md",
+          "outcome": "no-extracted-relationship"
+        }
+      ],
+      "recoveredTargets": [
+        "packages/core/src/core.ts"
+      ],
+      "distractionControlsReturned": []
+    },
+    {
+      "id": "codex-launcher",
+      "budget": {
+        "maxFacts": 60,
+        "maxDepth": 32,
+        "maxPages": 3
+      },
+      "originalRecall": {
+        "expected": 6,
+        "firstPage": 3,
+        "examinedPages": 4,
+        "examinedFraction": 0.6666666666666666
+      },
+      "sourceProjectRecall": {
+        "expected": 6,
+        "firstPage": 3,
+        "examinedPages": 4,
+        "examinedFraction": 0.6666666666666666
+      },
+      "reachableFacts": 3490,
+      "factsExamined": 180,
+      "complete": false,
+      "depthLimitReached": false,
+      "remainingTargets": [
+        {
+          "path": "docs/PROVIDERS.md",
+          "outcome": "no-extracted-relationship"
+        },
+        {
+          "path": "docs/ADR-006-provider-boundaries.md",
+          "outcome": "no-extracted-relationship"
+        }
+      ],
+      "recoveredTargets": [],
+      "distractionControlsReturned": []
+    },
+    {
+      "id": "working-content",
+      "budget": {
+        "maxFacts": 60,
+        "maxDepth": 32,
+        "maxPages": 3
+      },
+      "originalRecall": {
+        "expected": 6,
+        "firstPage": 5,
+        "examinedPages": 5,
+        "examinedFraction": 0.8333333333333334
+      },
+      "sourceProjectRecall": {
+        "expected": 6,
+        "firstPage": 5,
+        "examinedPages": 5,
+        "examinedFraction": 0.8333333333333334
+      },
+      "reachableFacts": 3490,
+      "factsExamined": 180,
+      "complete": false,
+      "depthLimitReached": false,
+      "remainingTargets": [
+        {
+          "path": "docs/ADR-003-draft-overlays.md",
+          "outcome": "no-extracted-relationship"
+        }
+      ],
+      "recoveredTargets": [],
+      "distractionControlsReturned": []
+    }
+  ],
+  "limitations": [
+    "Expected paths are reviewable hypotheses, not exhaustive labels or approved product policy.",
+    "Recall measures candidate file relationship retrieval, not a proven dependency path or whether a proposed change is safe.",
+    "Unjudged results are not false positives. Distraction controls measure query noise, not false graph assertions.",
+    "Presence of a test file does not prove that behavior was tested or that the test passed.",
+    "Missing relationships are gaps in this extraction/configuration, not proof of missing implementation.",
+    "A successful evaluation command means measurement completed; it is not a quality or merge gate."
+  ]
+}
