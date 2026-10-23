@@ -192,7 +192,7 @@
       "destinationPath": "scripts/check-publication.mjs",
       "sourceSha256": "88692c21d34cef2d2e5b20c92ab3ec26cbe6336889dbb7b534c681ded7f466b2",
       "modified": true,
-      "destinationSha256": "97348657bed913168f3066963fc59f86eb6b7d06e86a66f1c0bc31be026c3778"
+      "destinationSha256": "546465bb9907051ebbae9f1c421b8b7be23414ce51c44891092d0fb793f67e8b"
     },
     {
       "sourcePath": "tools/context-graph/scripts/generate-third-party-notices.mjs",
@@ -248,14 +248,14 @@
       "destinationPath": "src/configuration/config.test.ts",
       "sourceSha256": "70bcda6d6b48ff6fa03223c9420fe3e0e3e32c688e0a14f11034515e0707dee4",
       "modified": true,
-      "destinationSha256": "ecc951094cdf745793ee368c3d5670252d04c69f8e7ef9cc9c28c855f87c0155"
+      "destinationSha256": "ff4d15018ec35d21a95c589cf2c74bce2e340f9042b2d3ecaabca5889609e3aa"
     },
     {
       "sourcePath": "tools/context-graph/src/config.ts",
       "destinationPath": "src/configuration/config.ts",
       "sourceSha256": "e9ee8cf2134d274aa6f6a21545959fbec97e958181d9032c073293f28e04d6ca",
       "modified": true,
-      "destinationSha256": "23a0790c86fdf75ba9773ae098e83958c7ed56e021f000cc5a8dc4cb64faacc4"
+      "destinationSha256": "5e34e4dfa38219570bd6f13239609b432830e76162f44a768a929895f66dc02a"
     },
     {
       "sourcePath": "tools/context-graph/src/core.ts",
@@ -318,7 +318,7 @@
       "destinationPath": "src/application/hydrator.ts",
       "sourceSha256": "bb41c5b53b26da10274d8b967b99c78ff12b485df16bfc66445252e35c94fb9d",
       "modified": true,
-      "destinationSha256": "71113d92ef63363047c0b10d1354e5266b48153f42371cc98472b5bbf605dbb8"
+      "destinationSha256": "8c751fe04922d1117728672b78a1de2d6f42f403e9d506f387c95661e641a5c0"
     },
     {
       "sourcePath": "tools/context-graph/src/index.ts",
@@ -581,6 +581,7 @@
     ".changeset/cited-document-links.md",
     ".changeset/committed-source-indexing.md",
     ".changeset/config.json",
+    ".changeset/explicit-routing-declarations.md",
     ".changeset/impact-evaluation-baseline.md",
     ".changeset/proximity-impact-ranking.md",
     ".changeset/relative-module-requests.md",
@@ -612,6 +613,7 @@
     "docs/ADR-011-explicit-document-links.md",
     "docs/ADR-012-impact-ranking.md",
     "docs/ADR-013-relative-module-requests.md",
+    "docs/ADR-014-routing-declarations.md",
     "docs/CLOUD-ENVIRONMENT.md",
     "docs/ENVIRONMENT-VALIDATION.md",
     "docs/IMPACT-EVALUATION.md",
@@ -638,6 +640,7 @@
     "evaluations/dispatch/project/docs/dispatch-contract.md",
     "evaluations/dispatch/project/docs/dispatch-policy.md",
     "evaluations/dispatch/project/package.json",
+    "evaluations/dispatch/project/routing/dispatch.json",
     "evaluations/dispatch/project/src/api/dispatch.ts",
     "evaluations/dispatch/project/src/archive/consumer.ts",
     "evaluations/dispatch/project/src/audit/consumer.ts",
@@ -658,6 +661,8 @@
     "evaluations/dispatch/project/test/refund.test.ts",
     "evaluations/dispatch/project/tsconfig.json",
     "evaluations/dispatch/relative-imports-baseline.json",
+    "evaluations/dispatch/routing-protocol.md",
+    "evaluations/dispatch/routing.config.json",
     "evaluations/weftlet/baseline.json",
     "evaluations/weftlet/cases.json",
     "evaluations/weftlet/context-graph.config.json",
@@ -743,6 +748,8 @@
     "src/extraction/module-request.ts",
     "src/extraction/providers.test.ts",
     "src/extraction/providers.ts",
+    "src/extraction/routing.test.ts",
+    "src/extraction/routing.ts",
     "src/extraction/scip-project.test.ts",
     "src/extraction/scip-project.ts",
     "src/extraction/semantic-process.test.ts",
@@ -769,6 +776,7 @@
     "tests/module-boundaries.test.ts",
     "tests/rdf-ontology.test.ts",
     "tests/rdf.test.ts",
+    "tests/routing.test.ts",
     "tests/runtime.test.ts",
     "tests/snapshot-lifecycle.test.ts"
   ],

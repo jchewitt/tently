@@ -13,10 +13,13 @@ import { RepositoryContractExtractor, RepositoryFileExtractor, ScipSymbolExtract
 import { sha256, stableJson } from "../infrastructure/util.js";
 import { contextPackEvidenceAuthority } from "../graph/query.js";
 import { inWorkingScope, readWorkingContent } from "../repository/working-content.js";
+import { extractRoutingDeclarations, routingExtractorIdentity } from '../extraction/routing.js';
+import { RdfEvidenceGraph } from '../graph/rdf.js';
 
 const execute = promisify(execFile);
 const implementationExtractors = new Set([
   'repository-file-extractor', 'repository-contract-extractor', 'scip-symbol-extractor',
+  routingExtractorIdentity.id,
 ]);
 
 /** Conservative code overlay: reindex implementation; invalidate changed prose, never synthesize intent. */
@@ -38,8 +41,14 @@ export async function buildWorkingOverlay(
   const changed = await repository.workingChanges();
   if (changed.length > 500) throw new Error('Overlay exceeds the 500 changed-path bound');
   const captured: { path: string; content: Buffer | null }[] = [];
+  const routingSources = config.routingSources ?? [];
+  const baseRouting = await extractRoutingDeclarations(repository, {
+    repositoryRoot: repository.root, repositoryId: config.repositoryId, ref: head,
+    commitSha: head, snapshotId: baseSnapshotId, changedPaths: [], deletedPaths: [], renamedPaths: {},
+  }, routingSources, { allowMissingSources: true });
   const roots = [...config.codeRoots, ...config.semanticSources, ...config.evidenceRoots,
-    ...config.contractPatterns, ...scipSourcePatterns(config.scip.sourceProject)];
+    ...config.contractPatterns, ...scipSourcePatterns(config.scip.sourceProject),
+    ...routingSources, ...baseRouting.referencedPaths];
   const excluded: string[] = [];
   for (const path of changed) {
     if (!inWorkingScope(path, roots)) {
@@ -59,9 +68,10 @@ export async function buildWorkingOverlay(
   const snapshotId = `${head}-overlay-${sha256(stableJson({
     baseContentDigest: base.manifest.contentDigest, overlayDigest,
     repositoryFileExtractor: repositoryFileExtractorIdentity,
+    ...(routingSources.length ? { routingExtractor: routingExtractorIdentity } : {}),
   })).slice(0, 32)}`;
   const affected = new Set(captured.map((file) => file.path));
-  const facts = await withCommittedTree(repository.root, head, async (root) => {
+  const extracted = await withCommittedTree(repository.root, head, async (root) => {
     for (const file of captured) {
       const target = join(root, file.path);
       if (file.content === null) await rm(target, { force: true });
@@ -72,7 +82,9 @@ export async function buildWorkingOverlay(
     }
     const git = (...args: string[]) => execute('git', args, { cwd: root });
     await git('init', '--quiet');
-    await git('add', '.');
+    // The archive already contains only committed files plus explicitly captured changes.
+    // Preserve tracked inputs even when their repository .gitignore also matches them.
+    await git('add', '--force', '.');
     await git('-c', 'user.name=Context Graph Draft', '-c', 'user.email=draft@example.invalid',
       '-c', 'commit.gpgsign=false', 'commit', '--quiet', '-m', 'Isolated overlay input');
     const draftRepository = new GitRepository(root);
@@ -84,17 +96,30 @@ export async function buildWorkingOverlay(
       renamedPaths: {},
     };
     const scip = await new ScipTypeScriptIndexer(config.scip, storageRoot).index(context);
+    const routing = await extractRoutingDeclarations(draftRepository, context, routingSources,
+      { allowMissingSources: true });
+    const uncapturedEndpoints = routing.referencedPaths.filter((path) => !inWorkingScope(path, roots));
+    if (uncapturedEndpoints.length) {
+      throw new Error(`Draft routing endpoints are outside captured source scope; add them to configured source scope before rebuilding: ${uncapturedEndpoints.join(', ')}`);
+    }
     const extractors = [
       new RepositoryFileExtractor(draftRepository, config.codeRoots, scip.digest),
       new RepositoryContractExtractor(draftRepository, config.contractPatterns,
         config.contractConsumerRoots ?? config.codeRoots, config.contractAliases),
       new ScipSymbolExtractor(draftRepository, scip),
     ];
-    return (await Promise.all(extractors.map((e) => e.extract(context)))).flat().map(({ id: _id, ...fact }) => {
+    const facts = [...(await Promise.all(extractors.map((e) => e.extract(context)))).flat(),
+      ...routing.facts].map(({ id: _id, ...fact }) => {
       const draft = { ...fact, snapshotId, authority: 'draft' as const,
+        ...(fact.extractor.id === routingExtractorIdentity.id ? { sourceAuthority: 'draft' as const } : {}),
         provenance: { ...fact.provenance, commitSha: head } };
       return { ...draft, id: sha256(stableJson(draft)) };
     });
+    const diagnostics = routing.diagnostics.map(({ id: _id, ...item }) => {
+      const draft = { ...item, provenance: item.provenance.map((span) => ({ ...span, commitSha: head })) };
+      return { ...draft, id: sha256(stableJson(draft)) };
+    }).sort((a, b) => a.id.localeCompare(b.id));
+    return { facts, diagnostics };
   });
   const retained = base.facts.filter((fact) =>
     !implementationExtractors.has(fact.extractor.id) &&
@@ -105,14 +130,16 @@ export async function buildWorkingOverlay(
       node.id === `component:file:${path}` || node.id === `document:${path}` || node.label === path,
     )),
   ).map((fact) => ({ ...fact, snapshotId }));
-  const allFacts = [...retained, ...facts].sort((a, b) => a.id.localeCompare(b.id));
+  const allFacts = [...retained, ...extracted.facts].sort((a, b) => a.id.localeCompare(b.id));
   const overlay: GraphSnapshot = {
     ...base,
     manifest: {
       ...base.manifest, snapshotId, baseSha: head, overlayDigest, overlayCapture,
       extractorVersions: { ...base.manifest.extractorVersions,
-        [repositoryFileExtractorIdentity.id]: repositoryFileExtractorIdentity.version },
-      generatedAt: new Date().toISOString(), contentDigest: sha256(stableJson(allFacts)),
+        [repositoryFileExtractorIdentity.id]: repositoryFileExtractorIdentity.version,
+        ...(routingSources.length ? { [routingExtractorIdentity.id]: routingExtractorIdentity.version } : {}) },
+      generatedAt: new Date().toISOString(), contentDigest: sha256(stableJson(routingSources.length
+        ? { facts: allFacts, diagnostics: extracted.diagnostics } : allFacts)),
     },
     facts: allFacts,
     invariants: base.invariants.map((rule) => ({
@@ -123,8 +150,11 @@ export async function buildWorkingOverlay(
       'Draft implementation overlay: changed semantic documents require explicit re-extraction.',
       `Changes outside configured source scope are excluded: ${excluded.join(', ') || '(none)'}`,
     ],
-    diagnostics: [],
+    diagnostics: extracted.diagnostics,
   };
+  if (routingSources.length && !(await new RdfEvidenceGraph(overlay).validate()).conforms) {
+    throw new Error('Draft routing overlay failed SHACL validation; saved evidence was preserved');
+  }
   if (await repository.resolveRef('HEAD') !== head) throw new Error('HEAD changed during overlay capture; retry');
   await store.write(overlay);
   await store.updateHead(`overlay-${sha256(`${resolve(repository.root)}:${agent}`).slice(0, 24)}`, snapshotId);
