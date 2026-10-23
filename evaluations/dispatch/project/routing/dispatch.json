@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "routes": [
+    {
+      "id": "archive-completion",
+      "scope": "example/dispatch",
+      "channel": "dispatch.completed.v1",
+      "producer": "src/dispatch/executor.ts",
+      "consumer": "src/archive/consumer.ts"
+    }
+  ]
+}

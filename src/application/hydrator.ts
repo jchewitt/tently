@@ -22,6 +22,7 @@ import { documentLinkerIdentity, linkSemanticDocuments } from "../extraction/doc
 import { runtimeEvidenceFacts } from "../extraction/runtime-evidence.js";
 import { matchesRepositoryGlob } from "../repository/glob.js";
 import { RdfEvidenceGraph } from "../graph/rdf.js";
+import { extractRoutingDeclarations, routingExtractorIdentity } from '../extraction/routing.js';
 
 export interface HydrationOptions {
   readonly signal?: AbortSignal;
@@ -126,6 +127,7 @@ export class ContextGraphHydrator {
         ...config.evidenceRoots,
         ...contractPatternRoots(config.contractPatterns),
         ...contractPatternRoots(scipSourcePatterns(config.scip.sourceProject)),
+        ...(config.routingSources ?? []),
       ]),
     ];
     const delta = await repository.delta(baseSha, commitSha, allRoots);
@@ -147,6 +149,7 @@ export class ContextGraphHydrator {
     const configurationDigest = sha256(stableJson(config));
     const scopeDigest = sha256(stableJson(selectedSemanticSources)).slice(0, 12);
     const effectiveSuffix = ['graph-v4', `links-${documentLinkerIdentity.version}`, `files-${repositoryFileExtractorIdentity.version}`,
+      ...(config.routingSources?.length ? [`routes-${routingExtractorIdentity.version}`] : []),
       configurationDigest.slice(0, 16), scopeDigest, baseSuffix, runtimeSuffix].filter(Boolean).join('-');
     const snapshotId = effectiveSuffix ? `${commitSha}-${effectiveSuffix}` : commitSha;
     const context: ExtractionContext = {
@@ -161,6 +164,8 @@ export class ContextGraphHydrator {
       renamedPaths: delta.renamedPaths,
       semanticPaths: selectedSemanticSources,
     };
+    // Validate committed routing inputs before invoking any provider or indexer.
+    const routing = await extractRoutingDeclarations(repository, context, config.routingSources ?? []);
     const sources = await repository.semanticSources(context, selectedSemanticSources);
     if (sources.length > (config.semantic.maxDocuments ?? 8) ||
       sources.some((source) => Buffer.byteLength(source.content) > (config.semantic.maxSourceBytes ?? 65_536))) {
@@ -243,12 +248,13 @@ export class ContextGraphHydrator {
       sources.filter((source) => config.approvedIntentSources?.some((pattern) =>
         matchesRepositoryGlob(source.path, pattern))).map((source) => source.path));
     diagnostics.push(...documents.diagnostics);
+    diagnostics.push(...routing.diagnostics);
     options.signal?.throwIfAborted();
     options.onProgress?.({ phase: 'compile-semantic-rdf' });
     const ontology = await this.dependencies.ontologyCompiler.compile(snapshotId, artifacts, context);
     const runtimeEvidence = runtimeRevision.references;
     const runtimeFacts = runtimeEvidenceFacts(context, runtimeEvidence);
-    const facts = [...semanticFacts, ...documents.facts, ...extractorFacts, ...runtimeFacts].sort(
+    const facts = [...semanticFacts, ...documents.facts, ...extractorFacts, ...routing.facts, ...runtimeFacts].sort(
       (left, right) => left.id.localeCompare(right.id),
     );
     const invariants = (
@@ -301,6 +307,7 @@ export class ContextGraphHydrator {
         extractorVersions: {
           assembly: 'standalone-graph-v4',
           [documentLinkerIdentity.id]: documentLinkerIdentity.version,
+          ...(config.routingSources?.length ? { [routingExtractorIdentity.id]: routingExtractorIdentity.version } : {}),
           semantic: config.semantic.extractorVersion,
           scip: scip.version,
           ontology: config.ontology.toolVersion,

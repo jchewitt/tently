@@ -18,6 +18,8 @@ export interface ContextGraphConfig {
   readonly contractConsumerRoots?: readonly string[];
   readonly contractAliases?: Readonly<Record<string, readonly string[]>>;
   readonly evidenceRoots: readonly string[];
+  /** Exact committed JSON routing declarations; opt-in, not approved intent or runtime evidence. */
+  readonly routingSources?: readonly string[];
   readonly semantic: {
     readonly provider: 'codex-cli' | 'module';
     /** Codex authentication only; secrets stay in the process environment. */
@@ -125,6 +127,14 @@ function validateConfig(value: unknown, absolutePath: string): asserts value is 
   }
   if (value.approvedIntentSources !== undefined) {
     requireConfig(isStringArray(value.approvedIntentSources), 'approvedIntentSources must be an array of strings', absolutePath);
+  }
+  if (value.routingSources !== undefined) {
+    requireConfig(isStringArray(value.routingSources) && value.routingSources.length <= 16 &&
+      new Set(value.routingSources).size === value.routingSources.length &&
+      value.routingSources.every((path) => path.endsWith('.json') && path === path.trim() && path.length <= 1024 &&
+        !/[\\:*?#[\]{}%\x00-\x1f\x7f-\x9f]/.test(path) &&
+        path.split('/').every((part) => part.length > 0 && part !== '.' && part !== '..')),
+    'routingSources must contain at most 16 unique exact repository-relative .json paths', absolutePath);
   }
   for (const field of [
     'semanticSources',

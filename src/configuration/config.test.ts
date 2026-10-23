@@ -44,6 +44,22 @@ function withoutPath(path: string): object {
 }
 
 describe('loadConfig', () => {
+  it('accepts opt-in routing declarations and rejects ambiguous or escaping source selections', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'context-graph-config-routing-'));
+    const path = join(root, 'config.json');
+    for (const routingSources of [undefined, [], ['deployment/routes.json']]) {
+      await writeFile(path, JSON.stringify({ ...validConfig, routingSources }));
+      await expect(loadConfig(path)).resolves.toBeDefined();
+    }
+    for (const routingSources of [null, 'routes.json', ['../routes.json'], ['/routes.json'],
+      ['C:/routes.json'], ['a\\routes.json'], ['a/*.json'], ['a//routes.json'], ['./routes.json'],
+      ['a/%72outes.json'], ['routes.yaml'], ['routes.json', 'routes.json'],
+      Array.from({ length: 17 }, (_, index) => `route-${index}.json`)]) {
+      await writeFile(path, JSON.stringify({ ...validConfig, routingSources }));
+      await expect(loadConfig(path)).rejects.toThrow('routingSources');
+    }
+  });
+
   it('accepts an explicit source project and rejects escaping paths, wildcard aliases and incompatible launchers', async () => {
     const root = await mkdtemp(join(tmpdir(), 'context-graph-config-scip-'));
     const path = join(root, 'config.json');

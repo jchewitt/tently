@@ -115,6 +115,11 @@ and [lifecycle checks](../tests/storage.test.ts).
 commit and retain source-line citations. Missing files produce diagnostics; directory mentions
 are not expanded. A reference does not approve intent or establish that a linked test passed.
 
+For a consumer that shares no typed symbol with its producer, opt into
+[explicit routing declarations](docs/ADR-014-routing-declarations.md) using `routingSources`.
+Each committed JSON record names a scoped binding and exact producer/consumer files. These
+are cited candidate dependencies; they do not assert an approved policy or observed delivery.
+
 Install the locally packed core and toolkit tarballs together. The installed commands are
 `weftlet`, `weftlet-mcp`, and the compatible `context-graph` / `context-graph-mcp` aliases. For example, after preparing a release:
 

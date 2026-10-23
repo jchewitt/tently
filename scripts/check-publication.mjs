@@ -82,6 +82,7 @@ try {
         'dist/interfaces/cli.js', 'dist/interfaces/mcp.js', 'dist/extraction/static.js',
         'dist/extraction/scip-project.js', 'dist/configuration/scip-project.js',
         'dist/extraction/document.js', 'dist/extraction/document-references.js', 'dist/extraction/module-request.js',
+        'dist/extraction/routing.js',
         'dist/graph/ranking.js',
         'runtime-check.mjs', 'runtime-check.d.mts',
         'examples/generic-typescript/context-graph.config.json',
@@ -211,6 +212,11 @@ try {
       )}\n`,
     ),
     writeFile(join(consumer, 'src', 'contract.ts'), 'export interface Greeting { text: string }\n'),
+    writeFile(join(consumer, 'src', 'archive.ts'), 'export const archive = (value: unknown) => value;\n'),
+    writeFile(join(consumer, 'routing.json'), JSON.stringify({ schemaVersion: 1, routes: [{
+      id: 'archive', scope: 'public-smoke', channel: 'greeting.completed',
+      producer: 'src/consumer.ts', consumer: 'src/archive.ts',
+    }] }) + '\n'),
     writeFile(join(consumer, 'intent.md'), '# Greeting\nSee [implementation](src/consumer.ts) and [checks](test/contract.test.ts).\n'),
     writeFile(join(consumer, 'test', 'contract.test.ts'), "import type { Greeting } from '@fixture/contracts';\nexport const tested: Greeting = { text: 'test' };\n"),
     writeFile(
@@ -233,6 +239,8 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { ScipSymbolExtractor, ScipTypeScriptIndexer, RepositoryFileExtractor } from ${JSON.stringify(staticModule)};
 import { linkSemanticDocuments } from ${JSON.stringify(new URL('document.js', staticModule).href)};
+import { extractRoutingDeclarations } from ${JSON.stringify(new URL('routing.js', staticModule).href)};
+import { GitRepository } from ${JSON.stringify(new URL('../repository/git.js', staticModule).href)};
 import { renderContextPackVisualization, RdfEvidenceGraph, CG, SnapshotImpactQueryService } from ${JSON.stringify(toolkitModule)};
 
 const root = process.cwd();
@@ -287,7 +295,12 @@ if (moduleRequest?.object.id !== 'contract:module:./src%2Fcontract.js' ||
     moduleRequest.object.attributes?.resolution !== 'unresolved' || moduleRequest.extractor.version !== '2.0.0') {
   throw new Error('Installed file extractor did not preserve repository-relative request identity');
 }
-const facts = [...sourceFacts, ...documents.facts, ...fileFacts];
+const routing = await extractRoutingDeclarations(new GitRepository(root), context, ['routing.json']);
+if (routing.facts.length !== 2 || routing.diagnostics.length ||
+    routing.facts.some((fact) => fact.authority !== 'inferred' || fact.extractionReview !== 'deterministic')) {
+  throw new Error('Installed routing declarations did not retain explicit bindings and evidence authority');
+}
+const facts = [...sourceFacts, ...documents.facts, ...fileFacts, ...routing.facts];
 const snapshot = { manifest: { schemaVersion:1, repositoryId:'publication-smoke',ref:'HEAD',commitSha:context.commitSha,snapshotId:context.snapshotId,contentDigest:index.digest,generatedAt:'2026-01-01',ontologyVersion:'rdf-v1',extractorVersions:{},semanticModel:'none',semanticPromptVersion:'none',semanticArtifactKeys:[],scipIndexDigest:index.digest,rdfDigest:'' }, facts, invariants:[],runtimeEvidence:[],unresolved:[] };
 const graph = new RdfEvidenceGraph(snapshot);
 if (!(await graph.validate()).conforms) throw new Error('Installed SHACL validation failed');
