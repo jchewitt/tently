@@ -108,7 +108,7 @@
       "destinationPath": "package.json",
       "sourceSha256": "a575dbb2fed8c554b95e8e9b3e03a0c21cab1be7249860bbebc18e046b2ff78d",
       "modified": true,
-      "destinationSha256": "0f4b671d7ef81f74886fbf37f0d50c21c6863af1203ece18e3da01dd8c0b910f"
+      "destinationSha256": "c7a5cbf191d699a51a22fb961ba84e9f73521c0cc332c697f67a9267812de9ee"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/LICENSE",
@@ -143,7 +143,7 @@
       "destinationPath": "packages/core/package.json",
       "sourceSha256": "2a29066eb8452f22fafcb06bb035a84dda93c5705dba32aba600a1b7e5aaf19c",
       "modified": true,
-      "destinationSha256": "9dbd393a312bb6a992b53d2624279b62991e64609beb506744186614f9b194cf"
+      "destinationSha256": "b7ab260df2ff6005788e6891449205b9b9c9f96aca13b680578a4f776aa21b52"
     },
     {
       "sourcePath": "tools/context-graph/packages/core/src/core.ts",
@@ -578,15 +578,8 @@
   ],
   "authoredPaths": [
     ".changeset/README.md",
-    ".changeset/cited-document-links.md",
-    ".changeset/committed-source-indexing.md",
     ".changeset/config.json",
-    ".changeset/explicit-routing-declarations.md",
-    ".changeset/impact-evaluation-baseline.md",
-    ".changeset/proximity-impact-ranking.md",
-    ".changeset/relative-module-requests.md",
     ".changeset/release-plan.json",
-    ".changeset/windows-consumer-reliability.md",
     ".github/workflows/check.yml",
     ".github/workflows/publish.yml",
     ".github/workflows/version.yml",
