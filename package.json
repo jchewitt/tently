@@ -1,6 +1,6 @@
 {
   "name": "@weftlet/toolkit",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Evidence-backed context graphs for AI development agents: product intent, contracts, code, tests and runtime behavior",
   "license": "Apache-2.0",
   "type": "module",
