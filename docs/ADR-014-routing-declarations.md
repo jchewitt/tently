@@ -9,8 +9,8 @@ have an operational consumer that static imports alone do not retrieve.
 
 This increment accepts a small, explicit Weftlet mapping format. It does not parse a broker's
 deployment configuration or verify a running subscription. The configuration selects exact
-committed files through `routingSources`; no directory expansion, glob, network request or
-working-checkout read occurs during committed hydration. Future deployment-format adapters
+committed files through `routingSources`. The routing extractor performs no directory expansion,
+glob lookup, network request or working-checkout read. Future deployment-format adapters
 can supply stronger evidence separately without changing this declaration's meaning.
 
 ## Configuration and source format

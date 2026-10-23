@@ -62,9 +62,14 @@ measurement. Original saved-snapshot results remain unchanged.
 to their requesting directory. On those same frozen inputs, dispatch retains 15/16 candidates
 while three-page distractions fall from 7/7 to 0/7; Weftlet retains 24/24 first-page candidates
 and one later-page distraction. Refreshes and overlays have versioned identities, and old
-snapshots remain readable with their original facts. The archival routing gap remains.
+snapshots remain readable with their original facts. The archival routing gap remains without
+additional source evidence. [Explicit routing declarations](ADR-014-routing-declarations.md)
+now supply opt-in, cited producer/consumer bindings with inferred authority. A separately
+committed authored mapping improves same-SHA dispatch retrieval from 15/16 to 16/16 on page
+one, with zero labeled distractions. Drafts rebuild and invalidate affected bindings; these
+results do not establish deployed subscriptions or observed delivery.
 Next work should be separate, reviewed increments:
-evaluate explicit operational routing evidence against the unchanged dispatch control;
+evaluate actual deployment/runtime routing evidence against the unchanged dispatch control;
 review explicit mappings
 and run a bounded live semantic comparison when the maintainer is ready;
 retain the passing hosted Ubuntu CI gate; validate fresh-cloud

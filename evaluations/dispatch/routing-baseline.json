@@ -1,0 +1,598 @@
+{
+  "schemaVersion": 1,
+  "status": "advisory-authored-routing-source-comparison",
+  "implementationCommit": "5b8d49679f48837fe2ea465940b8c852e543cf5d",
+  "inputAndProtocolCommit": "e5510479c0545e38a41a902b65839529a3e66e73",
+  "measuredAt": "2026-10-23T00:36:30.855Z",
+  "runtime": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "rankingVersion": "proximity-diversity-v1",
+  "protocol": {
+    "file": "evaluations/dispatch/routing-protocol.md",
+    "originalDispatchRecord": "evaluations/dispatch/baseline.json",
+    "relativeImportRecord": "evaluations/dispatch/relative-imports-baseline.json",
+    "original27InputsUnchanged": true,
+    "evaluatorAndRankingDigestsUnchanged": true,
+    "suiteFile": "evaluations/dispatch/cases.json",
+    "maxFacts": 60,
+    "maxPages": 3,
+    "maxDepth": 32,
+    "modelCalls": 0
+  },
+  "newInputSha256": {
+    "evaluations/dispatch/project/routing/dispatch.json": "84db0cee2be9e5c8e98fdd56a4aa5409cb7cdc2e41ab0426a3724c428594d212",
+    "evaluations/dispatch/routing.config.json": "2d406bb31332a6f29a7c0ea7336883db9b6e0f0bb11ccdf8365961133945f29f",
+    "evaluations/dispatch/routing-protocol.md": "e100c74f3319756ea6dc225e9a3aa42b4cf162697d03be19149dd431932890a5"
+  },
+  "implementationSourceDigests": {
+    "src/extraction/routing.ts": "a9d182790914100d7673e1e2921dc9c24d89bd9add67348929aa1fc67b7e5498",
+    "src/configuration/config.ts": "5e34e4dfa38219570bd6f13239609b432830e76162f44a768a929895f66dc02a",
+    "src/application/hydrator.ts": "8c751fe04922d1117728672b78a1de2d6f42f403e9d506f387c95661e641a5c0",
+    "src/application/overlay.ts": "aa98f47bc197f87ca2f023176e149c5dc247a3028293e9c8d39df872dd8c9ee7",
+    "src/graph/query.ts": "ead61dfde748cd1a02c8b1a14dc729173a6b85ec3b8213af2bd5169c60b70253",
+    "src/graph/ranking.ts": "da29de6e0979bec8c3ca7f014bcfa9aa89cfbbf97d1bdb5a64d279b94e651fd5"
+  },
+  "control": {
+    "configurationFile": "evaluations/dispatch/context-graph.config.json",
+    "configurationDigest": "3f17b3a8ad39bbd638b7032d3a5e5f95119a8d5d4d564e82a67768b4093fd0aa",
+    "suiteDigest": "3f41615755b80e3bd561f5b28c3677bf95e6a94eead5571e9b1ec882a3d8dc34",
+    "snapshot": {
+      "repositoryId": "example/dispatch-evaluation",
+      "commitSha": "e5510479c0545e38a41a902b65839529a3e66e73",
+      "snapshotId": "e5510479c0545e38a41a902b65839529a3e66e73-graph-v4-links-2.0.0-files-2.0.0-3f17b3a8ad39bbd6-f5177df64ec0",
+      "contentDigest": "52c1009503b91b3b64aa01d0e4619c5e1cc11acc96fe4a7ced071ff2ec0012d2",
+      "extractorVersions": {
+        "assembly": "standalone-graph-v4",
+        "document-linker": "2.0.0",
+        "semantic": "1.1.0",
+        "scip": "0.4.0",
+        "ontology": "rdf-record-v1",
+        "repository-file-extractor": "2.0.0",
+        "repository-contract-extractor": "1.1.0",
+        "scip-symbol-extractor": "1.0.0"
+      },
+      "scipIndexDigest": "666e9cf042344aaa7ae9dd06971abcd8604c24390b1816d77b32f5b3bb0031e0",
+      "semanticArtifactKeys": [
+        "95b25e3ce51e9662177eef968c36265fadb989b547bef67fd2a0e9bcca933a85",
+        "cdd155d9cdaebb11e9e7a8a8b674a29cb1aca307dd56ed27b550b2088816dec8",
+        "e261f5a696fe196830c43222859649301dae1ded1a294b3c80656664df4b9ac3"
+      ]
+    },
+    "snapshotFileSha256": "ce04179dc513c2f9ca68607cdbff0e2b3e6dbf7b6f4afc519d0ff9af80ec4a8e",
+    "reportDigest": "a32f2c55e6fe8d1c6fe198b64769613b5c1030a8186123b3d89762af860d5f11",
+    "hydration": {
+      "extracted": 0,
+      "reused": 3
+    },
+    "coverage": {
+      "totalFacts": 227,
+      "extractorCounts": {
+        "repository-file-extractor": 50,
+        "scip-symbol-extractor": 164,
+        "document-linker": 13
+      },
+      "semanticAssertions": 0,
+      "runtimeReferences": 0,
+      "approvedIntentSources": []
+    },
+    "summary": {
+      "expected": 16,
+      "firstPage": 15,
+      "threePages": 15,
+      "distractionLabels": 7,
+      "firstPageDistractions": 0,
+      "threePageDistractions": 0
+    },
+    "results": [
+      {
+        "id": "upstream-request-contract",
+        "budget": {
+          "maxFacts": 60,
+          "maxDepth": 32,
+          "maxPages": 3
+        },
+        "recall": {
+          "expected": 6,
+          "firstPage": 6,
+          "examinedPages": 6,
+          "examinedFraction": 1
+        },
+        "exploration": {
+          "rankingVersion": "proximity-diversity-v1",
+          "pages": 3,
+          "factsExamined": 180,
+          "reachableFacts": 183,
+          "depthLimitReached": false,
+          "pageBudgetExhausted": true,
+          "complete": false
+        },
+        "missingTargets": [],
+        "distractions": [
+          {
+            "path": "src/refund/policy.ts",
+            "inSnapshot": true,
+            "inFirstPage": false,
+            "inExaminedPages": false
+          },
+          {
+            "path": "src/audit/consumer.ts",
+            "inSnapshot": true,
+            "inFirstPage": false,
+            "inExaminedPages": false
+          }
+        ]
+      },
+      {
+        "id": "async-submission-consumers",
+        "budget": {
+          "maxFacts": 60,
+          "maxDepth": 32,
+          "maxPages": 3
+        },
+        "recall": {
+          "expected": 6,
+          "firstPage": 5,
+          "examinedPages": 5,
+          "examinedFraction": 0.8333333333333334
+        },
+        "exploration": {
+          "rankingVersion": "proximity-diversity-v1",
+          "pages": 3,
+          "factsExamined": 180,
+          "reachableFacts": 183,
+          "depthLimitReached": false,
+          "pageBudgetExhausted": true,
+          "complete": false
+        },
+        "missingTargets": [
+          {
+            "path": "src/archive/consumer.ts",
+            "outcome": "not-retrieved-within-budget"
+          }
+        ],
+        "distractions": [
+          {
+            "path": "src/refund/planner.ts",
+            "inSnapshot": true,
+            "inFirstPage": false,
+            "inExaminedPages": false
+          },
+          {
+            "path": "src/audit/consumer.ts",
+            "inSnapshot": true,
+            "inFirstPage": false,
+            "inExaminedPages": false
+          }
+        ]
+      },
+      {
+        "id": "same-name-policy",
+        "budget": {
+          "maxFacts": 60,
+          "maxDepth": 32,
+          "maxPages": 3
+        },
+        "recall": {
+          "expected": 4,
+          "firstPage": 4,
+          "examinedPages": 4,
+          "examinedFraction": 1
+        },
+        "exploration": {
+          "rankingVersion": "proximity-diversity-v1",
+          "pages": 3,
+          "factsExamined": 180,
+          "reachableFacts": 183,
+          "depthLimitReached": false,
+          "pageBudgetExhausted": true,
+          "complete": false
+        },
+        "missingTargets": [],
+        "distractions": [
+          {
+            "path": "src/refund/policy.ts",
+            "inSnapshot": true,
+            "inFirstPage": false,
+            "inExaminedPages": false
+          },
+          {
+            "path": "src/refund/planner.ts",
+            "inSnapshot": true,
+            "inFirstPage": false,
+            "inExaminedPages": false
+          },
+          {
+            "path": "src/audit/consumer.ts",
+            "inSnapshot": true,
+            "inFirstPage": false,
+            "inExaminedPages": false
+          }
+        ]
+      }
+    ]
+  },
+  "enabled": {
+    "configurationFile": "evaluations/dispatch/routing.config.json",
+    "configurationDigest": "96d0cf1fae13551c516765d5be81e8097ca663ca05cb842a2a0fc932966ec1a4",
+    "suiteDigest": "3f41615755b80e3bd561f5b28c3677bf95e6a94eead5571e9b1ec882a3d8dc34",
+    "snapshot": {
+      "repositoryId": "example/dispatch-evaluation",
+      "commitSha": "e5510479c0545e38a41a902b65839529a3e66e73",
+      "snapshotId": "e5510479c0545e38a41a902b65839529a3e66e73-graph-v4-links-2.0.0-files-2.0.0-routes-1.0.0-96d0cf1fae13551c-f5177df64ec0",
+      "contentDigest": "29be46afa732ac0eb8d9b1c26eea1ca3fbfbf6294879b5ed7297014353198f9a",
+      "extractorVersions": {
+        "assembly": "standalone-graph-v4",
+        "document-linker": "2.0.0",
+        "routing-declaration-extractor": "1.0.0",
+        "semantic": "1.1.0",
+        "scip": "0.4.0",
+        "ontology": "rdf-record-v1",
+        "repository-file-extractor": "2.0.0",
+        "repository-contract-extractor": "1.1.0",
+        "scip-symbol-extractor": "1.0.0"
+      },
+      "scipIndexDigest": "666e9cf042344aaa7ae9dd06971abcd8604c24390b1816d77b32f5b3bb0031e0",
+      "semanticArtifactKeys": [
+        "95b25e3ce51e9662177eef968c36265fadb989b547bef67fd2a0e9bcca933a85",
+        "cdd155d9cdaebb11e9e7a8a8b674a29cb1aca307dd56ed27b550b2088816dec8",
+        "e261f5a696fe196830c43222859649301dae1ded1a294b3c80656664df4b9ac3"
+      ]
+    },
+    "snapshotFileSha256": "c735024971820b71d79fa94a06a9b6057eb7c8c4fc8f24b66f3e8a04a30adc6b",
+    "reportDigest": "f41f11bd8e3e8a8ea7df465067dfa556e085dcc09397a50079878a2065e8964f",
+    "hydration": {
+      "extracted": 0,
+      "reused": 3
+    },
+    "coverage": {
+      "totalFacts": 229,
+      "extractorCounts": {
+        "repository-file-extractor": 50,
+        "scip-symbol-extractor": 164,
+        "document-linker": 13,
+        "routing-declaration-extractor": 2
+      },
+      "semanticAssertions": 0,
+      "runtimeReferences": 0,
+      "approvedIntentSources": []
+    },
+    "summary": {
+      "expected": 16,
+      "firstPage": 16,
+      "threePages": 16,
+      "distractionLabels": 7,
+      "firstPageDistractions": 0,
+      "threePageDistractions": 0
+    },
+    "results": [
+      {
+        "id": "upstream-request-contract",
+        "budget": {
+          "maxFacts": 60,
+          "maxDepth": 32,
+          "maxPages": 3
+        },
+        "recall": {
+          "expected": 6,
+          "firstPage": 6,
+          "examinedPages": 6,
+          "examinedFraction": 1
+        },
+        "exploration": {
+          "rankingVersion": "proximity-diversity-v1",
+          "pages": 3,
+          "factsExamined": 180,
+          "reachableFacts": 198,
+          "depthLimitReached": false,
+          "pageBudgetExhausted": true,
+          "complete": false
+        },
+        "missingTargets": [],
+        "distractions": [
+          {
+            "path": "src/refund/policy.ts",
+            "inSnapshot": true,
+            "inFirstPage": false,
+            "inExaminedPages": false
+          },
+          {
+            "path": "src/audit/consumer.ts",
+            "inSnapshot": true,
+            "inFirstPage": false,
+            "inExaminedPages": false
+          }
+        ]
+      },
+      {
+        "id": "async-submission-consumers",
+        "budget": {
+          "maxFacts": 60,
+          "maxDepth": 32,
+          "maxPages": 3
+        },
+        "recall": {
+          "expected": 6,
+          "firstPage": 6,
+          "examinedPages": 6,
+          "examinedFraction": 1
+        },
+        "exploration": {
+          "rankingVersion": "proximity-diversity-v1",
+          "pages": 3,
+          "factsExamined": 180,
+          "reachableFacts": 198,
+          "depthLimitReached": false,
+          "pageBudgetExhausted": true,
+          "complete": false
+        },
+        "missingTargets": [],
+        "distractions": [
+          {
+            "path": "src/refund/planner.ts",
+            "inSnapshot": true,
+            "inFirstPage": false,
+            "inExaminedPages": false
+          },
+          {
+            "path": "src/audit/consumer.ts",
+            "inSnapshot": true,
+            "inFirstPage": false,
+            "inExaminedPages": false
+          }
+        ]
+      },
+      {
+        "id": "same-name-policy",
+        "budget": {
+          "maxFacts": 60,
+          "maxDepth": 32,
+          "maxPages": 3
+        },
+        "recall": {
+          "expected": 4,
+          "firstPage": 4,
+          "examinedPages": 4,
+          "examinedFraction": 1
+        },
+        "exploration": {
+          "rankingVersion": "proximity-diversity-v1",
+          "pages": 3,
+          "factsExamined": 180,
+          "reachableFacts": 198,
+          "depthLimitReached": false,
+          "pageBudgetExhausted": true,
+          "complete": false
+        },
+        "missingTargets": [],
+        "distractions": [
+          {
+            "path": "src/refund/policy.ts",
+            "inSnapshot": true,
+            "inFirstPage": false,
+            "inExaminedPages": false
+          },
+          {
+            "path": "src/refund/planner.ts",
+            "inSnapshot": true,
+            "inFirstPage": false,
+            "inExaminedPages": false
+          },
+          {
+            "path": "src/audit/consumer.ts",
+            "inSnapshot": true,
+            "inFirstPage": false,
+            "inExaminedPages": false
+          }
+        ]
+      }
+    ]
+  },
+  "repeated": {
+    "hydration": {
+      "extracted": 0,
+      "reused": 3
+    },
+    "snapshotIdentityAndContentUnchanged": true
+  },
+  "supplementalDiagnosis": {
+    "snapshotId": "e5510479c0545e38a41a902b65839529a3e66e73-graph-v4-links-2.0.0-files-2.0.0-routes-1.0.0-96d0cf1fae13551c-f5177df64ec0",
+    "contentDigest": "29be46afa732ac0eb8d9b1c26eea1ca3fbfbf6294879b5ed7297014353198f9a",
+    "fullContinuation": {
+      "case": "async-submission-consumers",
+      "pages": [
+        60,
+        60,
+        60,
+        18
+      ],
+      "returned": 198,
+      "uniqueFacts": 198,
+      "archiveImplementationFacts": 6,
+      "archiveTestFacts": 7,
+      "firstPageArchiveImplementationFacts": 3,
+      "firstPageArchiveTestFacts": 1,
+      "distractionFacts": 0
+    },
+    "nonRoutingFactsUnchangedExceptSnapshotId": true,
+    "diagnosticsUnchanged": true,
+    "artifactKeysAndScipDigestUnchanged": true,
+    "rdfProjectionEquivalent": true,
+    "shaclConforms": true,
+    "routingSparql": [
+      {
+        "binding": "urn:context-graph:node:workflow%3Arouting%3A65103ba338d82f02c7a29974749daff6c0bb97a7f76c6ea862228a216d14a573",
+        "consumer": "urn:context-graph:node:component%3Afile%3Asrc%2Farchive%2Fconsumer.ts"
+      }
+    ],
+    "routingWitnesses": [
+      {
+        "subject": {
+          "id": "workflow:routing:65103ba338d82f02c7a29974749daff6c0bb97a7f76c6ea862228a216d14a573",
+          "kind": "Workflow",
+          "label": "Routing example/dispatch/archive-completion: dispatch.completed.v1",
+          "attributes": {
+            "evidenceLayer": "routing-declaration",
+            "routeId": "archive-completion",
+            "scope": "example/dispatch",
+            "channel": "dispatch.completed.v1"
+          }
+        },
+        "predicate": "routesThrough",
+        "object": {
+          "id": "component:file:src/archive/consumer.ts",
+          "label": "src/archive/consumer.ts",
+          "kind": "Component"
+        },
+        "provenance": {
+          "path": "routing/dispatch.json",
+          "startLine": 1,
+          "endLine": 13,
+          "digest": "84db0cee2be9e5c8e98fdd56a4aa5409cb7cdc2e41ab0426a3724c428594d212",
+          "commitSha": "e5510479c0545e38a41a902b65839529a3e66e73"
+        },
+        "extractor": {
+          "id": "routing-declaration-extractor",
+          "version": "1.0.0"
+        },
+        "confidence": 1,
+        "authority": "inferred",
+        "sourceAuthority": "inferred",
+        "extractionReview": "deterministic",
+        "id": "5cc15e96c9722a8e2855e6c7f1018a4cdb20b9e601f78b042b0f30c381da0c0b",
+        "snapshotId": "e5510479c0545e38a41a902b65839529a3e66e73-graph-v4-links-2.0.0-files-2.0.0-routes-1.0.0-96d0cf1fae13551c-f5177df64ec0"
+      },
+      {
+        "subject": {
+          "id": "component:file:src/dispatch/executor.ts",
+          "label": "src/dispatch/executor.ts",
+          "kind": "Component"
+        },
+        "predicate": "emits",
+        "object": {
+          "id": "workflow:routing:65103ba338d82f02c7a29974749daff6c0bb97a7f76c6ea862228a216d14a573",
+          "kind": "Workflow",
+          "label": "Routing example/dispatch/archive-completion: dispatch.completed.v1",
+          "attributes": {
+            "evidenceLayer": "routing-declaration",
+            "routeId": "archive-completion",
+            "scope": "example/dispatch",
+            "channel": "dispatch.completed.v1"
+          }
+        },
+        "provenance": {
+          "path": "routing/dispatch.json",
+          "startLine": 1,
+          "endLine": 13,
+          "digest": "84db0cee2be9e5c8e98fdd56a4aa5409cb7cdc2e41ab0426a3724c428594d212",
+          "commitSha": "e5510479c0545e38a41a902b65839529a3e66e73"
+        },
+        "extractor": {
+          "id": "routing-declaration-extractor",
+          "version": "1.0.0"
+        },
+        "confidence": 1,
+        "authority": "inferred",
+        "sourceAuthority": "inferred",
+        "extractionReview": "deterministic",
+        "id": "f281fb83c3ebbb2c975a02e0af5821ac39f818bd501937f794a5fdff35cc9db1",
+        "snapshotId": "e5510479c0545e38a41a902b65839529a3e66e73-graph-v4-links-2.0.0-files-2.0.0-routes-1.0.0-96d0cf1fae13551c-f5177df64ec0"
+      }
+    ],
+    "snapshotDiagnostics": [
+      {
+        "id": "80738a6872e7fd416ce349135e244fc109ee3680966177b3b486917c0e018a1b",
+        "kind": "implementationGaps",
+        "reason": "Document reference policy.md resolves to docs/policy.md, which is not a committed file. Directory references are not expanded.",
+        "provenance": [
+          {
+            "path": "docs/dispatch-policy.md",
+            "startLine": 10,
+            "endLine": 10,
+            "digest": "da1edfbcb27f7ca451e898ad92fca9635ad53aae8dc8ab5ffefd076b11170f2b",
+            "commitSha": "e5510479c0545e38a41a902b65839529a3e66e73"
+          }
+        ],
+        "relatedNodeIds": [
+          "document:docs/dispatch-policy.md",
+          "document:docs/policy.md"
+        ],
+        "evidenceScope": "source"
+      }
+    ]
+  },
+  "savedSnapshotByteChecks": [
+    {
+      "label": "dispatch-original",
+      "snapshotId": "fa902165a1f212a6d3245c847e1ab9b64a69715b-graph-v3-links-2.0.0-3f17b3a8ad39bbd6-f5177df64ec0",
+      "snapshotFileSha256": "267e2dea2ea98026d8345347f5c9d3030efbb757a6751a52e5a720795e8a1519",
+      "bytesUnchanged": true
+    },
+    {
+      "label": "document-links",
+      "snapshotId": "dcef64001d8d47cd1aeb4c1434992612158a104a-graph-v3-links-2.0.0-42f885befb5ce881-4f68cb388720",
+      "snapshotFileSha256": "58e2a957725baab8315920729aba96a0574891f1336eab9b7f9a37f534e6c670",
+      "bytesUnchanged": true
+    },
+    {
+      "label": "older-source-project",
+      "snapshotId": "eeaaa342d62c11eeef44bfdf81fa8dedcfeb205d-graph-v2-42f885befb5ce881-4f68cb388720",
+      "snapshotFileSha256": "6cfc77bf40228b0e86ab65dd5621008eb1ed7e93c8ae5c5a4c5fe25a4a281041",
+      "bytesUnchanged": true
+    },
+    {
+      "label": "dispatch-relative-imports",
+      "snapshotId": "fa902165a1f212a6d3245c847e1ab9b64a69715b-graph-v4-links-2.0.0-files-2.0.0-3f17b3a8ad39bbd6-f5177df64ec0",
+      "snapshotFileSha256": "37f943661b51696030ccc9ed918243d70e8c5d53f67c29f9b4945247776c8ca5",
+      "bytesUnchanged": true
+    },
+    {
+      "label": "weftlet-document-links-relative-imports",
+      "snapshotId": "dcef64001d8d47cd1aeb4c1434992612158a104a-graph-v4-links-2.0.0-files-2.0.0-42f885befb5ce881-4f68cb388720",
+      "snapshotFileSha256": "7eb6722068ed446964cf70690662522432d6c7a74e12a190d4a2febdc242f37a",
+      "bytesUnchanged": true
+    }
+  ],
+  "savedEvidenceRescoring": [
+    {
+      "label": "dispatch",
+      "snapshotId": "fa902165a1f212a6d3245c847e1ab9b64a69715b-graph-v4-links-2.0.0-files-2.0.0-3f17b3a8ad39bbd6-f5177df64ec0",
+      "reportDigest": "ac9dcd784eb748d12a24449bad52f5959c8e18517234e9614503923a1ad7003f",
+      "summary": {
+        "expected": 16,
+        "firstPage": 15,
+        "threePages": 15,
+        "distractionLabels": 7,
+        "firstPageDistractions": 0,
+        "threePageDistractions": 0
+      },
+      "savedOnly": true,
+      "metricsUnchanged": true
+    },
+    {
+      "label": "weftlet-document-links",
+      "snapshotId": "dcef64001d8d47cd1aeb4c1434992612158a104a-graph-v4-links-2.0.0-files-2.0.0-42f885befb5ce881-4f68cb388720",
+      "reportDigest": "9486bc276a6531736d36e458e43544d62f3bdb7469c1888b486579e8fe5fb1a6",
+      "summary": {
+        "expected": 24,
+        "firstPage": 24,
+        "threePages": 24,
+        "distractionLabels": 4,
+        "firstPageDistractions": 0,
+        "threePageDistractions": 1
+      },
+      "savedOnly": true,
+      "metricsUnchanged": true
+    }
+  ],
+  "limitations": [
+    "The single route was deliberately authored as a Weftlet mapping, not discovered from an executable broker configuration or observed runtime delivery.",
+    "Candidate-file recall measures use of the supplied declaration; it does not prove product causality, compatible payloads or current-diff safety.",
+    "The no-routing control still cannot retrieve the archival consumer; the original extraction gap remains without extra source evidence.",
+    "Routing facts remain inferred/deterministic even if the source path is listed as approved intent.",
+    "All non-routing fact fields match the same-SHA control except containing snapshotId; all three cases remain truncated at 180 of 198 reachable facts.",
+    "No live semantic-quality, browser or provider authentication result is claimed."
+  ]
+}

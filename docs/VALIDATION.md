@@ -8,6 +8,52 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## Explicit routing declarations, 2026-10-23
+
+[ADR 014](ADR-014-routing-declarations.md) adds opt-in committed source mappings for explicit
+producer/consumer bindings. Implementation `5b8d49679f48837fe2ea465940b8c852e543cf5d` was
+measured on input/protocol commit `e5510479c0545e38a41a902b65839529a3e66e73`, frozen before
+measurement. The original 27 dispatch inputs, cases and evaluator/ranking hashes are unchanged.
+The public-safe comparison is `evaluations/dispatch/routing-baseline.json`.
+
+Linux cloud, Node 24.19.0, pnpm 10.18.2:
+
+- The same-SHA no-routing control retains **15/16 expected files** on page one and within
+  three pages, with **0/7 labeled distractions**. Enabling the single authored declaration
+  retrieves **16/16 on page one and within three pages**, retaining **0/7 distractions**.
+  This measures use of a supplied mapping, not discovery or verification of a deployed route.
+- Hydration produces **227 control facts / 229 enabled facts**. Only two inferred,
+  deterministic routing facts are added; every non-routing fact field matches except its
+  containing snapshot ID. Diagnostics, SCIP digest and semantic artifact keys are unchanged.
+  Both runs reuse all three control artifacts with zero extraction/model calls. Repeating
+  enabled hydration retains snapshot identity/content and again reuses all three artifacts.
+- Full continuation returns **198 unique facts** (60/60/60/18), versus 183 reachable in the
+  control. All six archival implementation facts and seven archival test facts are reachable;
+  three implementation facts and one test fact appear on page one. A test-file relationship
+  does not assert test execution or delivery. No refund/audit distraction facts are returned.
+- Direct SPARQL returns the exact producer/binding/consumer pair with inferred authority.
+  SHACL conforms and RDF projection matches every fact field. The existing unresolved
+  Markdown reference remains a diagnostic; no approved intent or runtime evidence is added.
+- The final full publication gate passed **222 deterministic tests** (1 core + 221 toolkit),
+  one optional OML skip, build, 12 advisory architecture findings, inventory, licenses and
+  fresh packed-consumer installation. The installed smoke extracts a committed routing file
+  and includes its consumer in the complete SCIP/RDF/SHACL/query/viewer/MCP path.
+- Tests cover strict schemas/duplicate JSON keys, bounds, scoped identity, same-topic binding
+  isolation, exact regular Git blobs including Unicode/spaced paths, missing/ambiguous
+  endpoints, dirty committed querying, rename/delete, tracked-but-ignored manifests, repeated
+  overlays, draft authority, outside-scope endpoint rejection and failed-refresh preservation.
+  Secondary review found and resolved diagnostic ordering and draft freshness issues before
+  the final full gate. The isolated overlay now preserves all archived tracked inputs even
+  when `.gitignore` matches them.
+- Five historical snapshot files retain their recorded SHA-256 digests. Saved-only rescoring
+  of the latest dispatch and Weftlet graphs preserves their scores and reachability (15/16
+  and 24/24 first-page candidates respectively). All 79 original imported source paths/source
+  hashes remain intact. No source application was modified.
+
+Hosted Ubuntu/Windows results are attached to the implementation PR. Browser interaction,
+live provider authentication, broader semantic quality and actual deployment/runtime routing
+validation remain separate. This increment includes a minor changeset but no npm publication.
+
 ## Relative module request identities, 2026-10-22
 
 [ADR 013](ADR-013-relative-module-requests.md) scopes generic relative imports to the

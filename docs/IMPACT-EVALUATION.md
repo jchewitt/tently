@@ -302,11 +302,53 @@ facts. Saved queries do not silently repair old evidence. These synthetic/self-r
 cases measure candidate retrieval and labeled distractions, not exhaustive precision,
 operational delivery, approved intent or safety of the current diff.
 
+## Explicit routing source comparison
+
+[ADR 014](ADR-014-routing-declarations.md) adds opt-in committed mappings with exact producer
+and consumer paths. The declaration, configuration and protocol were committed at
+`e5510479c0545e38a41a902b65839529a3e66e73` before measurement. The original 27 inputs, cases,
+ranking and budgets remain frozen. This new source was deliberately authored; it is not a
+discovered deployment configuration. See `evaluations/dispatch/routing-protocol.md` and
+`evaluations/dispatch/routing-baseline.json` for the protocol and public-safe record.
+
+Implementation `5b8d49679f48837fe2ea465940b8c852e543cf5d` compares the original configuration
+with routing disabled and the new configuration with one mapping enabled, both at that new
+input SHA. The mapping names the executor and archival consumer with `dispatch.completed.v1`
+in `example/dispatch` scope. Its binding identity includes repository, scope and declaration
+ID; channel text is not a shared join key. Both added facts are inferred/deterministic and
+cite the committed mapping, without approval or observed-delivery claims.
+
+| Scenario | First page, control → enabled | Three pages, control → enabled | Enabled distractions |
+| --- | ---: | ---: | ---: |
+| Upstream request contract | 6/6 → 6/6 | 6/6 → 6/6 | 0/2 |
+| Asynchronous submission consumers | 5/6 → 6/6 | 5/6 → 6/6 | 0/2 |
+| Same-name domain policy | 4/4 → 4/4 | 4/4 → 4/4 | 0/3 |
+| Total | 15/16 → 16/16 | 15/16 → 16/16 | 0/7 |
+
+Both configurations have zero labeled distractions at both budgets. Enabled hydration adds
+two routing facts to the same 227 facts; all other fields match apart from containing snapshot
+ID. Reachability increases from 183 to 198 facts per case. The normal three-page result still
+stops at 180 with continuation. Supplemental full continuation exhausts 60/60/60/18 unique
+facts, including all six archival implementation facts and seven archival test facts. Three
+implementation facts and one test fact appear on page one. Their retrieval does not prove
+the tests ran, the payloads agree, or a message was delivered.
+
+Direct SPARQL finds the cited pair; RDF projection is field-equivalent and SHACL conforms.
+Existing diagnostics, SCIP digest and semantic artifact keys remain unchanged. Both refreshes
+reuse three control artifacts with zero extraction/model calls, and repeated enabled hydration
+retains identity/content. Five historical snapshot byte hashes are preserved; saved-only
+rescoring of the latest dispatch/Weftlet snapshots preserves their original scores/reachability.
+
+The no-routing control still misses the archival consumer. The improvement demonstrates
+extraction and cross-source use of an explicit map, not automatic operational discovery or
+broader semantic quality. Review real mappings and validate actual deployment/runtime evidence
+separately before treating these candidate relationships as stronger evidence.
+
 ## Next bounded increments
 
-1. Evaluate an explicit source for operational routing separately from ranking. Preserve the
-   frozen dispatch control and its archival expectation; matching topic text alone must not
-   become a claim of delivery or complete static dependency coverage.
+1. Evaluate actual deployment configuration or runtime routing evidence as a separate source.
+   Preserve the frozen no-routing control and distinguish authored declarations, configured
+   subscriptions and observed delivery; matching topic text alone must not bridge them.
 2. Review the explicit mappings with a consumer owner, then compare a bounded Codex extraction
    against the control when ready. Preserve inferred/unreviewed assertion labels.
 
