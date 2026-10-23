@@ -1,5 +1,9 @@
 # Impact retrieval evaluations
 
+For an installed toolkit in your own project, start with the
+[consumer trial](CONSUMER-TRIAL.md). It covers private log retention and human review using
+existing CLI/MCP commands. The evaluator below is development tooling in this source checkout.
+
 This is an advisory, reproducible evaluation of candidate-file retrieval on the real
 repository. It is not a quality gate, a live model benchmark, or an assertion that a
 proposed change is safe. The four scenarios and their expected findings were written

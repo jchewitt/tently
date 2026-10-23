@@ -69,6 +69,7 @@ committed authored mapping improves same-SHA dispatch retrieval from 15/16 to 16
 one, with zero labeled distractions. Drafts rebuild and invalidate affected bindings; these
 results do not establish deployed subscriptions or observed delivery.
 Next work should be separate, reviewed increments:
+run the [private consumer trial](CONSUMER-TRIAL.md) on predeclared real-project tasks;
 evaluate actual deployment/runtime routing evidence against the unchanged dispatch control;
 review explicit mappings
 and run a bounded live semantic comparison when the maintainer is ready;

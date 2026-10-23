@@ -8,6 +8,40 @@ The milestone entries below record the original cloud checks. Subsequent
 establishes live Codex success on Windows and the full deterministic checks on WSL,
 while identifying remaining native Windows issues.
 
+## Development workspace recovery, 2026-10-23
+
+The existing Codex development workspace became executable again at repository commit
+`3617c71e29af869feccec1f5b1390c3082149b12`. Runtime status reported current observations and
+connected execution; shell access, the repository identity and its initially clean worktree
+were confirmed. The cause of the earlier executor failure was not established. A reported
+OAuth 404 from another project was not reproduced or attributed to the executor failure.
+
+Linux, Node 24.19.0, pnpm 10.18.2:
+
+- The existing restoration checkpoint passed `node scripts/check-restoration.mjs --verify`:
+  its snapshot digest was retained, ten facts were queried with an intentionally unavailable
+  provider, and the historical evidence remained ineligible for current-diff validation.
+  No checkpoint or saved evidence was regenerated to obtain that result. A build had already
+  run; verification preceded the new governance run.
+- The full deterministic publication gate passed again: **222 tests** (1 core + 221 toolkit),
+  one optional OML skip, build, 12 advisory architecture findings, inventory, licenses and
+  fresh packed-consumer installation/indexing/RDF/SHACL/viewer-generation/MCP checks.
+- The new [consumer-trial recipe](CONSUMER-TRIAL.md) was exercised in a separate public
+  dispatch Git repository using fresh npm installation of locally packed core/toolkit archives.
+  The documented Bash blocks ran with only the sample task/path replaced. The deterministic
+  zero-assertion provider produced three artifacts; the repeat extracted zero and reused three
+  with unchanged snapshot identity/content. Diagnostics, SHACL and two distinct 60-fact pages
+  passed. A deliberate exit-7 child retained its error/status and stopped the shell before a
+  subsequent marker could run. Independent review confirmed the corrected fail-fast handling,
+  captured-commit pinning and command compatibility. This is a command-recipe check, not a
+  live semantic-quality measurement. An initial source-workspace rehearsal stopped at npm's
+  `workspace:^` metadata handling; the successful check used the documented installed consumer.
+
+This was recovery within the existing conversation, not the new-task procedure in
+[environment validation](ENVIRONMENT-VALIDATION.md). It establishes neither fresh-cloud
+restoration nor live model/authentication recovery. No model request, source-application
+change or npm publication was part of these checks.
+
 ## Explicit routing declarations, 2026-10-23
 
 [ADR 014](ADR-014-routing-declarations.md) adds opt-in committed source mappings for explicit
