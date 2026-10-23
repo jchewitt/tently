@@ -615,6 +615,7 @@
     "docs/ADR-013-relative-module-requests.md",
     "docs/ADR-014-routing-declarations.md",
     "docs/CLOUD-ENVIRONMENT.md",
+    "docs/CONSUMER-TRIAL.md",
     "docs/ENVIRONMENT-VALIDATION.md",
     "docs/IMPACT-EVALUATION.md",
     "docs/MIGRATING-TO-WEFTLET.md",

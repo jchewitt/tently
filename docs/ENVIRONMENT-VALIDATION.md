@@ -3,6 +3,10 @@
 macOS is outside the maintainer's current validation scope. Treat the following checks
 separately; a live model provider is not a prerequisite for deterministic development.
 
+These cloud checks concern the Codex workspace used to develop Weftlet. Consumer repositories
+run the installed toolkit locally; they do not need this workspace or a hosted Weftlet service.
+Use the [consumer trial](CONSUMER-TRIAL.md) to evaluate actual project usage.
+
 ## Hosted CI: verified
 
 GitHub-hosted Ubuntu run [39492039168](https://github.com/jchewitt/weftlet/actions/runs/39492039168)

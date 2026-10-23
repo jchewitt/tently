@@ -7,6 +7,8 @@ contracts, implementing code, downstream consumers, tests and observed runtime e
 Agents can query cited evidence and explore dependencies across module and asynchronous
 boundaries. See the [roadmap](docs/ROADMAP.md) and [validation](docs/VALIDATION.md) for
 supported capabilities and limitations.
+For a first real-project evaluation, use the [private consumer trial](docs/CONSUMER-TRIAL.md)
+to retain reproducible queries, logs and human-reviewed findings.
 
 ## Set up a project
 
